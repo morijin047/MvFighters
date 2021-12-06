@@ -1,14 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Object = UnityEngine.Object;
 
 public class FighterS : MonoBehaviour
 {
     public Fighter stats;
 
-    private List<Move> moveSet;
+    public List<Move> moveSet;
 
     private CharacterState state;
 
@@ -22,11 +26,9 @@ public class FighterS : MonoBehaviour
 
     private Vector2 inputVector;
 
-    public GameObject head;
-
     public HitBox hitbox;
 
-    public int playerPort;
+    private int playerPort;
 
     float currentHitstunFrame = -1;
 
@@ -46,9 +48,9 @@ public class FighterS : MonoBehaviour
 
     private bool canCancel = true;
 
-    public bool moveLand = true;
+    private bool moveLand = true;
 
-    public bool hitBoxActivatated = false;
+    private bool hitBoxActivatated = false;
 
     private bool canbeHit = true;
 
@@ -65,21 +67,37 @@ public class FighterS : MonoBehaviour
 
         stats = new Fighter(2f, 300f, 10000);
         currentHp = stats.maxHp;
-
-        moveSet = new List<Move>();
-        Move aMove = new Move(100, 15f, 1.5f, 1.5f, 3f, new Vector3(0, 0, 50f),
-            new Vector3(0, 0.5f, 0.5f), new Vector3(0.1f, 0.3f, 0.7f), MoveHierarchy.A);
-        Move bMove = new Move(250, 6f, 2.5f, 2f, 4f, new Vector3(0, 0, 100f),
-            new Vector3(0, 0.1f, 0.5f), new Vector3(0.1f, 0.5f, 0.8f), MoveHierarchy.B);
-        Move cMove = new Move(400, 8f, 3.5f, 2f, 6f, new Vector3(0, 0, 150f),
-            new Vector3(0, 0.5f, 0.5f), new Vector3(0.1f, 0.5f, 1f), MoveHierarchy.C);
-        aMove.AddProperties(MoveProperty.JumpCancel);
-        bMove.AddProperties(MoveProperty.JumpCancel);
-        moveSet.Add(aMove);
-        moveSet.Add(bMove);
-        moveSet.Add(cMove);
+        
+        // Move aMove = new Move(100, 15f, 1.5f, 1.5f, 3f, new Vector3(0, 0, 50f),
+        //     new Vector3(0, 0.5f, 0.5f), new Vector3(0.1f, 0.3f, 0.7f), MoveHierarchy.A, MoveCategory.Melee);
+        // Move bMove = new Move(250, 6f, 2.5f, 2f, 4f, new Vector3(0, 0, 100f),
+        //     new Vector3(0, 0.1f, 0.5f), new Vector3(0.1f, 0.5f, 0.8f), MoveHierarchy.B, MoveCategory.Melee);
+        // Move cMove = new Move(400, 8f, 3.5f, 2f, 6f, new Vector3(0, 0, 150f),
+        //     new Vector3(0, 0.5f, 0.5f), new Vector3(0.1f, 0.5f, 1f), MoveHierarchy.C, MoveCategory.Melee);
+        // aMove.AddProperties(MoveProperty.JumpCancel);
+        // bMove.AddProperties(MoveProperty.JumpCancel);
+        // moveSet.Add(aMove);
+        // moveSet.Add(bMove);
+        // moveSet.Add(cMove);
+        // Object[] obj = AssetDatabase.LoadAllAssetsAtPath(Path.Combine("Assets", "Scripts", "FighterScripts", "Moves", "Dummy")) ;
+        // foreach (Object move in obj)
+        // {
+        //     if (move.GetType() == typeof(Move))
+        //         moveSet.Add(move as Move);
+        // }
         moveLand = true;
     }
+
+    public void SetPort(int playerPort)
+    {
+        this.playerPort = playerPort;
+    }
+
+    public int GetPort()
+    {
+        return playerPort;
+    }
+    
 
     void MoveLand(DamageEventArg arg)
     {
@@ -132,9 +150,7 @@ public class FighterS : MonoBehaviour
         
         if(Input.GetKey(KeyCode.M))
             rb.AddForce(new Vector3(0,0, 250f));
-        
-        
-        
+
         CheckAirborne();
         //Debug.Log(isGrounded);
         //Vector2 inputVector = context.ReadValue<Vector2>();
@@ -183,11 +199,11 @@ public class FighterS : MonoBehaviour
         {
             currentFrame = animator.GetCurrentAnimatorStateInfo(default).normalizedTime * 10;
             canAttack = false;
-            if (currentFrame > currentMove.totalFrame - currentMove.endingFrame)
+            if (currentFrame > currentMove.GetTotalFrames() - currentMove.endingFrame)
             {
                 canCancel = true;
             }
-            if (currentFrame > currentMove.totalFrame)
+            if (currentFrame > currentMove.GetTotalFrames())
             {
                 AnimOver();
                 currentFrame = -1;
@@ -329,7 +345,7 @@ public class FighterS : MonoBehaviour
             canbeHit = false;
             lastMoveHitBy = eventArg.move;
             if (currentMove != null)
-                currentFrame = currentMove.totalFrame;
+                currentFrame = currentMove.GetTotalFrames();
             
             if (transform.rotation.y != 0)
             {

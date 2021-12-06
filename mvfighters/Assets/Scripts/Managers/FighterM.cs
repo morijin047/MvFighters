@@ -17,6 +17,8 @@ public class FighterM : MonoBehaviour
     {
         p1Script = player1.GetComponent<FighterS>();
         p2Script = player2.GetComponent<FighterS>();
+        p1Script.SetPort(1);
+        p2Script.SetPort(2);
     }
 
     public void UpdateObjects()

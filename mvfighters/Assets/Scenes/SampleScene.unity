@@ -878,6 +878,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 502032522626785194, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 502032522659472000, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
       propertyPath: hurtboxSize.y
       value: 0.5
@@ -894,7 +898,8 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 502032521326385353, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
 --- !u!1 &1894428166
 GameObject:
@@ -1041,6 +1046,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dummy1
       objectReference: {fileID: 0}
+    - target: {fileID: 502032522626785194, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 502032522659472000, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
       propertyPath: hurtboxSize.y
       value: 0.5
@@ -1049,5 +1058,14 @@ PrefabInstance:
       propertyPath: hurtboxSize.z
       value: 0.5
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 502032522659472003, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 502032522659472003, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: m_Size.z
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 502032521326385353, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}

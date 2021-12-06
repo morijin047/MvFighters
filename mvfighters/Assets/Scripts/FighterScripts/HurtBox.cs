@@ -13,7 +13,7 @@ public class HurtBox : MonoBehaviour
     public void GetHitBy(Move move, int playerThatUsedAttack)
     {
         //Debug.Log("Damage");
-        int playerHit = GetComponentInParent<FighterS>().playerPort;
+        int playerHit = GetComponentInParent<FighterS>().GetPort();
         //if(playerHit != playerThatUsedAttack)
             EventManager.InvokeDamage(new DamageEventArg(playerHit, move));
         //return true;
