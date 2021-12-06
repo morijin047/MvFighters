@@ -12,15 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f16a587a5f70a6d4da71e56af5382e8f, type: 3}
   m_Name: Stab Punch
   m_EditorClassIdentifier: 
-  properties: 
+  properties: 01000000
   hierarchy: 0
   category: 0
   damage: 100
-  hitstun: 15
+  hitstun: 4
   startupFrame: 1.5
   activeFrame: 1.5
   endingFrame: 3
-  totalFrame: 0
   hitboxSize: {x: 0.1, y: 0.3, z: 0.7}
-  hitboxPosition: {x: 0, y: 0, z: 0}
+  hitboxPosition: {x: 0, y: 0.5, z: 0.5}
   knockbackForce: {x: 0, y: 0, z: 50}

@@ -558,6 +558,22 @@ PrefabInstance:
       propertyPath: playerPort
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 502032521326385367, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: moveSet.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 502032521326385367, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: moveSet.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 246dd97949db0c7499f7e5fd27ea632b, type: 2}
+    - target: {fileID: 502032521326385367, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: moveSet.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7479ca3eb4b05244cb272ffdd59700f1, type: 2}
+    - target: {fileID: 502032521326385367, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: moveSet.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4d5ef03a054a43746a5a960f5b447b20, type: 2}
     - target: {fileID: 502032521683713468, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -998,6 +1014,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 502032521326385367, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: moveSet.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 502032521326385367, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: moveSet.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 246dd97949db0c7499f7e5fd27ea632b, type: 2}
+    - target: {fileID: 502032521326385367, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: moveSet.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7479ca3eb4b05244cb272ffdd59700f1, type: 2}
+    - target: {fileID: 502032521326385367, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
+      propertyPath: moveSet.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4d5ef03a054a43746a5a960f5b447b20, type: 2}
     - target: {fileID: 502032522617172042, guid: 5d8a776a755b67645a2431308a3d08b2, type: 3}
       propertyPath: m_RootOrder
       value: 3
