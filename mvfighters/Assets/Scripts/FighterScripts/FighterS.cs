@@ -14,14 +14,6 @@ public class FighterS : MonoBehaviour
 
     private Rigidbody rb;
 
-    // public AnimationClip punch;
-    //
-    // private Animation anim;
-    //
-    // public AnimationClip walking;
-    //
-    // public AnimationClip idle;
-
     private Animator animator;
 
     private bool animPlaying = false;
@@ -71,15 +63,15 @@ public class FighterS : MonoBehaviour
         EventManager.AddDamageListener(TakeHit);
         EventManager.AddDamageListener(MoveLand);
 
-        stats = new Fighter(2f, 350f, 10000);
+        stats = new Fighter(2f, 300f, 10000);
         currentHp = stats.maxHp;
 
         moveSet = new List<Move>();
         Move aMove = new Move(100, 15f, 1.5f, 1.5f, 3f, new Vector3(0, 0, 50f),
             new Vector3(0, 0.5f, 0.5f), new Vector3(0.1f, 0.3f, 0.7f), MoveHierarchy.A);
-        Move bMove = new Move(250, 6f, 2.5f, 2f, 4f, new Vector3(0, 0, 150f),
+        Move bMove = new Move(250, 6f, 2.5f, 2f, 4f, new Vector3(0, 0, 100f),
             new Vector3(0, 0.1f, 0.5f), new Vector3(0.1f, 0.5f, 0.8f), MoveHierarchy.B);
-        Move cMove = new Move(400, 8f, 3.5f, 2f, 6f, new Vector3(0, 0, 250f),
+        Move cMove = new Move(400, 8f, 3.5f, 2f, 6f, new Vector3(0, 0, 150f),
             new Vector3(0, 0.5f, 0.5f), new Vector3(0.1f, 0.5f, 1f), MoveHierarchy.C);
         aMove.AddProperties(MoveProperty.JumpCancel);
         bMove.AddProperties(MoveProperty.JumpCancel);
@@ -92,7 +84,6 @@ public class FighterS : MonoBehaviour
     void MoveLand(DamageEventArg arg)
     {
         moveLand = true;
-        canCancel = true;
         canAttack = true;
         DeActivateHitbox();
     }
@@ -284,8 +275,13 @@ public class FighterS : MonoBehaviour
         {
             //Vector3 temp = new Vector3(0, stats.jumpforce, inputVector.normalized.x * stats.walkSpeed * 100);
             //Debug.Log(temp);
+            
+            // rb.velocity = new Vector3(0, stats.jumpforce * Time.deltaTime,
+            //     inputVector.x * Time.deltaTime * stats.walkSpeed * 1000);
             rb.AddForce(new Vector3(0, stats.jumpforce, inputVector.normalized.x * stats.walkSpeed * 100));
             transform.Translate(new Vector3(0, 0.2f, 0));
+            isGrounded = false;
+            //transform.Translate(new Vector3(0, stats.jumpforce * Time.deltaTime, inputVector.x * Time.deltaTime * stats.walkSpeed));
             ChangeAnimationState(CharacterState.Jumping);
         }
     }
@@ -337,7 +333,7 @@ public class FighterS : MonoBehaviour
             
             if (transform.rotation.y != 0)
             {
-                if (inputVector.x > 0)
+                if (inputVector.x > 0 && !isInHitstun)
                 {
                     currentHitstunFrame = eventArg.move.hitstun;
                     currentHitstunFrame /= 2;
@@ -353,7 +349,7 @@ public class FighterS : MonoBehaviour
             }
             else
             {
-                if (inputVector.x < 0)
+                if (inputVector.x < 0  && !isInHitstun)
                 {
                     currentHitstunFrame = eventArg.move.hitstun;
                     currentHitstunFrame /= 2;
