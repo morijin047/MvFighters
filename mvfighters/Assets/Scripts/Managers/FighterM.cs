@@ -13,6 +13,7 @@ public class FighterM : MonoBehaviour
     private FighterS p1Script;
 
     private FighterS p2Script;
+
     private void Start()
     {
         p1Script = player1.GetComponent<FighterS>();
@@ -27,14 +28,19 @@ public class FighterM : MonoBehaviour
         p2Script.Movement(MainS.instance.player2.Combat2.Move.ReadValue<Vector2>());
     }
 
-    public void UseMove(int playerPort, MoveHierarchy moveType)
+    public void UseMove(int playerPort, MoveType moveType)
     {
         switch (playerPort)
         {
-            case 1 :
-                p1Script.Attack(moveType);
+            case 1:
+                // if (p1Script.CheckCrouch())
+                // {
+                //     p1Script.Attack(moveType);
+                // }
+                // else
+                    p1Script.Attack(moveType);
                 break;
-            case 2 :
+            case 2:
                 p2Script.Attack(moveType);
                 break;
         }

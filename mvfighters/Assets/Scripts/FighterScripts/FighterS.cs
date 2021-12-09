@@ -12,8 +12,6 @@ public class FighterS : MonoBehaviour
 {
     public Fighter stats;
 
-    public List<Move> moveSet;
-
     private CharacterState state;
 
     private Rigidbody rb;
@@ -54,50 +52,46 @@ public class FighterS : MonoBehaviour
 
     private bool canbeHit = true;
 
+    private bool isCrouched = false;
+
+    private bool jumpSquat = false;
+
+    private float currentJumpFrame = -1;
+
+    private bool jumping = false;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        //anim = GetComponent<Animation>();
         state = CharacterState.Idle;
         animator = GetComponent<Animator>();
-
         EventManager.AddDamageListener(TakeHit);
         EventManager.AddDamageListener(MoveLand);
-
-        stats = new Fighter(2f, 300f, 10000);
         currentHp = stats.maxHp;
-        
-        // Move aMove = new Move(100, 15f, 1.5f, 1.5f, 3f, new Vector3(0, 0, 50f),
-        //     new Vector3(0, 0.5f, 0.5f), new Vector3(0.1f, 0.3f, 0.7f), MoveHierarchy.A, MoveCategory.Melee);
-        // Move bMove = new Move(250, 6f, 2.5f, 2f, 4f, new Vector3(0, 0, 100f),
-        //     new Vector3(0, 0.1f, 0.5f), new Vector3(0.1f, 0.5f, 0.8f), MoveHierarchy.B, MoveCategory.Melee);
-        // Move cMove = new Move(400, 8f, 3.5f, 2f, 6f, new Vector3(0, 0, 150f),
-        //     new Vector3(0, 0.5f, 0.5f), new Vector3(0.1f, 0.5f, 1f), MoveHierarchy.C, MoveCategory.Melee);
-        // aMove.AddProperties(MoveProperty.JumpCancel);
-        // bMove.AddProperties(MoveProperty.JumpCancel);
-        // moveSet.Add(aMove);
-        // moveSet.Add(bMove);
-        // moveSet.Add(cMove);
-        // Object[] obj = AssetDatabase.LoadAllAssetsAtPath(Path.Combine("Assets", "Scripts", "FighterScripts", "Moves", "Dummy")) ;
-        // foreach (Object move in obj)
-        // {
-        //     if (move.GetType() == typeof(Move))
-        //         moveSet.Add(move as Move);
-        // }
         moveLand = true;
     }
 
     public void SetPort(int playerPort)
     {
         this.playerPort = playerPort;
+        gameObject.layer = LayerMask.NameToLayer("Player" + playerPort);
+        foreach (Transform trans in gameObject.GetComponentsInChildren<Transform>(true))
+        {
+            trans.gameObject.layer = LayerMask.NameToLayer("Player" + playerPort);
+        }
+
+        if (this.playerPort == 2)
+        {
+            transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+        }
     }
 
     public int GetPort()
     {
         return playerPort;
     }
-    
+
 
     void MoveLand(DamageEventArg arg)
     {
@@ -108,18 +102,19 @@ public class FighterS : MonoBehaviour
 
     void ChangeAnimationState(CharacterState newAnimation)
     {
-        if (state == newAnimation && (newAnimation == CharacterState.Idle || newAnimation == CharacterState.Walking || newAnimation == CharacterState.Running)) return;
-        // if(playerPort == 2)
-        //     Debug.Log(newAnimation.ToString());
-        
+        if (state == newAnimation && (newAnimation == CharacterState.Idle || newAnimation == CharacterState.Walking ||
+                                      newAnimation == CharacterState.Running)) return;
         animator.Play(newAnimation.ToString(), -1, 0);
         state = newAnimation;
     }
 
-    void ChangeAnimationState(MoveHierarchy newAnimation)
+    void ChangeAnimationState(MoveType newAnimation)
     {
         CharacterState temp;
-        if (CharacterState.TryParse(newAnimation.ToString(), out temp))
+        string newString = newAnimation.ToString();
+        // if (isCrouched)
+        //     newString += "2";
+        if (CharacterState.TryParse(newString, out temp))
         {
             ChangeAnimationState(temp);
         }
@@ -134,7 +129,7 @@ public class FighterS : MonoBehaviour
         RaycastHit hit;
         int layerMask = 1 << 6;
         Debug.DrawRay(transform.position, Vector3.down, Color.red, 0.1f);
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.1f, layerMask))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.1f, layerMask) && !jumpSquat)
         {
             isGrounded = true;
         }
@@ -147,44 +142,56 @@ public class FighterS : MonoBehaviour
     public void Movement(Vector2 input)
     {
         inputVector = input;
-        
-        if(Input.GetKey(KeyCode.M))
-            rb.AddForce(new Vector3(0,0, 250f));
+
+        if (Input.GetKey(KeyCode.M))
+            rb.AddForce(new Vector3(0, 0, 250f));
 
         CheckAirborne();
-        //Debug.Log(isGrounded);
-        //Vector2 inputVector = context.ReadValue<Vector2>();
         if (inputVector.y > 0 && isGrounded)
         {
-            Jump();
+            StartJumpSquat();
         }
 
-        //Debug.Log(inputVector);
+        if (inputVector.y < 0 && isGrounded)
+        {
+            isCrouched = true;
+        }
+        else
+        {
+            isCrouched = false;
+        }
         if (isGrounded && !animPlaying)
         {
-            if (inputVector.x != 0)
+            if (inputVector.x != 0 && !isCrouched)
             {
-                //rb.velocity = new Vector3(0, 0, inputVector.x * Time.deltaTime * 50000);
                 if (transform.rotation.y != 0)
                     transform.Translate(new Vector3(0, 0, -inputVector.x * Time.deltaTime * stats.walkSpeed));
                 else
                     transform.Translate(new Vector3(0, 0, inputVector.x * Time.deltaTime * stats.walkSpeed));
-                // anim.clip = walking;
                 if (!animPlaying)
                     ChangeAnimationState(CharacterState.Walking);
             }
             else
             {
-                //anim.clip = idle;
                 if (!animPlaying)
-                    ChangeAnimationState(CharacterState.Idle);
+                {
+                    if (isCrouched)
+                        ChangeAnimationState(CharacterState.Crouching);
+                    else 
+                        ChangeAnimationState(CharacterState.Idle);
+                }
             }
         }
 
+        // if (currentHitstunFrame == 0)
+        // {
+        //     animator.Rebind();
+        //     currentHitstunFrame++;
+        // }
         if (currentHitstunFrame > 0)
         {
             hitstunRemaining = animator.GetCurrentAnimatorStateInfo(default).normalizedTime * 10;
-
+            //hitstunRemaining += 0.5f;
             if (hitstunRemaining >= currentHitstunFrame)
             {
                 currentHitstunFrame = -1;
@@ -193,25 +200,29 @@ public class FighterS : MonoBehaviour
                 canbeHit = true;
             }
         }
-
-
+        // if (currentFrame == 0)
+        // {
+        //     animator.Rebind();
+        //     animator.Update(0f);
+        //     currentFrame++;
+        // }
         if (currentFrame >= 0)
         {
             currentFrame = animator.GetCurrentAnimatorStateInfo(default).normalizedTime * 10;
-            canAttack = false;
+            //currentFrame += 0.5f;
             if (currentFrame > currentMove.GetTotalFrames() - currentMove.endingFrame)
             {
                 canCancel = true;
             }
+
             if (currentFrame > currentMove.GetTotalFrames())
             {
                 AnimOver();
                 currentFrame = -1;
                 canAttack = true;
                 moveLand = true;
-                
             }
-            else if (currentFrame > currentMove.activeFrame + currentMove.startupFrame )
+            else if (currentFrame > currentMove.activeFrame + currentMove.startupFrame)
             {
                 if (hitBoxActivatated)
                     DeActivateHitbox();
@@ -219,8 +230,8 @@ public class FighterS : MonoBehaviour
 
             else if (currentFrame > currentMove.startupFrame)
             {
-                if(!hitBoxActivatated)
-                 ActivateHitbox();
+                if (!hitBoxActivatated)
+                    ActivateHitbox();
             }
             else
             {
@@ -229,43 +240,62 @@ public class FighterS : MonoBehaviour
             }
         }
 
+        if (currentJumpFrame >= 0 && jumpSquat)
+        {
+            currentJumpFrame = animator.GetCurrentAnimatorStateInfo(default).normalizedTime * 10;
+            
+            if (currentJumpFrame > stats.jumpSquat)
+            {
+                Jumping();
+                currentJumpFrame = 0;
+                jumping = true;
+                canAttack = false;
+                jumpSquat = false;
+            }
+        }
+        
+        if (currentJumpFrame >= 0 && jumping)
+        {
+            currentJumpFrame = animator.GetCurrentAnimatorStateInfo(default).normalizedTime * 10;
+            if (currentJumpFrame > stats.jumpFrames)
+            {
+                currentJumpFrame = -1;
+                jumping = false;
+                canAttack = true;
+                AnimOver();
+            }
+        }
 
-        //if (!animPlaying)
-        //anim.Play();
-
-        // if (currentFrame >= 0)
-        // {
-        //     Debug.Log(currentFrame);
-        // }
-
-        // if (currentHitstunFrame >= 0)
-        // {
-        //     Debug.Log(hitstunRemaining);
-        // }
+        if (rb.velocity.y < 0)
+        {
+            rb.AddForce(new Vector3(0, -stats.floatiness, 0));
+        }
     }
 
-    public void Attack(MoveHierarchy moveType)
+    public void Attack(MoveType moveType)
     {
-        // anim.clip = punch;
-        //anim.Play();
         if (currentMove != null)
         {
-            if (moveType > currentMove.hierarchy)
+            if (CheckCancel(moveType))
                 canAttack = true;
         }
 
         if (!isInHitstun && canAttack && canCancel && moveLand)
         {
-            foreach (var m in moveSet)
+            if (isCrouched && moveType is MoveType.A or MoveType.B or MoveType.C)
             {
-                if (m.hierarchy == moveType)
-                    currentMove = m;
+                if (MoveType.TryParse(moveType.ToString() + "2", out moveType))
+                {
+                    Debug.Log(moveType);
+                }
             }
-
-            // if (lastMove == null)
-            //     lastMove = currentMove;
-            // if (lastMove != currentMove)
-            //     lastMove = currentMove;
+            foreach (var m in stats.moveSet)
+            {
+                if (m.type == moveType)
+                {
+                    currentMove = m;
+                }
+            }
             hitbox.UseResponder(currentMove);
             ChangeAnimationState(moveType);
             animPlaying = true;
@@ -273,10 +303,66 @@ public class FighterS : MonoBehaviour
             currentFrame = 0;
             canCancel = false;
             moveLand = false;
+            canAttack = false;
         }
     }
 
-    public void Jump()
+    public bool CheckCrouch()
+    {
+        return isCrouched;
+    }
+
+    public bool CheckCancel(MoveType typeOfMove)
+    {
+        int priority;
+        bool returnValue = false;
+        switch (typeOfMove)
+        {
+            case MoveType.A:
+                if (currentMove.type == typeOfMove || currentMove.type == MoveType.A2)
+                    returnValue = true;
+                break;
+            case MoveType.A2:
+                if (currentMove.type == typeOfMove || currentMove.type == MoveType.A)
+                    returnValue = true;
+                break;
+            case MoveType.B:
+                if (currentMove.MovePriority < 2)
+                    returnValue = true;
+                break;
+            case MoveType.B2:
+                if (currentMove.MovePriority < 2)
+                    returnValue = true;
+                break;
+            case MoveType.C:
+                if (currentMove.MovePriority < 3)
+                    returnValue = true;
+                break;
+            case MoveType.C2:
+                if (currentMove.MovePriority < 3)
+                    returnValue = true;
+                break;
+            case MoveType.MotionF:
+                if (currentMove.MovePriority < 4)
+                    returnValue = true;
+                break;
+            case MoveType.MotionB:
+                if (currentMove.MovePriority < 4)
+                    returnValue = true;
+                break;
+            case MoveType.Super:
+                if (currentMove.MovePriority < 5)
+                    returnValue = true;
+                break;
+            case MoveType.Grab:
+                returnValue = false;
+                break;
+        }
+
+        return returnValue;
+    }
+
+    public void StartJumpSquat()
     {
         if (currentMove != null)
         {
@@ -284,32 +370,29 @@ public class FighterS : MonoBehaviour
             {
                 if (p == MoveProperty.JumpCancel)
                     canAttack = true;
-            }  
+            }
         }
-        
+
         if (canAttack && canCancel && moveLand)
         {
-            //Vector3 temp = new Vector3(0, stats.jumpforce, inputVector.normalized.x * stats.walkSpeed * 100);
-            //Debug.Log(temp);
-            
-            // rb.velocity = new Vector3(0, stats.jumpforce * Time.deltaTime,
-            //     inputVector.x * Time.deltaTime * stats.walkSpeed * 1000);
-            rb.AddForce(new Vector3(0, stats.jumpforce, inputVector.normalized.x * stats.walkSpeed * 100));
-            transform.Translate(new Vector3(0, 0.2f, 0));
-            isGrounded = false;
-            //transform.Translate(new Vector3(0, stats.jumpforce * Time.deltaTime, inputVector.x * Time.deltaTime * stats.walkSpeed));
+            jumpSquat = true;
+            currentJumpFrame = 0;
+            animPlaying = true;
             ChangeAnimationState(CharacterState.Jumping);
+            //isGrounded = false;
         }
+    }
+
+    public void Jumping()
+    {
+        rb.AddForce(new Vector3(0, stats.jumpforce, inputVector.normalized.x * stats.jumpforce / 3));
+        transform.Translate(new Vector3(0, 0.2f, 0));
+        isGrounded = false;
     }
 
     public void AnimOver()
     {
         animPlaying = false;
-        // if (head.activeInHierarchy)
-        //     head.GetComponent<HurtBox>().HurtboxSwitch(false);
-        // if(playerPort == 2)
-        //     Debug.Log("Anim Over");
-        //ChangeAnimationState(CharacterState.Idle);
     }
 
     public void ActivateHitbox()
@@ -328,28 +411,23 @@ public class FighterS : MonoBehaviour
     {
         rb.AddForce(new Vector3(0, knockback.y, knockback.z * -transform.forward.z));
     }
+
     public void TakeHit(DamageEventArg eventArg)
     {
         if (lastMoveHitBy != null)
         {
-            if (lastMoveHitBy.hierarchy != eventArg.move.hierarchy)
+            if (lastMoveHitBy.type != eventArg.move.type)
                 canbeHit = true;
         }
+
         if (eventArg.player == playerPort && canbeHit)
         {
-            AnimOver();
-            DeActivateHitbox();
-            PushedAway(eventArg.move.knockbackForce);
-            animPlaying = true;
-            isInHitstun = true;
-            canbeHit = false;
-            lastMoveHitBy = eventArg.move;
             if (currentMove != null)
                 currentFrame = currentMove.GetTotalFrames();
-            
+
             if (transform.rotation.y != 0)
             {
-                if (inputVector.x > 0 && !isInHitstun)
+                if (inputVector.x > 0 && !isInHitstun && CheckOverHead(eventArg) && CheckLow(eventArg))
                 {
                     currentHitstunFrame = eventArg.move.hitstun;
                     currentHitstunFrame /= 2;
@@ -365,7 +443,7 @@ public class FighterS : MonoBehaviour
             }
             else
             {
-                if (inputVector.x < 0  && !isInHitstun)
+                if (inputVector.x < 0 && !isInHitstun)
                 {
                     currentHitstunFrame = eventArg.move.hitstun;
                     currentHitstunFrame /= 2;
@@ -379,6 +457,57 @@ public class FighterS : MonoBehaviour
                     currentHitstunFrame = eventArg.move.hitstun;
                 }
             }
+            isInHitstun = true;
+            AnimOver();
+            DeActivateHitbox();
+            PushedAway(eventArg.move.knockbackForce);
+            animPlaying = true;
+            canbeHit = false;
+            lastMoveHitBy = eventArg.move;
+            if (currentHp < 0)
+            {
+                switch (playerPort)
+                {
+                    case 1 :
+                        EventManager.InvokeRoundEnd(new RoundEndEventArg(2));
+                        break;
+                    case 2 :
+                        EventManager.InvokeRoundEnd(new RoundEndEventArg(1));
+                        break;
+                }
+            }
         }
+    }
+
+    public bool CheckOverHead(DamageEventArg arg)
+    {
+        bool blockSuccess = true;
+        foreach (var p in arg.move.properties)
+        {
+            if (p == MoveProperty.Overhead)
+            {
+                if (inputVector.y < 0)
+                {
+                    blockSuccess = false;
+                }
+            }
+        }
+        return blockSuccess;
+    }
+
+    public bool CheckLow(DamageEventArg arg)
+    {
+        bool blockSuccess = true;
+        foreach (var p in arg.move.properties)
+        {
+            if (p == MoveProperty.Low)
+            {
+                if (inputVector.y >= 0)
+                {
+                    blockSuccess = false;
+                }
+            }
+        }
+        return blockSuccess;
     }
 }

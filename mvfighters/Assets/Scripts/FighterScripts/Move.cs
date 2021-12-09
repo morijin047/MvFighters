@@ -6,7 +6,7 @@ using UnityEngine;
 public class Move : ScriptableObject , IHitboxResponder
 {
     public List<MoveProperty> properties;
-    public MoveHierarchy hierarchy;
+    public MoveType type;
     public MoveCategory category;
     
     public int damage;
@@ -24,9 +24,11 @@ public class Move : ScriptableObject , IHitboxResponder
     public Vector3 hitboxPosition;
 
     public Vector3 knockbackForce;
+
+    public int MovePriority;
     
     public Move(int damage, float hitstun, float startupFrame, float activeFrame, float endingFrame,
-        Vector3 knockbackForce, Vector3 hitboxPosition,Vector3 hitboxSize,MoveHierarchy hierarchy, MoveCategory category)
+        Vector3 knockbackForce, Vector3 hitboxPosition,Vector3 hitboxSize,MoveType type, MoveCategory category)
     {
         this.damage = damage;
         this.hitstun = hitstun;
@@ -34,7 +36,7 @@ public class Move : ScriptableObject , IHitboxResponder
         this.activeFrame = activeFrame;
         this.endingFrame = endingFrame;
         
-        this.hierarchy = hierarchy;
+        this.type = type;
         this.hitboxSize = hitboxSize;
         this.hitboxPosition = hitboxPosition;
         this.knockbackForce = knockbackForce;

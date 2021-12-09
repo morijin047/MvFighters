@@ -1,0 +1,883 @@
+fileFormatVersion: 2
+guid: 347d363d5ecd86344822460b47391dae
+ModelImporter:
+  serializedVersion: 21202
+  internalIDToNameTable:
+  - first:
+      74: -203655887218126122
+    second: CrossKick
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 1
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: CrossKick
+      takeName: mixamo.com
+      internalID: 0
+      firstFrame: 9
+      lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 0
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human:
+    - boneName: GDR:Hips
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftUpLeg
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightUpLeg
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftLeg
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightLeg
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftFoot
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightFoot
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:Spine
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:Spine1
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:Neck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:Head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftShoulder
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightShoulder
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftArm
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightArm
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftForeArm
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightForeArm
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHand
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHand
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftToeBase
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightToeBase
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandThumb1
+      humanName: Left Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandThumb2
+      humanName: Left Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandThumb3
+      humanName: Left Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandIndex1
+      humanName: Left Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandIndex2
+      humanName: Left Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandIndex3
+      humanName: Left Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandMiddle1
+      humanName: Left Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandMiddle2
+      humanName: Left Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandMiddle3
+      humanName: Left Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandRing1
+      humanName: Left Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandRing2
+      humanName: Left Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandRing3
+      humanName: Left Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandPinky1
+      humanName: Left Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandPinky2
+      humanName: Left Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:LeftHandPinky3
+      humanName: Left Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandThumb1
+      humanName: Right Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandThumb2
+      humanName: Right Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandThumb3
+      humanName: Right Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandIndex1
+      humanName: Right Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandIndex2
+      humanName: Right Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandIndex3
+      humanName: Right Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandMiddle1
+      humanName: Right Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandMiddle2
+      humanName: Right Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandMiddle3
+      humanName: Right Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandRing1
+      humanName: Right Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandRing2
+      humanName: Right Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandRing3
+      humanName: Right Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandPinky1
+      humanName: Right Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandPinky2
+      humanName: Right Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:RightHandPinky3
+      humanName: Right Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: GDR:Spine2
+      humanName: UpperChest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: Scissor Kick(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:Hips
+      parentName: Scissor Kick(Clone)
+      position: {x: -0.001447511, y: 0.5613942, z: 0.019148473}
+      rotation: {x: -0.26252764, y: 0.02046075, z: -0.014445875, w: 0.96459943}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:Spine
+      parentName: GDR:Hips
+      position: {x: -0, y: 0.08642, z: 0.002414}
+      rotation: {x: 0.22274722, y: 0.0013064456, z: 0.019990433, w: 0.9746704}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:Spine1
+      parentName: GDR:Spine
+      position: {x: -0, y: 0.100862, z: 0}
+      rotation: {x: 0.06964519, y: -0.022841658, z: 0.01030742, w: 0.99725705}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:Spine2
+      parentName: GDR:Spine1
+      position: {x: -0, y: 0.115270995, z: 0}
+      rotation: {x: -0.033339947, y: -0.027064843, z: -0.0073187994, w: 0.99905074}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:Neck
+      parentName: GDR:Spine2
+      position: {x: -0, y: 0.12968001, z: 0}
+      rotation: {x: -0.096644826, y: -0.019729776, z: 0.0033083179, w: 0.9951179}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:Head
+      parentName: GDR:Neck
+      position: {x: -0, y: 0.067944, z: 0.0085970005}
+      rotation: {x: -0.011772664, y: -0.005383943, z: 0.0205167, w: 0.99970573}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:HeadTop_End
+      parentName: GDR:Head
+      position: {x: -0, y: 0.645045, z: 0.081616}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftShoulder
+      parentName: GDR:Spine2
+      position: {x: -0.067710996, y: 0.108964995, z: 0.000305}
+      rotation: {x: 0.48701203, y: -0.23517682, z: 0.55713606, w: 0.63016707}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftArm
+      parentName: GDR:LeftShoulder
+      position: {x: -0, y: 0.14173199, z: 0}
+      rotation: {x: -0.14313246, y: 0.85839874, z: -0.02932509, w: 0.49173653}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftForeArm
+      parentName: GDR:LeftArm
+      position: {x: -0, y: 0.222394, z: 0}
+      rotation: {x: 0.028646812, y: 0.17647307, z: -0.0057089166, w: 0.98387194}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHand
+      parentName: GDR:LeftForeArm
+      position: {x: -0, y: 0.287659, z: 0}
+      rotation: {x: 0.023727499, y: 0.90554357, z: 0.036055844, w: -0.42205212}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandThumb1
+      parentName: GDR:LeftHand
+      position: {x: 0.045672, y: 0.02423, z: 0.018376}
+      rotation: {x: 0.21253994, y: -0.3167191, z: -0.49663904, w: 0.77965724}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandThumb2
+      parentName: GDR:LeftHandThumb1
+      position: {x: -0.012492999, y: 0.04208, z: 0}
+      rotation: {x: 0.022018202, y: 0.056859475, z: 0.27114466, w: 0.96060544}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandThumb3
+      parentName: GDR:LeftHandThumb2
+      position: {x: 0.008658, y: 0.042691, z: 0}
+      rotation: {x: -0.01261177, y: 0.02008158, z: -0.015556996, w: 0.9995977}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandThumb4
+      parentName: GDR:LeftHandThumb3
+      position: {x: 0.003835, y: 0.035976, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandIndex1
+      parentName: GDR:LeftHand
+      position: {x: 0.066465996, y: 0.13399, z: -0.002937}
+      rotation: {x: 0.07835426, y: -0.028496096, z: -0.074033536, w: 0.9937644}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandIndex2
+      parentName: GDR:LeftHandIndex1
+      position: {x: 0.000012, y: 0.046950996, z: 0}
+      rotation: {x: 0.029989962, y: -0.0066423467, z: 0.0016261314, w: 0.99952686}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandIndex3
+      parentName: GDR:LeftHandIndex2
+      position: {x: 0.000004, y: 0.045275, z: 0}
+      rotation: {x: 0.029338617, y: 0.000043752116, z: 0.0012316691, w: 0.9995688}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandIndex4
+      parentName: GDR:LeftHandIndex3
+      position: {x: -0.000015, y: 0.036634, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandMiddle1
+      parentName: GDR:LeftHand
+      position: {x: 0.020826, y: 0.153906, z: 0.0010769999}
+      rotation: {x: 0.07854687, y: -0.012415551, z: -0.05243919, w: 0.9954529}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandMiddle2
+      parentName: GDR:LeftHandMiddle1
+      position: {x: -0.000008, y: 0.051723998, z: 0}
+      rotation: {x: 0.028924467, y: -0.005484784, z: 0.0022310277, w: 0.9995641}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandMiddle3
+      parentName: GDR:LeftHandMiddle2
+      position: {x: -0, y: 0.046740998, z: 0}
+      rotation: {x: 0.03233631, y: 0.000055168715, z: 0.0023285565, w: 0.99947435}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandMiddle4
+      parentName: GDR:LeftHandMiddle3
+      position: {x: 0.0000069999996, y: 0.036421, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandRing1
+      parentName: GDR:LeftHand
+      position: {x: -0.022658, y: 0.162358, z: -0.002829}
+      rotation: {x: 0.07630157, y: -0.009723719, z: -0.05464354, w: 0.99553883}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandRing2
+      parentName: GDR:LeftHandRing1
+      position: {x: 0.000006, y: 0.039986998, z: 0}
+      rotation: {x: 0.033458326, y: -0.002581454, z: 0.002643471, w: 0.9994333}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandRing3
+      parentName: GDR:LeftHandRing2
+      position: {x: 0.000004, y: 0.037046, z: 0}
+      rotation: {x: 0.024131695, y: -0.00074131397, z: 0.0016049617, w: 0.9997072}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandRing4
+      parentName: GDR:LeftHandRing3
+      position: {x: -0.000010000001, y: 0.027484, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandPinky1
+      parentName: GDR:LeftHand
+      position: {x: -0.064635, y: 0.15288499, z: -0.001736}
+      rotation: {x: 0.07213836, y: -0.00727066, z: -0.02626268, w: 0.9970223}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandPinky2
+      parentName: GDR:LeftHandPinky1
+      position: {x: -0, y: 0.038393, z: 0}
+      rotation: {x: 0.031641714, y: -0.0031952944, z: 0.00266159, w: 0.9994907}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandPinky3
+      parentName: GDR:LeftHandPinky2
+      position: {x: -0, y: 0.029616, z: 0}
+      rotation: {x: 0.022056337, y: 0.0034532158, z: 0.0018596771, w: 0.999749}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftHandPinky4
+      parentName: GDR:LeftHandPinky3
+      position: {x: -0, y: 0.022082, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightShoulder
+      parentName: GDR:Spine2
+      position: {x: 0.067710996, y: 0.108981, z: 0.00085199997}
+      rotation: {x: 0.47283748, y: 0.31317338, z: -0.5272991, w: 0.6326949}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightArm
+      parentName: GDR:RightShoulder
+      position: {x: -0, y: 0.14173199, z: 0}
+      rotation: {x: 0.019349016, y: 0.3944736, z: -0.1519442, w: 0.90605146}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightForeArm
+      parentName: GDR:RightArm
+      position: {x: -0, y: 0.22262199, z: 0}
+      rotation: {x: -0.024579762, y: 0.0008299647, z: -0.0011835957, w: 0.99969685}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHand
+      parentName: GDR:RightForeArm
+      position: {x: -0, y: 0.287657, z: 0}
+      rotation: {x: -0.04194617, y: -0.48037404, z: -0.010754416, w: 0.87599415}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandThumb1
+      parentName: GDR:RightHand
+      position: {x: -0.04853, y: 0.023924999, z: 0.020229999}
+      rotation: {x: 0.15788332, y: 0.32717094, z: 0.5570442, w: 0.7468158}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandThumb2
+      parentName: GDR:RightHandThumb1
+      position: {x: 0.0103980005, y: 0.045027, z: 0}
+      rotation: {x: 0.02526595, y: 0.0785123, z: -0.22985433, w: 0.9697239}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandThumb3
+      parentName: GDR:RightHandThumb2
+      position: {x: -0.0075919996, y: 0.039935, z: 0}
+      rotation: {x: 0.010402135, y: -0.07582613, z: 0.014317946, w: 0.99696404}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandThumb4
+      parentName: GDR:RightHandThumb3
+      position: {x: -0.002806, y: 0.030818999, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandIndex1
+      parentName: GDR:RightHand
+      position: {x: -0.070959, y: 0.13123399, z: -0.004944}
+      rotation: {x: 0.083386734, y: 0.033586305, z: 0.09985696, w: 0.99093246}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandIndex2
+      parentName: GDR:RightHandIndex1
+      position: {x: -0.000017999999, y: 0.04567, z: 0}
+      rotation: {x: 0.035230584, y: 0.003881101, z: -0.0009702331, w: 0.9993712}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandIndex3
+      parentName: GDR:RightHandIndex2
+      position: {x: -0.000006, y: 0.04465, z: 0}
+      rotation: {x: 0.034651667, y: 0.0026012002, z: -0.00044333047, w: 0.99939597}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandIndex4
+      parentName: GDR:RightHandIndex3
+      position: {x: 0.000024, y: 0.034721997, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandMiddle1
+      parentName: GDR:RightHand
+      position: {x: -0.024163, y: 0.15465999, z: 0.002531}
+      rotation: {x: 0.086591385, y: 0.0077635013, z: 0.058995556, w: 0.99446535}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandMiddle2
+      parentName: GDR:RightHandMiddle1
+      position: {x: -0.000019, y: 0.048961, z: 0}
+      rotation: {x: 0.03231881, y: 0.0020594392, z: -0.0018612986, w: 0.99947375}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandMiddle3
+      parentName: GDR:RightHandMiddle2
+      position: {x: -0.000006, y: 0.047601998, z: 0}
+      rotation: {x: 0.031926915, y: 0.0044859555, z: -0.0013445237, w: 0.9994793}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandMiddle4
+      parentName: GDR:RightHandMiddle3
+      position: {x: 0.000025, y: 0.035857, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandRing1
+      parentName: GDR:RightHand
+      position: {x: 0.022091, y: 0.164361, z: -0.001858}
+      rotation: {x: 0.07270696, y: 0.014101171, z: 0.034614258, w: 0.9966528}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandRing2
+      parentName: GDR:RightHandRing1
+      position: {x: 0.000008999999, y: 0.037554, z: 0}
+      rotation: {x: 0.023808513, y: 0.0025377783, z: -0.0016227341, w: 0.999712}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandRing3
+      parentName: GDR:RightHandRing2
+      position: {x: 0.000006, y: 0.036712, z: 0}
+      rotation: {x: 0.032654826, y: 0.004374663, z: -0.002294324, w: 0.99945456}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandRing4
+      parentName: GDR:RightHandRing3
+      position: {x: -0.000015, y: 0.028052, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandPinky1
+      parentName: GDR:RightHand
+      position: {x: 0.065758, y: 0.154033, z: -0.0017779999}
+      rotation: {x: 0.06022519, y: -0.016094675, z: 0.025097424, w: 0.9977395}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandPinky2
+      parentName: GDR:RightHandPinky1
+      position: {x: -0, y: 0.037028, z: 0}
+      rotation: {x: 0.030761398, y: 0.003200889, z: -0.0021615208, w: 0.9995193}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandPinky3
+      parentName: GDR:RightHandPinky2
+      position: {x: -0.000001, y: 0.030051999, z: 0}
+      rotation: {x: 0.026836585, y: -0.00013064306, z: -0.0017715363, w: 0.9996383}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightHandPinky4
+      parentName: GDR:RightHandPinky3
+      position: {x: -0, y: 0.021403998, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftUpLeg
+      parentName: GDR:Hips
+      position: {x: -0.13822, y: -0.04795, z: -0.001069}
+      rotation: {x: -0.289939, y: -0.15930897, z: 0.9372807, w: 0.109822385}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftLeg
+      parentName: GDR:LeftUpLeg
+      position: {x: -0, y: 0.294416, z: 0}
+      rotation: {x: -0.30684295, y: -0.031117555, z: -0.047373325, w: 0.95007104}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftFoot
+      parentName: GDR:LeftLeg
+      position: {x: -0, y: 0.31368998, z: 0}
+      rotation: {x: 0.92964786, y: -0.12945022, z: 0.18020046, w: 0.2941517}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftToeBase
+      parentName: GDR:LeftFoot
+      position: {x: 0.051009, y: 0.166064, z: -0.010040999}
+      rotation: {x: 0.2223106, y: -0.00615303, z: -0.07872583, w: 0.9717728}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:LeftToe_End
+      parentName: GDR:LeftToeBase
+      position: {x: 0.015592999, y: 0.098604, z: -0.002223}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightUpLeg
+      parentName: GDR:Hips
+      position: {x: 0.13822, y: -0.04795, z: 0.0015299999}
+      rotation: {x: 0.19341964, y: -0.15554959, z: 0.9644005, w: -0.0912416}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightLeg
+      parentName: GDR:RightUpLeg
+      position: {x: -0, y: 0.294466, z: 0}
+      rotation: {x: -0.2887119, y: -0.058188997, z: 0.13447618, w: 0.9461372}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightFoot
+      parentName: GDR:RightLeg
+      position: {x: -0, y: 0.31373698, z: 0}
+      rotation: {x: 0.8805725, y: 0.0645167, z: -0.36186293, w: 0.29914033}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightToeBase
+      parentName: GDR:RightFoot
+      position: {x: -0.066221, y: 0.165346, z: -0.012491}
+      rotation: {x: 0.22049394, y: 0.0025025255, z: 0.074235044, w: 0.9725561}
+      scale: {x: 1, y: 1, z: 1}
+    - name: GDR:RightToe_End
+      parentName: GDR:RightToeBase
+      position: {x: -0.025864, y: 0.09743, z: -0.0035179998}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 3
+  humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

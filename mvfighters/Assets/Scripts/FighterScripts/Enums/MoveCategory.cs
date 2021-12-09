@@ -5,7 +5,7 @@ using UnityEngine;
 public enum MoveCategory 
 {
     Melee,
-    Combat,
+    Range,
     Projectile,
     Grab
 }

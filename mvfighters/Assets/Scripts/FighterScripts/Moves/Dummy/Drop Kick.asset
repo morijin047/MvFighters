@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f16a587a5f70a6d4da71e56af5382e8f, type: 3}
   m_Name: Drop Kick
   m_EditorClassIdentifier: 
-  properties: 09000000
-  hierarchy: 2
+  properties: 0900000007000000
+  type: 5
   category: 0
   damage: 400
   hitstun: 8
@@ -23,3 +23,4 @@ MonoBehaviour:
   hitboxSize: {x: 0.1, y: 0.5, z: 1}
   hitboxPosition: {x: 0, y: 0.5, z: 0.5}
   knockbackForce: {x: 0, y: 0, z: 150}
+  MovePriority: 3

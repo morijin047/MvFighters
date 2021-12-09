@@ -62,6 +62,33 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Motion-F"",
+                    ""type"": ""Button"",
+                    ""id"": ""7df63414-7113-44bd-8465-09354a9d4be1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Motion-B"",
+                    ""type"": ""Button"",
+                    ""id"": ""4c1a21b2-06c0-48b9-acc8-b8fc885d42d2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Grab"",
+                    ""type"": ""Button"",
+                    ""id"": ""d8d4e47d-0cd4-4ba0-833c-a48cf04ca406"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +179,39 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
                     ""action"": ""C"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72af85ef-80e5-44f4-97f7-a22896e4b8ff"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Motion-F"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7bce2a72-dcbb-4298-bc28-95ac9aada1bb"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Motion-B"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""30c4790d-0a90-4a3a-8589-34f92db68ffc"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -190,6 +250,33 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
                     ""name"": ""C"",
                     ""type"": ""Button"",
                     ""id"": ""956adda6-8c74-4a5a-aae3-1df416be5df7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Motion-F"",
+                    ""type"": ""Button"",
+                    ""id"": ""523bc137-acdf-4b61-950a-7cb73c6f4761"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Motion-B"",
+                    ""type"": ""Button"",
+                    ""id"": ""df729fab-299e-4be6-adfd-29d82782cba3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Grab"",
+                    ""type"": ""Button"",
+                    ""id"": ""a66d5849-b310-40e1-a172-ddb8a39e20b7"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -284,6 +371,39 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
                     ""action"": ""C"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""faa00b3f-06ef-4c27-8cde-acf9900bfb72"",
+                    ""path"": ""<Keyboard>/numpad4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83e7ec38-39da-48e1-aa0b-f0cb8f5a8aa0"",
+                    ""path"": ""<Keyboard>/numpad5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Motion-F"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""afb1398b-1273-4e49-b2c3-22c32e34f08e"",
+                    ""path"": ""<Keyboard>/numpad6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Motion-B"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -308,12 +428,18 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
         m_Combat1_A = m_Combat1.FindAction("A", throwIfNotFound: true);
         m_Combat1_B = m_Combat1.FindAction("B", throwIfNotFound: true);
         m_Combat1_C = m_Combat1.FindAction("C", throwIfNotFound: true);
+        m_Combat1_MotionF = m_Combat1.FindAction("Motion-F", throwIfNotFound: true);
+        m_Combat1_MotionB = m_Combat1.FindAction("Motion-B", throwIfNotFound: true);
+        m_Combat1_Grab = m_Combat1.FindAction("Grab", throwIfNotFound: true);
         // Combat2
         m_Combat2 = asset.FindActionMap("Combat2", throwIfNotFound: true);
         m_Combat2_Move = m_Combat2.FindAction("Move", throwIfNotFound: true);
         m_Combat2_A = m_Combat2.FindAction("A", throwIfNotFound: true);
         m_Combat2_B = m_Combat2.FindAction("B", throwIfNotFound: true);
         m_Combat2_C = m_Combat2.FindAction("C", throwIfNotFound: true);
+        m_Combat2_MotionF = m_Combat2.FindAction("Motion-F", throwIfNotFound: true);
+        m_Combat2_MotionB = m_Combat2.FindAction("Motion-B", throwIfNotFound: true);
+        m_Combat2_Grab = m_Combat2.FindAction("Grab", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -377,6 +503,9 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
     private readonly InputAction m_Combat1_A;
     private readonly InputAction m_Combat1_B;
     private readonly InputAction m_Combat1_C;
+    private readonly InputAction m_Combat1_MotionF;
+    private readonly InputAction m_Combat1_MotionB;
+    private readonly InputAction m_Combat1_Grab;
     public struct Combat1Actions
     {
         private @InputManager m_Wrapper;
@@ -385,6 +514,9 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
         public InputAction @A => m_Wrapper.m_Combat1_A;
         public InputAction @B => m_Wrapper.m_Combat1_B;
         public InputAction @C => m_Wrapper.m_Combat1_C;
+        public InputAction @MotionF => m_Wrapper.m_Combat1_MotionF;
+        public InputAction @MotionB => m_Wrapper.m_Combat1_MotionB;
+        public InputAction @Grab => m_Wrapper.m_Combat1_Grab;
         public InputActionMap Get() { return m_Wrapper.m_Combat1; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -406,6 +538,15 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
                 @C.started -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnC;
                 @C.performed -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnC;
                 @C.canceled -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnC;
+                @MotionF.started -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnMotionF;
+                @MotionF.performed -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnMotionF;
+                @MotionF.canceled -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnMotionF;
+                @MotionB.started -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnMotionB;
+                @MotionB.performed -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnMotionB;
+                @MotionB.canceled -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnMotionB;
+                @Grab.started -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnGrab;
+                @Grab.performed -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnGrab;
+                @Grab.canceled -= m_Wrapper.m_Combat1ActionsCallbackInterface.OnGrab;
             }
             m_Wrapper.m_Combat1ActionsCallbackInterface = instance;
             if (instance != null)
@@ -422,6 +563,15 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
                 @C.started += instance.OnC;
                 @C.performed += instance.OnC;
                 @C.canceled += instance.OnC;
+                @MotionF.started += instance.OnMotionF;
+                @MotionF.performed += instance.OnMotionF;
+                @MotionF.canceled += instance.OnMotionF;
+                @MotionB.started += instance.OnMotionB;
+                @MotionB.performed += instance.OnMotionB;
+                @MotionB.canceled += instance.OnMotionB;
+                @Grab.started += instance.OnGrab;
+                @Grab.performed += instance.OnGrab;
+                @Grab.canceled += instance.OnGrab;
             }
         }
     }
@@ -434,6 +584,9 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
     private readonly InputAction m_Combat2_A;
     private readonly InputAction m_Combat2_B;
     private readonly InputAction m_Combat2_C;
+    private readonly InputAction m_Combat2_MotionF;
+    private readonly InputAction m_Combat2_MotionB;
+    private readonly InputAction m_Combat2_Grab;
     public struct Combat2Actions
     {
         private @InputManager m_Wrapper;
@@ -442,6 +595,9 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
         public InputAction @A => m_Wrapper.m_Combat2_A;
         public InputAction @B => m_Wrapper.m_Combat2_B;
         public InputAction @C => m_Wrapper.m_Combat2_C;
+        public InputAction @MotionF => m_Wrapper.m_Combat2_MotionF;
+        public InputAction @MotionB => m_Wrapper.m_Combat2_MotionB;
+        public InputAction @Grab => m_Wrapper.m_Combat2_Grab;
         public InputActionMap Get() { return m_Wrapper.m_Combat2; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -463,6 +619,15 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
                 @C.started -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnC;
                 @C.performed -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnC;
                 @C.canceled -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnC;
+                @MotionF.started -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnMotionF;
+                @MotionF.performed -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnMotionF;
+                @MotionF.canceled -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnMotionF;
+                @MotionB.started -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnMotionB;
+                @MotionB.performed -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnMotionB;
+                @MotionB.canceled -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnMotionB;
+                @Grab.started -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnGrab;
+                @Grab.performed -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnGrab;
+                @Grab.canceled -= m_Wrapper.m_Combat2ActionsCallbackInterface.OnGrab;
             }
             m_Wrapper.m_Combat2ActionsCallbackInterface = instance;
             if (instance != null)
@@ -479,6 +644,15 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
                 @C.started += instance.OnC;
                 @C.performed += instance.OnC;
                 @C.canceled += instance.OnC;
+                @MotionF.started += instance.OnMotionF;
+                @MotionF.performed += instance.OnMotionF;
+                @MotionF.canceled += instance.OnMotionF;
+                @MotionB.started += instance.OnMotionB;
+                @MotionB.performed += instance.OnMotionB;
+                @MotionB.canceled += instance.OnMotionB;
+                @Grab.started += instance.OnGrab;
+                @Grab.performed += instance.OnGrab;
+                @Grab.canceled += instance.OnGrab;
             }
         }
     }
@@ -498,6 +672,9 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
         void OnA(InputAction.CallbackContext context);
         void OnB(InputAction.CallbackContext context);
         void OnC(InputAction.CallbackContext context);
+        void OnMotionF(InputAction.CallbackContext context);
+        void OnMotionB(InputAction.CallbackContext context);
+        void OnGrab(InputAction.CallbackContext context);
     }
     public interface ICombat2Actions
     {
@@ -505,5 +682,8 @@ public partial class @InputManager : IInputActionCollection2, IDisposable
         void OnA(InputAction.CallbackContext context);
         void OnB(InputAction.CallbackContext context);
         void OnC(InputAction.CallbackContext context);
+        void OnMotionF(InputAction.CallbackContext context);
+        void OnMotionB(InputAction.CallbackContext context);
+        void OnGrab(InputAction.CallbackContext context);
     }
 }

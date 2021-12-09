@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[SerializeField]
+[CreateAssetMenu(fileName = "Fighter", menuName = "Fighter / Add")]
 public class Fighter : ScriptableObject
 {
     public float walkSpeed;
@@ -11,10 +11,13 @@ public class Fighter : ScriptableObject
     
     public int maxHp;
 
-    public Fighter(float walkSpeed, float jumpforce, int maxHp)
-    {
-        this.walkSpeed = walkSpeed;
-        this.jumpforce = jumpforce;
-        this.maxHp = maxHp;
-    }
+    public string name;
+    
+    public List<Move> moveSet;
+
+    public float jumpSquat;
+
+    public float jumpFrames;
+
+    public float floatiness;
 }

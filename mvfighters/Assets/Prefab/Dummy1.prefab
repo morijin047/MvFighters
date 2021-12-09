@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 502032521683713469}
   - component: {fileID: 502032521683713458}
   m_Layer: 7
-  m_Name: AHitboxP1
+  m_Name: AHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1354,7 +1354,6 @@ GameObject:
   - component: {fileID: 502032522626785194}
   - component: {fileID: 502032521326385352}
   - component: {fileID: 502032521326385355}
-  - component: {fileID: 502032521326385353}
   - component: {fileID: 502032521326385367}
   m_Layer: 7
   m_Name: Dummy1
@@ -1392,11 +1391,11 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 502032522617400426}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 08ad64bb6c623934fa136b083ef6d9ea, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 5e12618280d0f9b4b8370fb403a9d589, type: 3}
   m_Controller: {fileID: 9100000, guid: 455cfd63531075946b334d1e6df05af3, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1432,24 +1431,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.1865044, z: 0.4210977}
   m_Center: {x: 0, y: 0.5647893, z: -0.023878247}
---- !u!111 &502032521326385353
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 502032522617400426}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: dc5eddb63de2ed940b27006ff0e64186, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: dc5eddb63de2ed940b27006ff0e64186, type: 2}
-  - {fileID: 7400000, guid: f2c10322618cc9a4cad61865a7e99fbd, type: 2}
-  - {fileID: 7400000, guid: e9574fec49adc904dadbcb471abd2078, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 0
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!114 &502032521326385367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1462,13 +1443,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49b60bca776840b40aefcc0325f36c81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 0}
-  head: {fileID: 502032522659472013}
+  stats: {fileID: 11400000, guid: 2b66a319fcc02574bb0c986d2713c7cf, type: 2}
   hitbox: {fileID: 502032521683713458}
-  playerPort: 1
   currentHp: 0
-  moveLand: 0
-  hitBoxActivatated: 0
 --- !u!1 &502032522617400428
 GameObject:
   m_ObjectHideFlags: 0
@@ -2409,7 +2386,7 @@ GameObject:
   - component: {fileID: 502032522659472000}
   - component: {fileID: 502032522659472003}
   m_Layer: 7
-  m_Name: Head HurtboxP1
+  m_Name: Head Hurtbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2443,7 +2420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 502032522659472003}
-  hurtboxSize: {x: 0.1, y: 0.25, z: 0.25}
+  hurtboxSize: {x: 0.1, y: 0.5, z: 0.5}
 --- !u!65 &502032522659472003
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2469,7 +2446,7 @@ GameObject:
   - component: {fileID: 502032523029358832}
   - component: {fileID: 502032523029358835}
   m_Layer: 7
-  m_Name: MainHurtboxP1
+  m_Name: MainHurtbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

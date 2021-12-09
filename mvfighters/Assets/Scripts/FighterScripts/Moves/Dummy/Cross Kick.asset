@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f16a587a5f70a6d4da71e56af5382e8f, type: 3}
-  m_Name: Stab Punch
+  m_Name: Cross Kick
   m_EditorClassIdentifier: 
-  properties: 01000000
-  type: 1
+  properties: 0000000009000000
+  type: 6
   category: 0
-  damage: 100
-  hitstun: 6
-  startupFrame: 2.5
-  activeFrame: 1.5
-  endingFrame: 3
-  hitboxSize: {x: 0.1, y: 0.3, z: 0.7}
-  hitboxPosition: {x: 0, y: 0.5, z: 0.5}
-  knockbackForce: {x: 0, y: 0, z: 50}
-  MovePriority: 1
+  damage: 450
+  hitstun: 10
+  startupFrame: 3.5
+  activeFrame: 3
+  endingFrame: 4
+  hitboxSize: {x: 0, y: 0.5, z: 1}
+  hitboxPosition: {x: 0, y: 1, z: 0}
+  knockbackForce: {x: 0, y: 200, z: 100}
+  MovePriority: 3

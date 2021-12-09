@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Swift Kick
   m_EditorClassIdentifier: 
   properties: 01000000
-  hierarchy: 1
+  type: 3
   category: 0
   damage: 250
-  hitstun: 6
-  startupFrame: 2.5
-  activeFrame: 2
+  hitstun: 8
+  startupFrame: 4
+  activeFrame: 2.5
   endingFrame: 4
-  hitboxSize: {x: 0.1, y: 0.5, z: 0.8}
-  hitboxPosition: {x: 0, y: 0.1, z: 0.5}
+  hitboxSize: {x: 0.1, y: 0.6, z: 0.8}
+  hitboxPosition: {x: 0, y: 0.3, z: 0.5}
   knockbackForce: {x: 0, y: 0, z: 100}
+  MovePriority: 2

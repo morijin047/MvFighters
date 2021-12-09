@@ -12,8 +12,13 @@ public enum CharacterState
     Crouching,
     GettingHit,
     A,
+    A2,
     B,
+    B2,
     C,
-    Motion,
-    Super
+    C2,
+    MotionF,
+    MotionB,
+    Super,
+    Grab
 }
