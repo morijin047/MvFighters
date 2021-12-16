@@ -6,6 +6,10 @@ public enum  GameState
 {
     Menu,
     NetworkMenu,
+    Css,
+    TrainingCss,
+    NetworkCss,
     Combat,
+    TrainingCombat,
     NetworkCombat
 }

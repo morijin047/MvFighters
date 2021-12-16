@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,8 +15,12 @@ public class FighterM : MonoBehaviour
 
     private FighterS p2Script;
 
-    private void Start()
+    public void StarGame(GameObject p1, GameObject p2, bool twoplayer)
     {
+        player1 = p1;
+        player1 = Instantiate(player1);
+        player2 = p2;
+        player2 = Instantiate(player2);
         p1Script = player1.GetComponent<FighterS>();
         p2Script = player2.GetComponent<FighterS>();
         p1Script.SetPort(1);
@@ -26,6 +31,7 @@ public class FighterM : MonoBehaviour
     {
         p1Script.Movement(MainS.instance.player1.Combat1.Move.ReadValue<Vector2>());
         p2Script.Movement(MainS.instance.player2.Combat2.Move.ReadValue<Vector2>());
+        
     }
 
     public void UseMove(int playerPort, MoveType moveType)
@@ -33,12 +39,7 @@ public class FighterM : MonoBehaviour
         switch (playerPort)
         {
             case 1:
-                // if (p1Script.CheckCrouch())
-                // {
-                //     p1Script.Attack(moveType);
-                // }
-                // else
-                    p1Script.Attack(moveType);
+                p1Script.Attack(moveType);
                 break;
             case 2:
                 p2Script.Attack(moveType);

@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Option", menuName = "Option / Add")]
 public class Options : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public bool isSubMenu;
+    public MenuSelection option;
+    public VersusSelection versusOption;
+    public OnlineSelection onlineOption;
+    public TrainingSelection trainingOption;
+    public OptionSelection optionsOption;
 }

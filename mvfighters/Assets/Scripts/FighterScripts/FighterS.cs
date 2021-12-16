@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Object = UnityEngine.Object;
@@ -14,7 +15,7 @@ public class FighterS : MonoBehaviour
 
     private CharacterState state;
 
-    private Rigidbody rb;
+    public Rigidbody rb;
 
     private Animator animator;
 
@@ -63,13 +64,14 @@ public class FighterS : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        //rb = GetComponent<Rigidbody>();
         state = CharacterState.Idle;
         animator = GetComponent<Animator>();
         EventManager.AddDamageListener(TakeHit);
         EventManager.AddDamageListener(MoveLand);
         currentHp = stats.maxHp;
         moveLand = true;
+        ResetPosition();
     }
 
     public void SetPort(int playerPort)
@@ -81,9 +83,13 @@ public class FighterS : MonoBehaviour
             trans.gameObject.layer = LayerMask.NameToLayer("Player" + playerPort);
         }
 
+        if (playerPort == 1)
+            hitbox.mask = LayerMask.GetMask("Player2");
+
         if (this.playerPort == 2)
         {
             transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+            hitbox.mask = LayerMask.GetMask("Player1");
         }
     }
 
@@ -92,7 +98,14 @@ public class FighterS : MonoBehaviour
         return playerPort;
     }
 
-
+    public void ResetPosition()
+    {
+        if (playerPort == 1)
+            transform.position = new Vector3(0, 0, -3);
+        if (playerPort == 2)
+            transform.position = new Vector3(0, 0, 3);
+    }
+    
     void MoveLand(DamageEventArg arg)
     {
         moveLand = true;
@@ -160,14 +173,12 @@ public class FighterS : MonoBehaviour
         {
             isCrouched = false;
         }
+
         if (isGrounded && !animPlaying)
         {
             if (inputVector.x != 0 && !isCrouched)
             {
-                if (transform.rotation.y != 0)
-                    transform.Translate(new Vector3(0, 0, -inputVector.x * Time.deltaTime * stats.walkSpeed));
-                else
-                    transform.Translate(new Vector3(0, 0, inputVector.x * Time.deltaTime * stats.walkSpeed));
+                transform.Translate(new Vector3(0, 0, transform.forward.z * inputVector.x * Time.deltaTime * stats.walkSpeed));
                 if (!animPlaying)
                     ChangeAnimationState(CharacterState.Walking);
             }
@@ -177,8 +188,35 @@ public class FighterS : MonoBehaviour
                 {
                     if (isCrouched)
                         ChangeAnimationState(CharacterState.Crouching);
-                    else 
+                    else
+                    {
                         ChangeAnimationState(CharacterState.Idle);
+                        if (playerPort == 1)
+                        {
+                            if (transform.position.z - MainS.instance.fm.player2.transform.position.z < 0)
+                            {
+                                transform.rotation = new Quaternion(0f, 0, 0f, 0f);
+                            }
+                            if (transform.position.z - MainS.instance.fm.player2.transform.position.z >= 0)
+                            {
+                                transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+                            }
+                        }
+
+                        if (playerPort == 2)
+                        {
+                            if (transform.position.z - MainS.instance.fm.player1.transform.position.z < 0)
+                            {
+                                transform.rotation = new Quaternion(0f, 0, 0f, 0f);
+                            }
+                            if (transform.position.z - MainS.instance.fm.player1.transform.position.z >= 0)
+                            {
+                                transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+                            }
+                        }
+                            
+                    }
+                        
                 }
             }
         }
@@ -200,6 +238,7 @@ public class FighterS : MonoBehaviour
                 canbeHit = true;
             }
         }
+
         // if (currentFrame == 0)
         // {
         //     animator.Rebind();
@@ -243,7 +282,7 @@ public class FighterS : MonoBehaviour
         if (currentJumpFrame >= 0 && jumpSquat)
         {
             currentJumpFrame = animator.GetCurrentAnimatorStateInfo(default).normalizedTime * 10;
-            
+
             if (currentJumpFrame > stats.jumpSquat)
             {
                 Jumping();
@@ -253,7 +292,7 @@ public class FighterS : MonoBehaviour
                 jumpSquat = false;
             }
         }
-        
+
         if (currentJumpFrame >= 0 && jumping)
         {
             currentJumpFrame = animator.GetCurrentAnimatorStateInfo(default).normalizedTime * 10;
@@ -289,6 +328,7 @@ public class FighterS : MonoBehaviour
                     Debug.Log(moveType);
                 }
             }
+
             foreach (var m in stats.moveSet)
             {
                 if (m.type == moveType)
@@ -296,11 +336,13 @@ public class FighterS : MonoBehaviour
                     currentMove = m;
                 }
             }
+
             hitbox.UseResponder(currentMove);
             ChangeAnimationState(moveType);
             animPlaying = true;
             //head.GetComponent<HurtBox>().HurtboxSwitch(true);
             currentFrame = 0;
+            currentJumpFrame = 255;
             canCancel = false;
             moveLand = false;
             canAttack = false;
@@ -457,21 +499,26 @@ public class FighterS : MonoBehaviour
                     currentHitstunFrame = eventArg.move.hitstun;
                 }
             }
+
             isInHitstun = true;
             AnimOver();
             DeActivateHitbox();
             PushedAway(eventArg.move.knockbackForce);
             animPlaying = true;
+            if (currentFrame > 0)
+                currentFrame = 255;
+            if (currentJumpFrame > 0)
+                currentJumpFrame = 255;
             canbeHit = false;
             lastMoveHitBy = eventArg.move;
             if (currentHp < 0)
             {
                 switch (playerPort)
                 {
-                    case 1 :
+                    case 1:
                         EventManager.InvokeRoundEnd(new RoundEndEventArg(2));
                         break;
-                    case 2 :
+                    case 2:
                         EventManager.InvokeRoundEnd(new RoundEndEventArg(1));
                         break;
                 }
@@ -492,6 +539,7 @@ public class FighterS : MonoBehaviour
                 }
             }
         }
+
         return blockSuccess;
     }
 
@@ -508,6 +556,7 @@ public class FighterS : MonoBehaviour
                 }
             }
         }
+
         return blockSuccess;
     }
 }
