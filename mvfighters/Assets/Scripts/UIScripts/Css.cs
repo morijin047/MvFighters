@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.UI;
@@ -32,7 +33,10 @@ public class Css : MonoBehaviour
     public Image cp1;
     
     public Image cp2;
+
+    public TMP_Text name1;
     
+    public TMP_Text name2;
     public void ActivateCSS()
     {
         initiated = true;
@@ -57,17 +61,34 @@ public class Css : MonoBehaviour
             ActivateCSS();
         if (player1.currentSelectedGameObject != null)
         {
-            if(!player1.currentSelectedGameObject.name.Contains("Mystery"))
-                cp1.sprite = FindCharacterPortrait(player1.currentSelectedGameObject.name);
-            else 
-                cp1.sprite = FindCharacterPortrait("RandomCSS"); 
+            if (!player1.currentSelectedGameObject.name.Contains("Mystery"))
+            {
+                string name = player1.currentSelectedGameObject.name;
+                cp1.sprite = FindCharacterPortrait(name);
+                name1.text = name;
+            }
+
+            else
+            {
+                cp1.sprite = FindCharacterPortrait("RandomCSS");
+                name1.text = "???";
+            }
+                
         }
         if (player2.currentSelectedGameObject != null)
         {
             if (!player2.currentSelectedGameObject.name.Contains("Mystery"))
-                cp2.sprite = FindCharacterPortrait(player2.currentSelectedGameObject.name);
+            {
+                string name = player2.currentSelectedGameObject.name;
+                cp2.sprite = FindCharacterPortrait(name);
+                name2.text = name;
+            }
             else
+            {
                 cp2.sprite = FindCharacterPortrait("RandomCSS");
+                name2.text = "???";
+            }
+                
         }
         if (c1Selected && c2Selected)
         {
