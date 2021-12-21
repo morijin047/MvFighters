@@ -44,3 +44,14 @@ public enum OptionSelection
    DisplaySetting,
    ButtonSetting
 }
+
+public enum PauseSelection
+{
+   None,
+   Resume,
+   ButtonSetting,
+   MoveList,
+   SoundSetting,
+   CharacterSelect,
+   MainMenu
+}

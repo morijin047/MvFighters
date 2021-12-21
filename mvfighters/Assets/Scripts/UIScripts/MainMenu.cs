@@ -14,6 +14,12 @@ public class MainMenu : MonoBehaviour
     public GameObject mainMenu;
 
     public GameObject versusMenu;
+    
+    public GameObject onlineMenu;
+    
+    public GameObject trainingMenu;
+    
+    public GameObject optionMenu;
 
     public EventSystem eventSystem;
 
@@ -35,20 +41,20 @@ public class MainMenu : MonoBehaviour
                     versusMenu.SetActive(true);
                 break;
             case MenuSelection.Online:
-                if (!mainMenu.activeInHierarchy)
-                    mainMenu.SetActive(true);
+                if (!onlineMenu.activeInHierarchy)
+                    onlineMenu.SetActive(true);
                 break;
             case MenuSelection.Training:
-                if (!mainMenu.activeInHierarchy)
-                    mainMenu.SetActive(true);
+                if (!trainingMenu.activeInHierarchy)
+                    trainingMenu.SetActive(true);
                 break;
             case MenuSelection.Gallery:
                 if (!mainMenu.activeInHierarchy)
                     mainMenu.SetActive(true);
                 break;
             case MenuSelection.Options:
-                if (!mainMenu.activeInHierarchy)
-                    mainMenu.SetActive(true);
+                if (!optionMenu.activeInHierarchy)
+                    optionMenu.SetActive(true);
                 break;
         }
     }
@@ -87,6 +93,15 @@ public class MainMenu : MonoBehaviour
             case MenuSelection.Versus :
                 eventSystem.SetSelectedGameObject(versusMenu.GetComponentInChildren<Button>().gameObject);
                 break;
+            case MenuSelection.Online :
+                eventSystem.SetSelectedGameObject(onlineMenu.GetComponentInChildren<Button>().gameObject);
+                break;
+            case MenuSelection.Training :
+                eventSystem.SetSelectedGameObject(trainingMenu.GetComponentInChildren<Button>().gameObject);
+                break;
+            case MenuSelection.Options :
+                eventSystem.SetSelectedGameObject(optionMenu.GetComponentInChildren<Button>().gameObject);
+                break;
         }
         currentMenu = newMenu;
         Transition();
@@ -98,11 +113,16 @@ public class MainMenu : MonoBehaviour
             mainMenu.SetActive(false);
         if (versusMenu.activeInHierarchy)
             versusMenu.SetActive(false);
+        if (onlineMenu.activeInHierarchy)
+            onlineMenu.SetActive(false);
+        if (trainingMenu.activeInHierarchy)
+            trainingMenu.SetActive(false);
+        if (optionMenu.activeInHierarchy)
+            optionMenu.SetActive(false);
     }
     
     public void GoToCss(String optionChoosed)
     {
-        MainS.instance.state = GameState.Css;
         MainS.instance.player1.UI.Disable();
         MainS.instance.player1.MenuMovement1.Enable();
         VersusSelection vs;
@@ -112,7 +132,25 @@ public class MainMenu : MonoBehaviour
             {
                 MainS.instance.player2.MenuMovement2.Enable();
             }
-                
+            MainS.instance.state = GameState.Css;
+        }
+        OnlineSelection online;
+        if (OnlineSelection.TryParse(optionChoosed, out online))
+        {
+            if (online == OnlineSelection.RankedMode)
+            {
+                //MainS.instance.player2.MenuMovement2.Enable();
+                MainS.instance.state = GameState.NetworkCss;
+            }
+        }
+        TrainingSelection training;
+        if (TrainingSelection.TryParse(optionChoosed, out training))
+        {
+            if (training == TrainingSelection.FreeTraining)
+            {
+                //MainS.instance.player2.MenuMovement2.Enable();
+                MainS.instance.state = GameState.TrainingCss;
+            }
         }
         Transition();
     }

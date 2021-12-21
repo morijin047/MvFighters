@@ -50,8 +50,8 @@ public class MainS : MonoBehaviour
         player1.Combat1.MotionF.performed += context => fm.UseMove(1, MoveType.MotionF);
         player1.Combat1.MotionB.performed += context => fm.UseMove(1, MoveType.MotionB);
         player1.Combat1.Grab.performed += context => fm.UseMove(1, MoveType.Grab);
-        
-        
+
+
         //player2.Combat2.Enable();
         player2.Combat2.A.performed += context => fm.UseMove(2, MoveType.A);
         player2.Combat2.B.performed += context => fm.UseMove(2, MoveType.B);
@@ -61,10 +61,10 @@ public class MainS : MonoBehaviour
         player2.Combat2.Grab.performed += context => fm.UseMove(2, MoveType.Grab);
 
         //player1.MenuMovement1.Enable();
-        
+        player1.MenuMovement1.Cancel.performed += context => um.css.CancelSelection(1);
         //player2.MenuMovement2.Enable();
-        
-        player1.UI.Enable();
+        player2.MenuMovement2.Cancel.performed += context => um.css.CancelSelection(2);
+
         player1.UI.Cancel.performed += context => um.menu.GoBack();
         player1.UI.Submit.performed += context => um.Submit();
     }
@@ -77,14 +77,14 @@ public class MainS : MonoBehaviour
             player1.MenuMovement1.Disable();
         if (player2.MenuMovement2.enabled)
             player2.MenuMovement2.Disable();
-        
+
         player1.Combat1.Enable();
-        if(twoPlayer)
+        if (twoPlayer)
             player2.Combat2.Enable();
         switch (state)
         {
             case GameState.Css:
-               state = GameState.Combat;
+                state = GameState.Combat;
                 break;
             case GameState.NetworkCss:
                 state = GameState.NetworkCombat;
@@ -114,30 +114,24 @@ public class MainS : MonoBehaviour
         {
             um.UpdateCSS();
         }
-        
+
         if (state == GameState.Combat)
         {
             fm.UpdateObjects();
-            if (Input.GetKeyDown(KeyCode.Escape))
+
+            
+            if (paused)
             {
-                paused = !paused;
-                if (paused)
-                {
-                    um.pauseMenu.enabled = true;
-                    Time.timeScale = 0;
-                    player1.Disable();
-                }
-                else
-                {
-                    um.pauseMenu.enabled = false;
-                    Time.timeScale = 1;
-                    player1.Enable();
-                }
+                um.ActivatePauseMenu();
+            }
+            else
+            {
+                um.DeactivatePauseMenu();
             }
         }
 
-        if (paused)
-            um.temp.GetComponentInChildren<TMP_Text>().text = player1.Combat1.Grab.name + " = " + player1.Combat1.Grab;
+        // if (paused)
+        //um.temp.GetComponentInChildren<TMP_Text>().text = player1.Combat1.Grab.name + " = " + player1.Combat1.Grab;
     }
 
     public void StartRebindProcess()
@@ -145,5 +139,14 @@ public class MainS : MonoBehaviour
         player1.Combat1.Grab.PerformInteractiveRebinding().WithControlsExcluding("Mouse").OnMatchWaitForAnother(0.1f)
             .Start();
     }
-   
+
+    public void SetPause(bool boolean)
+    {
+        paused = boolean;
+    }
+    
+    public bool GetPause()
+    {
+        return paused;
+    }
 }
