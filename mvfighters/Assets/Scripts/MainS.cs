@@ -93,6 +93,8 @@ public class MainS : MonoBehaviour
                 state = GameState.TrainingCombat;
                 break;
         }
+        
+        
     }
 
     public void RoundEnd(RoundEndEventArg eventarg)

@@ -23,6 +23,8 @@ public class MainMenu : MonoBehaviour
 
     public EventSystem eventSystem;
 
+    public AudioClip mainMenuBGM;
+
     public void Start()
     {
         currentMenu = MenuSelection.MainMenu;
@@ -152,6 +154,7 @@ public class MainMenu : MonoBehaviour
                 MainS.instance.state = GameState.TrainingCss;
             }
         }
+        
         Transition();
     }
 }

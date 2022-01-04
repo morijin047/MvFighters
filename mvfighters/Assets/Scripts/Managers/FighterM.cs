@@ -29,6 +29,8 @@ public class FighterM : MonoBehaviour
         p1Script.SetPort(1);
         p2Script.SetPort(2);
         twoPlayer = twoplayer;
+        BGMusic.bgmInstance.audio.clip = MainS.instance.um.inGame.stageMusic;
+        BGMusic.bgmInstance.audio.Play();
     }
 
     public void UpdateObjects()

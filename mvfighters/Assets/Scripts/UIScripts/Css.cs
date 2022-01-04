@@ -47,6 +47,8 @@ public class Css : MonoBehaviour
     
     private GameObject prefabPreview2;
 
+    public AudioClip cssBGM;
+
     private bool chooseForCPU;
     public void ActivateCSS()
     {
@@ -68,6 +70,8 @@ public class Css : MonoBehaviour
 
         c1Selected = false;
         c2Selected = false;
+        BGMusic.bgmInstance.audio.clip = cssBGM;
+        BGMusic.bgmInstance.audio.Play();
     }
 
     public void UpdateCss()

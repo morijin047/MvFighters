@@ -18,7 +18,9 @@ public class UIManager : MonoBehaviour
 
     public GameObject cssMenu;
 
-    private InGame inGame;
+    [HideInInspector] public InGame inGame;
+
+    public GameObject inGameUI;
 
     [HideInInspector] public PauseMenu pause;
 
@@ -36,6 +38,7 @@ public class UIManager : MonoBehaviour
         menu = mainMenu.GetComponent<MainMenu>();
         css = cssMenu.GetComponent<Css>();
         pause = pauseMenu.GetComponent<PauseMenu>();
+        inGame = inGameUI.GetComponent<InGame>();
         MainS.instance.player1.UI.Enable();
         if (cssMenu.activeInHierarchy)
         {
@@ -44,6 +47,8 @@ public class UIManager : MonoBehaviour
             if (MainS.instance.player2.MenuMovement2.enabled)
                 MainS.instance.player2.MenuMovement2.Disable();
         }
+        BGMusic.bgmInstance.audio.clip = menu.mainMenuBGM;
+        BGMusic.bgmInstance.audio.Play();
     }
 
     public void UpdateMenu()
