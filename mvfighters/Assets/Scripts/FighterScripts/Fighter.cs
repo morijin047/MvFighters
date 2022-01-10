@@ -7,6 +7,8 @@ public class Fighter : ScriptableObject
 {
     public float walkSpeed;
 
+    public float runspeed;
+
     public float jumpforce;
     
     public int maxHp;
@@ -20,4 +22,12 @@ public class Fighter : ScriptableObject
     public float jumpFrames;
 
     public float floatiness;
+
+    public float dashSpeed;
+    
+    public float DashTime;
+
+    public List<string> winningQuotes;
+
+    public float techSpeed;
 }

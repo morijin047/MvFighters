@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Spin
   m_EditorClassIdentifier: 
   properties: 04000000
-  type: 8
+  type: 9
   category: 0
   damage: 300
   hitstun: 3

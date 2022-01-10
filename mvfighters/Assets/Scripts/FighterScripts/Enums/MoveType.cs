@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum MoveType 
 {
+    Grab2,
     Grab,
     A,
     A2,

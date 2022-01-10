@@ -1447,6 +1447,7 @@ MonoBehaviour:
   rb: {fileID: 502032521326385352}
   hitbox: {fileID: 502032521683713458}
   currentHp: 0
+  runDelay: 0.5
 --- !u!1 &502032522617400428
 GameObject:
   m_ObjectHideFlags: 0

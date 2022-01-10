@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LegSweep
   m_EditorClassIdentifier: 
   properties: 0600000001000000
-  type: 4
+  type: 5
   category: 0
   damage: 225
   hitstun: 7

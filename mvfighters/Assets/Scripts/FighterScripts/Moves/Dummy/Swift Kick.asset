@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Swift Kick
   m_EditorClassIdentifier: 
   properties: 01000000
-  type: 3
+  type: 4
   category: 0
   damage: 250
   hitstun: 8

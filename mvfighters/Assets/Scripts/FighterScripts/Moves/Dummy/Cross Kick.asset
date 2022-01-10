@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Cross Kick
   m_EditorClassIdentifier: 
   properties: 0000000009000000
-  type: 6
+  type: 7
   category: 0
   damage: 450
   hitstun: 10

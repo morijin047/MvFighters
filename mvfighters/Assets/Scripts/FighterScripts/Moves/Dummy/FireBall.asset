@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FireBall
   m_EditorClassIdentifier: 
   properties: 03000000
-  type: 7
+  type: 8
   category: 2
   damage: 200
   hitstun: 5

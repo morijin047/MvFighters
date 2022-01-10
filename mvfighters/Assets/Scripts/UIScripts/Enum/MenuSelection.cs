@@ -55,3 +55,10 @@ public enum PauseSelection
    CharacterSelect,
    MainMenu
 }
+
+public enum ResultSelection
+{
+   Retry,
+   RCharacterSelect,
+   RMainMenu
+}

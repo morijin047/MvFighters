@@ -36,7 +36,6 @@ public class MainS : MonoBehaviour
         player2 = new InputManager();
         PrepareInputManager(player1, 1);
         state = GameState.Menu;
-        EventManager.AddRoundEndListener(RoundEnd);
         //controls = fm.player1.GetComponent<PlayerInput>();
         um.StartMenuUpdating();
     }
@@ -50,7 +49,7 @@ public class MainS : MonoBehaviour
         player1.Combat1.MotionF.performed += context => fm.UseMove(1, MoveType.MotionF);
         player1.Combat1.MotionB.performed += context => fm.UseMove(1, MoveType.MotionB);
         player1.Combat1.Grab.performed += context => fm.UseMove(1, MoveType.Grab);
-
+        player1.Combat1.Dash.performed += context => fm.PerformDash(1);
 
         //player2.Combat2.Enable();
         player2.Combat2.A.performed += context => fm.UseMove(2, MoveType.A);
@@ -59,29 +58,26 @@ public class MainS : MonoBehaviour
         player2.Combat2.MotionF.performed += context => fm.UseMove(2, MoveType.MotionF);
         player2.Combat2.MotionB.performed += context => fm.UseMove(2, MoveType.MotionB);
         player2.Combat2.Grab.performed += context => fm.UseMove(2, MoveType.Grab);
+        player2.Combat2.Dash.performed += context => fm.PerformDash(2);
 
         //player1.MenuMovement1.Enable();
         player1.MenuMovement1.Cancel.performed += context => um.css.CancelSelection(1);
+        player1.MenuMovement1.ExtraButton1.performed += context => um.css.RandomizeSelection(1);
         //player2.MenuMovement2.Enable();
         player2.MenuMovement2.Cancel.performed += context => um.css.CancelSelection(2);
-
-        player1.UI.Cancel.performed += context => um.menu.GoBack();
+        player2.MenuMovement2.ExtraButton1.performed += context => um.css.RandomizeSelection(2);
+        
+        player1.UI.Cancel.performed += context => um.mainMenu.GoBack();
         player1.UI.Submit.performed += context => um.Submit();
     }
 
-    public void GameStart(bool twoPlayer)
+    public void GameStart(bool twoPlayer, GameState previousState)
     {
-        if (player1.UI.enabled)
-            player1.UI.Disable();
-        if (player1.MenuMovement1.enabled)
-            player1.MenuMovement1.Disable();
-        if (player2.MenuMovement2.enabled)
-            player2.MenuMovement2.Disable();
-
+        DisableMenuControls();
         player1.Combat1.Enable();
         if (twoPlayer)
             player2.Combat2.Enable();
-        switch (state)
+        switch (previousState)
         {
             case GameState.Css:
                 state = GameState.Combat;
@@ -93,15 +89,17 @@ public class MainS : MonoBehaviour
                 state = GameState.TrainingCombat;
                 break;
         }
-        
-        
     }
 
-    public void RoundEnd(RoundEndEventArg eventarg)
+    public void DisableMenuControls()
     {
-        state = GameState.Menu;
+        if (player1.UI.enabled)
+            player1.UI.Disable();
+        if (player1.MenuMovement1.enabled)
+            player1.MenuMovement1.Disable();
+        if (player2.MenuMovement2.enabled)
+            player2.MenuMovement2.Disable();
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -117,10 +115,11 @@ public class MainS : MonoBehaviour
             um.UpdateCSS();
         }
 
-        if (state == GameState.Combat)
+        if (state is GameState.Combat or GameState.TrainingCombat or GameState.NetworkCombat)
         {
             fm.UpdateObjects();
 
+            um.UpdateInGameUI();
             
             if (paused)
             {
@@ -130,6 +129,11 @@ public class MainS : MonoBehaviour
             {
                 um.DeactivatePauseMenu();
             }
+        }
+
+        if (state is GameState.ResultScreen)
+        {
+            um.UpdateResultScreen();
         }
 
         // if (paused)

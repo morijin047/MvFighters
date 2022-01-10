@@ -10,13 +10,17 @@ public class UIManager : MonoBehaviour
 {
     public Canvas canvas;
 
-    [HideInInspector] public MainMenu menu;
+    [HideInInspector] public MainMenu mainMenu;
 
-    public GameObject mainMenu;
+    public GameObject mainMenuUI;
 
     [HideInInspector] public Css css;
 
-    public GameObject cssMenu;
+    public GameObject cssUI;
+    
+    [HideInInspector] public VsScreen vsScreen;
+
+    public GameObject vsScreenUI;
 
     [HideInInspector] public InGame inGame;
 
@@ -24,36 +28,41 @@ public class UIManager : MonoBehaviour
 
     [HideInInspector] public PauseMenu pause;
 
-    public GameObject pauseMenu;
+    public GameObject pauseUI;
+    
+    [HideInInspector] public ResultScreen result;
 
-    public Button temp;
+    public GameObject resultUI;
 
     public EventSystem eventSystem;
 
-    private bool was2player;
+    private bool was2Player;
 
     public void StartMenuUpdating()
     {
-        mainMenu.SetActive(true);
-        menu = mainMenu.GetComponent<MainMenu>();
-        css = cssMenu.GetComponent<Css>();
-        pause = pauseMenu.GetComponent<PauseMenu>();
+        mainMenuUI.SetActive(true);
+        mainMenu = mainMenuUI.GetComponent<MainMenu>();
+        css = cssUI.GetComponent<Css>();
+        pause = pauseUI.GetComponent<PauseMenu>();
         inGame = inGameUI.GetComponent<InGame>();
+        vsScreen = vsScreenUI.GetComponent<VsScreen>();
+        result = resultUI.GetComponent<ResultScreen>();
         MainS.instance.player1.UI.Enable();
-        if (cssMenu.activeInHierarchy)
+        if (cssUI.activeInHierarchy)
         {
-            cssMenu.SetActive(false);
+            cssUI.SetActive(false);
             MainS.instance.player1.MenuMovement1.Disable();
             if (MainS.instance.player2.MenuMovement2.enabled)
                 MainS.instance.player2.MenuMovement2.Disable();
         }
-        BGMusic.bgmInstance.audio.clip = menu.mainMenuBGM;
+        eventSystem.SetSelectedGameObject(mainMenu.mainMenu.GetComponentInChildren<Button>().gameObject);
+        BGMusic.bgmInstance.audio.clip = mainMenu.mainMenuBGM;
         BGMusic.bgmInstance.audio.Play();
     }
 
     public void UpdateMenu()
     {
-        menu.UpdateMainMenu();
+        mainMenu.UpdateMainMenu();
     }
 
     public void UpdateCSS()
@@ -61,20 +70,38 @@ public class UIManager : MonoBehaviour
         css.UpdateCss();
     }
 
+    public void UpdateInGameUI()
+    {
+        inGame.UpdateInGameUI();
+    }
+
+    public void UpdateResultScreen()
+    {
+        result.UpdateResultScreen();
+    }
+
+    public void GoToResultScreen(FighterS playerWin, FighterS playerLost)
+    {
+        inGameUI.SetActive(false);
+        resultUI.SetActive(true);
+        eventSystem.SetSelectedGameObject(result.resultOptions.GetComponentInChildren<Button>().gameObject);
+        result.IninitateResultScreen(playerWin, playerLost);
+    }
+
     public void ClickOption(String optionSelected)
     {
         MenuSelection newMenu;
         if (MenuSelection.TryParse(optionSelected, out newMenu))
         {
-            menu.GoTo(newMenu);
+            mainMenu.GoTo(newMenu, false);
         }
 
         VersusSelection vs;
         if (VersusSelection.TryParse(optionSelected, out vs))
         {
-            menu.GoToCss(vs.ToString());
-            mainMenu.SetActive(false);
-            cssMenu.SetActive(true);
+            mainMenu.GoToCss(vs.ToString());
+            mainMenuUI.SetActive(false);
+            cssUI.SetActive(true);
         }
 
         OnlineSelection online;
@@ -82,9 +109,9 @@ public class UIManager : MonoBehaviour
         {
             if (online == OnlineSelection.RankedMode)
             {
-                menu.GoToCss(online.ToString());
-                mainMenu.SetActive(false);
-                cssMenu.SetActive(true);
+                mainMenu.GoToCss(online.ToString());
+                mainMenuUI.SetActive(false);
+                cssUI.SetActive(true);
             }
         }
 
@@ -93,9 +120,9 @@ public class UIManager : MonoBehaviour
         {
             if (training == TrainingSelection.FreeTraining)
             {
-                menu.GoToCss(training.ToString());
-                mainMenu.SetActive(false);
-                cssMenu.SetActive(true);
+                mainMenu.GoToCss(training.ToString());
+                mainMenuUI.SetActive(false);
+                cssUI.SetActive(true);
             }
         }
 
@@ -117,27 +144,87 @@ public class UIManager : MonoBehaviour
             if (pause == PauseSelection.CharacterSelect)
             {
                 MainS.instance.SetPause(false);
+                inGame.TurnOffIngameUI();
                 switch (MainS.instance.state)
                 {
                     case GameState.Combat :
-                        MainS.instance.fm.MatchOver(true);
+                        MainS.instance.fm.MatchOver();
+                        MainS.instance.fm.DeleteCurrentFighter();
                         MainS.instance.SetPause(false);
                         MainS.instance.um.DeactivatePauseMenu();
                         MainS.instance.state = GameState.Css;
-                        MainS.instance.um.cssMenu.SetActive(true);
+                        MainS.instance.um.cssUI.SetActive(true);
                         MainS.instance.player1.MenuMovement1.Enable();
                         //MainS.instance.um.StartMenuUpdating();
                         if (MainS.instance.fm.twoPlayer)
                         {
-                            MainS.instance.um.menu.GoToCss(VersusSelection.VsPlayer.ToString());
+                            MainS.instance.um.mainMenu.GoToCss(VersusSelection.VsPlayer.ToString());
                             MainS.instance.player2.MenuMovement2.Enable();
                         }
                         else
                         {
-                            MainS.instance.um.menu.GoToCss(VersusSelection.VsCom.ToString());
+                            MainS.instance.um.mainMenu.GoToCss(VersusSelection.VsCom.ToString());
                         }
                         break;
                 }
+            }
+
+            if (pause == PauseSelection.MainMenu)
+            {
+                MainS.instance.fm.MatchOver(); 
+                MainS.instance.fm.DeleteCurrentFighter();
+                MainS.instance.SetPause(false);
+                DeactivatePauseMenu();
+                inGame.TurnOffIngameUI();
+                MainS.instance.state = GameState.Menu;
+                StartMenuUpdating();
+            }
+        }
+
+        ResultSelection result;
+        if (ResultSelection.TryParse(optionSelected, out result))
+        {
+            if (result == ResultSelection.Retry)
+            {
+                MainS.instance.state = this.result.previousGameState;
+                MainS.instance.fm.RoundStart();
+                inGame.InitiateInGameUI();
+                this.resultUI.SetActive(false);
+            }
+
+            if (result == ResultSelection.RCharacterSelect)
+            {
+                resultUI.SetActive(false);
+                switch (this.result.previousGameState)
+                {
+                    case GameState.Combat :
+                        MainS.instance.fm.MatchOver();
+                        MainS.instance.fm.DeleteCurrentFighter();
+                        MainS.instance.state = GameState.Css;
+                        MainS.instance.um.cssUI.SetActive(true);
+                        MainS.instance.player1.MenuMovement1.Enable();
+                        //MainS.instance.um.StartMenuUpdating();
+                        if (MainS.instance.fm.twoPlayer)
+                        {
+                            MainS.instance.um.mainMenu.GoToCss(VersusSelection.VsPlayer.ToString());
+                            MainS.instance.player2.MenuMovement2.Enable();
+                        }
+                        else
+                        {
+                            MainS.instance.um.mainMenu.GoToCss(VersusSelection.VsCom.ToString());
+                        }
+                        break;
+                }
+            }
+
+            if (result == ResultSelection.RMainMenu)
+            {
+                MainS.instance.fm.MatchOver(); 
+                MainS.instance.fm.DeleteCurrentFighter();
+                resultUI.SetActive(false);
+                MainS.instance.state = GameState.Menu;
+                StartMenuUpdating();
+                mainMenu.GoTo(MenuSelection.MainMenu, false);
             }
         }
     }
@@ -149,19 +236,20 @@ public class UIManager : MonoBehaviour
 
     public void ActivatePauseMenu()
     {
-        if (!pauseMenu.activeInHierarchy)
+        if (!pauseUI.activeInHierarchy)
         {
-            pauseMenu.SetActive(true);
+            pauseUI.SetActive(true);
             Time.timeScale = 0;
             MainS.instance.player1.Combat1.Disable();
             if (MainS.instance.player2.Combat2.enabled)
             {
                 MainS.instance.player2.Combat2.Disable();
-                was2player = true;
+                was2Player = true;
             }
 
             MainS.instance.player1.UI.Enable();
-            eventSystem.SetSelectedGameObject(pauseMenu.GetComponentInChildren<Button>().gameObject);
+            eventSystem.SetSelectedGameObject(pauseUI.GetComponentInChildren<Button>().gameObject);
+            SFXManager.sfxInstance.PlayPauseSound();
         }
         else
         {
@@ -171,15 +259,15 @@ public class UIManager : MonoBehaviour
 
     public void DeactivatePauseMenu()
     {
-        pauseMenu.SetActive(false);
+        pauseUI.SetActive(false);
         Time.timeScale = 1;
         MainS.instance.player1.Combat1.Enable();
-        if (was2player)
+        if (was2Player)
         {
             MainS.instance.player2.Combat2.Enable();
         }
 
         MainS.instance.player1.UI.Disable();
-        was2player = false;
+        was2Player = false;
     }
 }

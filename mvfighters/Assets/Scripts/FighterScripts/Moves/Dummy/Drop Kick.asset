@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Drop Kick
   m_EditorClassIdentifier: 
   properties: 0900000007000000
-  type: 5
+  type: 6
   category: 0
   damage: 400
   hitstun: 8

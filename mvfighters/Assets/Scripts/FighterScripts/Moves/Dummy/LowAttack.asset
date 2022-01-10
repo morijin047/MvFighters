@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LowAttack
   m_EditorClassIdentifier: 
   properties: 0100000006000000
-  type: 2
+  type: 3
   category: 0
   damage: 150
   hitstun: 4

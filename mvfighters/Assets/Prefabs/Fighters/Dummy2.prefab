@@ -1443,7 +1443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49b60bca776840b40aefcc0325f36c81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 2b66a319fcc02574bb0c986d2713c7cf, type: 2}
+  stats: {fileID: 11400000, guid: 8318b6e38af1f4c45857f9693ea66ccb, type: 2}
   rb: {fileID: 502032521326385352}
   hitbox: {fileID: 502032521683713458}
   currentHp: 0

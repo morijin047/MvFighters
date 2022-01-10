@@ -11,6 +11,11 @@ public enum CharacterState
     Jumping,
     Crouching,
     GettingHit,
+    KnockDown,
+    Dash,
+    Recovery,
+    Intro,
+    Winner,
     A,
     A2,
     B,
@@ -20,5 +25,6 @@ public enum CharacterState
     MotionF,
     MotionB,
     Super,
-    Grab
+    Grab,
+    Grab2
 }

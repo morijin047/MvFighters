@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f16a587a5f70a6d4da71e56af5382e8f, type: 3}
   m_Name: Grab
   m_EditorClassIdentifier: 
-  properties: 09000000
-  type: 0
+  properties: 
+  type: 1
   category: 3
   damage: 200
   hitstun: 10
-  startupFrame: 8
-  activeFrame: 5
-  endingFrame: 3
+  startupFrame: 2
+  activeFrame: 4
+  endingFrame: 2
   hitboxSize: {x: 0, y: 0.5, z: 0.5}
   hitboxPosition: {x: 0, y: 0.5, z: 0.5}
   knockbackForce: {x: 0, y: 0, z: 0}

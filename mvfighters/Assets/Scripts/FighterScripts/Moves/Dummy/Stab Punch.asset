@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Stab Punch
   m_EditorClassIdentifier: 
   properties: 01000000
-  type: 1
+  type: 2
   category: 0
   damage: 100
   hitstun: 6

@@ -25,6 +25,8 @@ public class MainMenu : MonoBehaviour
 
     public AudioClip mainMenuBGM;
 
+    public string lastSelection;
+
     public void Start()
     {
         currentMenu = MenuSelection.MainMenu;
@@ -59,6 +61,15 @@ public class MainMenu : MonoBehaviour
                     optionMenu.SetActive(true);
                 break;
         }
+
+        if (lastSelection == null)
+            lastSelection = eventSystem.currentSelectedGameObject.name;
+
+        if (eventSystem.currentSelectedGameObject.name != lastSelection)
+        {
+            lastSelection = eventSystem.currentSelectedGameObject.name;
+            SFXManager.sfxInstance.PlayMoveSound();
+        }
     }
 
     public void GoBack()
@@ -66,25 +77,25 @@ public class MainMenu : MonoBehaviour
         switch (currentMenu)
         {
             case MenuSelection.Versus :
-                GoTo(MenuSelection.MainMenu);
+                GoTo(MenuSelection.MainMenu, true);
                 break;
             case MenuSelection.Online :
-                GoTo(MenuSelection.MainMenu);
+                GoTo(MenuSelection.MainMenu, true);
                 break;
             case MenuSelection.Training :
-                GoTo(MenuSelection.MainMenu);
+                GoTo(MenuSelection.MainMenu, true);
                 break;
             case MenuSelection.Gallery :
-                GoTo(MenuSelection.MainMenu);
+                GoTo(MenuSelection.MainMenu, true);
                 break;
             case MenuSelection.Options :
-                GoTo(MenuSelection.MainMenu);
+                GoTo(MenuSelection.MainMenu, true);
                 break;
         }
         
     }
     
-    public void GoTo(MenuSelection newMenu)
+    public void GoTo(MenuSelection newMenu, bool cancel)
     {
         switch (newMenu)
         {
@@ -106,10 +117,10 @@ public class MainMenu : MonoBehaviour
                 break;
         }
         currentMenu = newMenu;
-        Transition();
+        Transition(cancel);
     }
     
-    public void Transition()
+    public void Transition(bool cancel)
     {
         if (mainMenu.activeInHierarchy)
             mainMenu.SetActive(false);
@@ -121,6 +132,10 @@ public class MainMenu : MonoBehaviour
             trainingMenu.SetActive(false);
         if (optionMenu.activeInHierarchy)
             optionMenu.SetActive(false);
+       if (cancel)
+           SFXManager.sfxInstance.PlayCancelSound();
+       else 
+           SFXManager.sfxInstance.PlayOkSound();
     }
     
     public void GoToCss(String optionChoosed)
@@ -154,7 +169,6 @@ public class MainMenu : MonoBehaviour
                 MainS.instance.state = GameState.TrainingCss;
             }
         }
-        
-        Transition();
+        Transition(false);
     }
 }

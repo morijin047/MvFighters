@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class Css : MonoBehaviour
 {
-    public GameObject css;
-
     public MultiplayerEventSystem player1;
     
     public MultiplayerEventSystem player2;
@@ -50,6 +48,10 @@ public class Css : MonoBehaviour
     public AudioClip cssBGM;
 
     private bool chooseForCPU;
+
+    [HideInInspector] public string lastSelection1;
+    
+    [HideInInspector] public string lastSelection2;
     public void ActivateCSS()
     {
         initiated = true;
@@ -194,13 +196,29 @@ public class Css : MonoBehaviour
                 }
                 
             }
-                
+              
+            if (lastSelection1 == null)
+                lastSelection1 = player1.currentSelectedGameObject.name;
+
+            if (player1.currentSelectedGameObject.name != lastSelection1)
+            {
+                lastSelection1 = player1.currentSelectedGameObject.name;
+                SFXManager.sfxInstance.PlayMoveSound();
+            }
+            
+            if (lastSelection2 == null)
+                lastSelection2 = player2.currentSelectedGameObject.name;
+
+            if (player2.currentSelectedGameObject.name != lastSelection2)
+            {
+                lastSelection2 = player2.currentSelectedGameObject.name;
+                SFXManager.sfxInstance.PlayMoveSound();
+            }
         }
         if (c1Selected && c2Selected)
         {
-            MainS.instance.GameStart(twoPlayer);
             MainS.instance.fm.StarGame(currentCharacter1, currentCharacter2, twoPlayer);
-            gameObject.SetActive(false);
+            MainS.instance.um.vsScreen.VsScreenAppear(twoPlayer, currentCharacter1.name, currentCharacter2.name);
             initiated = false;
             c1Selected = false;
             c2Selected = false;
@@ -209,6 +227,7 @@ public class Css : MonoBehaviour
                 player2.enabled = false;
             twoPlayer = false;
             chooseForCPU = false;
+            gameObject.SetActive(false);
         }
         
     }
@@ -265,6 +284,7 @@ public class Css : MonoBehaviour
                         chooseForCPU = true;
                 }
             }
+            SFXManager.sfxInstance.PlayOkSound();
         }
     }
 
@@ -294,13 +314,13 @@ public class Css : MonoBehaviour
             switch (MainS.instance.state)
             {
                 case GameState.Css :
-                    MainS.instance.um.menu.GoTo(MenuSelection.Versus);
+                    MainS.instance.um.mainMenu.GoTo(MenuSelection.Versus, true);
                     break;
                 case GameState.NetworkCss :
-                    MainS.instance.um.menu.GoTo(MenuSelection.Online);
+                    MainS.instance.um.mainMenu.GoTo(MenuSelection.Online, true);
                     break;
                 case GameState.TrainingCss :
-                    MainS.instance.um.menu.GoTo(MenuSelection.Training);
+                    MainS.instance.um.mainMenu.GoTo(MenuSelection.Training, true);
                     break;
             }
             MainS.instance.state = GameState.Menu;
@@ -314,5 +334,21 @@ public class Css : MonoBehaviour
             twoPlayer = false;
             chooseForCPU = false;
         }
+        SFXManager.sfxInstance.PlayCancelSound();
+    }
+
+    public void RandomizeSelection(int playerport)
+    {
+        int numberOfCharacter = characterPrefab.Count;
+        GameObject go = characterPrefab[Random.Range(0, numberOfCharacter)];
+        if (playerport == 1)
+        {
+            player1.SetSelectedGameObject(go);
+        }
+        if (playerport == 2)
+        {
+            player2.SetSelectedGameObject(go);
+        }
+        SelectCharacter(go.name);
     }
 }

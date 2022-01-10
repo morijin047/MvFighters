@@ -9,7 +9,9 @@ public enum  GameState
     Css,
     TrainingCss,
     NetworkCss,
+    VsScreen,
     Combat,
     TrainingCombat,
-    NetworkCombat
+    NetworkCombat,
+    ResultScreen
 }
