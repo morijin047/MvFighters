@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Move", menuName = "Move / Add")]
-public class Move : ScriptableObject , IHitboxResponder
+public class Move : ScriptableObject 
 {
     public List<MoveProperty> properties;
     public MoveType type;
@@ -47,13 +47,6 @@ public class Move : ScriptableObject , IHitboxResponder
     public void AddProperties(MoveProperty property)
     {
         properties.Add(property);
-    }
-
-    public void CollisionedWith(Collider collider)
-    {
-        int playerPort = collider.GetComponentInParent<FighterS>().GetPort();
-        HurtBox hurtbox = collider.GetComponent<HurtBox>();
-        hurtbox?.GetHitBy(this, playerPort);
     }
 
     public float GetTotalFrames()

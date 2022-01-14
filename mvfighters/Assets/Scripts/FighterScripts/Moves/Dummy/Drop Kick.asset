@@ -15,12 +15,12 @@ MonoBehaviour:
   properties: 0900000007000000
   type: 6
   category: 0
-  damage: 400
-  hitstun: 8
-  startupFrame: 3.5
-  activeFrame: 2.5
-  endingFrame: 6
+  damage: 800
+  hitstun: 30
+  startupFrame: 40
+  activeFrame: 20
+  endingFrame: 45
   hitboxSize: {x: 0.1, y: 0.5, z: 1}
   hitboxPosition: {x: 0, y: 0.5, z: 0.5}
-  knockbackForce: {x: 0, y: 0, z: 150}
+  knockbackForce: {x: 0, y: 0, z: 300}
   MovePriority: 3

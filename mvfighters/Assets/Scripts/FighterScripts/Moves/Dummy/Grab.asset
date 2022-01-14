@@ -17,9 +17,9 @@ MonoBehaviour:
   category: 3
   damage: 200
   hitstun: 10
-  startupFrame: 2
-  activeFrame: 4
-  endingFrame: 2
+  startupFrame: 24
+  activeFrame: 8
+  endingFrame: 32
   hitboxSize: {x: 0, y: 0.5, z: 0.5}
   hitboxPosition: {x: 0, y: 0.5, z: 0.5}
   knockbackForce: {x: 0, y: 0, z: 0}

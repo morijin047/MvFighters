@@ -30,7 +30,7 @@ public class FighterM : MonoBehaviour
     public bool twoPlayer;
 
     public bool roundStart = false;
-    
+
     private IEnumerator roundStartCoroutine;
     public float timeBeforeRoundStart;
 
@@ -77,6 +77,7 @@ public class FighterM : MonoBehaviour
         roundStartCoroutine = RoundStartCoroutine();
         StartCoroutine(roundStartCoroutine);
     }
+
     public IEnumerator RoundStartCoroutine()
     {
         while (true)
@@ -89,7 +90,7 @@ public class FighterM : MonoBehaviour
             SFXManager.sfxInstance.audio.PlayOneShot(MainS.instance.um.inGame.narratorVoices[1]);
             MainS.instance.um.inGame.StartCoroutineRoundText(2f);
             EnableControls();
-            StopCoroutine(roundStartCoroutine);  
+            StopCoroutine(roundStartCoroutine);
         }
     }
 
@@ -143,6 +144,13 @@ public class FighterM : MonoBehaviour
 
     public void UseMove(int playerPort, MoveType moveType)
     {
+        //foreach motionbufferArray
+            //condition forward
+                // moveType = MoveType.MotionF;
+            //condition backward
+                // moveType = MoveType.MotionB;
+            //condition super
+                // moveType = MoveType.Super;
         switch (playerPort)
         {
             case 1:
@@ -167,7 +175,6 @@ public class FighterM : MonoBehaviour
         }
     }
 
-    
 
     public void MatchOver()
     {
@@ -197,7 +204,9 @@ public class FighterM : MonoBehaviour
             p2Script.ChangeAnimationState(CharacterState.Idle);
             p1Script.KnockDown();
         }
-        MainS.instance.um.inGame.StartDelayedCoroutineRoundText(2f, 2f, winningPort, MainS.instance.um.inGame.narratorVoices[4]);
+
+        MainS.instance.um.inGame.StartDelayedCoroutineRoundText(2f, 2f, winningPort,
+            MainS.instance.um.inGame.narratorVoices[4]);
         roundStart = false;
         EventManager.InvokeRoundEnd(new RoundEndEventArg(winningPort));
     }

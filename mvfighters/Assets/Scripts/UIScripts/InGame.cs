@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,6 +44,12 @@ public class InGame : MonoBehaviour
 
     public List<AudioClip> narratorVoices;
 
+    private ComboDisplay comboDisplay;
+    public TMP_Text comboCounter;
+    public TMP_Text damageCounter;
+    private bool comboEvent = false;
+    public IEnumerator comboDisplayCoroutine;
+
     public void InitiateInGameUI()
     {
         MainS.instance.um.inGameUI.SetActive(true);
@@ -65,7 +72,12 @@ public class InGame : MonoBehaviour
         RoundIcon2.SetActive(false);
         MatchIcon1.SetActive(false);
         MatchIcon2.SetActive(false);
-        
+        if (!comboEvent)
+        {
+            comboDisplay = new ComboDisplay();
+            EventManager.AddDamageListener(comboDisplay.ComboTrigger);
+            comboEvent = true;
+        }
         //icon1.sprite = MainS.instance.um.css.cp1.sprite;
         timer = new Timer(timerStart);
         messageOnScreen.enabled = false;
@@ -160,7 +172,39 @@ public class InGame : MonoBehaviour
             int secondLeft = (int) timer.current;
             timerUI.text = secondLeft.ToString();
         }
+
+        if (comboDisplay.IsComboHappening() || comboDisplay.IsComboDisappearing())
+        {
+            comboDisplay.UpdateComboCounter(comboCounter, damageCounter);
+            comboCounter.enabled = true;
+            damageCounter.enabled = true;
+        }
+        else
+        {
+            comboCounter.enabled = false;
+            damageCounter.enabled = false;
+        }
     }
+
+    public void StartComboDisappearCoroutine(float delay)
+    {
+        comboDisplayCoroutine = ComboDisappearCoroutine(delay);
+        StartCoroutine(comboDisplayCoroutine);
+    }
+
+    private IEnumerator ComboDisappearCoroutine(float delay)
+    {
+        while (true)
+        {
+            comboDisplay.SetComboDisappearingBoolean(true);
+            yield return new WaitForSeconds(delay);
+            comboCounter.text = "";
+            damageCounter.text = "";
+            comboDisplay.SetComboDisappearingBoolean(false);
+            StopCoroutine(comboDisplayCoroutine);
+        }
+    }
+    
 
     public void GiveRoundWin(RoundEndEventArg eventarg)
     {

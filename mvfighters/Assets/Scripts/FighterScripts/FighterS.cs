@@ -15,6 +15,7 @@ public class FighterS : MonoBehaviour
     public Rigidbody rb;
     private Animator animator;
     public Fighter stats;
+
     void Start()
     {
         //rb = GetComponent<Rigidbody>();
@@ -24,8 +25,9 @@ public class FighterS : MonoBehaviour
         minZWorld = -5f;
         maxZWorld = 5f;
     }
-    
+
     private int playerPort;
+
     public void SetPort(int playerPort)
     {
         this.playerPort = playerPort;
@@ -34,20 +36,13 @@ public class FighterS : MonoBehaviour
         {
             trans.gameObject.layer = LayerMask.NameToLayer("Player" + playerPort);
         }
-
-        if (playerPort == 1)
-            hitbox.mask = LayerMask.GetMask("Player2");
-
-        if (this.playerPort == 2)
-        {
-            transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
-            hitbox.mask = LayerMask.GetMask("Player1");
-        }
     }
+
     public int GetPort()
     {
         return playerPort;
     }
+
     public void ResetPosition(float startPos)
     {
         if (playerPort == 1)
@@ -58,17 +53,17 @@ public class FighterS : MonoBehaviour
         moveLand = true;
         knockedDown = false;
         canAttack = true;
-        animPlaying = false;
+        HitStunOver();
         isCrouched = false;
         firsTap = false;
         secondTap = false;
         running = false;
         dashing = false;
         canDashAgain = true;
-        isInHitstun = false;
         teching = false;
         grabbing = false;
-        DeActivateHitbox();
+        if (hitbox.gameObject.activeInHierarchy)
+            DeActivateHitbox();
         currentHp = stats.maxHp;
         lastTimePressedRun = Time.time;
         currentdashTime = stats.DashTime;
@@ -78,6 +73,7 @@ public class FighterS : MonoBehaviour
     //ANIMATION
     private bool animPlaying = false;
     private CharacterState state;
+
     public void ChangeAnimationState(CharacterState newAnimation)
     {
         if (state == newAnimation && (newAnimation == CharacterState.Idle || newAnimation == CharacterState.Walking ||
@@ -85,6 +81,7 @@ public class FighterS : MonoBehaviour
         animator.Play(newAnimation.ToString(), -1, 0);
         state = newAnimation;
     }
+
     public void ChangeAnimationState(MoveType newAnimation)
     {
         CharacterState temp;
@@ -100,19 +97,21 @@ public class FighterS : MonoBehaviour
             Debug.Log("Error animation");
         }
     }
+
     public void AnimOver()
     {
         animPlaying = false;
     }
-    
+
     //MOVEMENT
     private Vector2 inputVector;
+
     public void Movement(Vector2 input)
     {
         inputVector = input;
 
         CheckAirborne();
-        
+
         //JUMP Performed
         if (inputVector.y > 0 && isGrounded)
         {
@@ -208,7 +207,7 @@ public class FighterS : MonoBehaviour
                     secondTap = true;
                     lastTimePressedRun = Time.time;
                 }
-                
+
                 //Stop run and reset the double tap logic
                 if (running)
                 {
@@ -221,14 +220,13 @@ public class FighterS : MonoBehaviour
                 {
                     if (isCrouched)
                     {
-                        DeActivateHitbox();
                         ChangeAnimationState(CharacterState.Crouching);
                     }
-                        
+
                     else
                     {
                         ChangeAnimationState(CharacterState.Idle);
-                        DeActivateHitbox();
+                        canCancel = true;
                         TurnPlayer();
                     }
                 }
@@ -239,7 +237,7 @@ public class FighterS : MonoBehaviour
         CurrentHitStunFrame();
         CurrentAttackFrame();
         CurrentJumpFrame();
-        
+
         //CameraLimit
         CameraLimit();
 
@@ -248,9 +246,10 @@ public class FighterS : MonoBehaviour
         {
             Dashing();
         }
-    } 
-    
+    }
+
     private bool isGrounded = true;
+
     void CheckAirborne()
     {
         RaycastHit hit;
@@ -266,8 +265,9 @@ public class FighterS : MonoBehaviour
             isGrounded = false;
         }
     }
-    
+
     private bool isCrouched = false;
+
     public bool CheckCrouch()
     {
         if (inputVector.y < 0 && isGrounded)
@@ -278,15 +278,17 @@ public class FighterS : MonoBehaviour
         {
             isCrouched = false;
         }
+
         return isCrouched;
     }
-    
+
     private float runDelay = 0.1f;
     private float lastTimePressedRun;
     private bool firsTap;
     private bool secondTap;
     private bool running;
     private Vector2 directionRun;
+
     public void PerformRun()
     {
         transform.Translate(new Vector3(0, 0,
@@ -294,9 +296,10 @@ public class FighterS : MonoBehaviour
         if (!animPlaying)
             ChangeAnimationState(CharacterState.Running);
     }
-    
+
     private float minZWorld;
     private float maxZWorld;
+
     public void CameraLimit()
     {
         float maxDist = MainS.instance.fm.maxDistance;
@@ -305,6 +308,7 @@ public class FighterS : MonoBehaviour
         viewPos.z = Math.Clamp(viewPos.z, centerScreen.z - maxDist / 2, centerScreen.z + maxDist / 2);
         transform.position = viewPos;
     }
+
     public void TurnPlayer()
     {
         if (playerPort == 1)
@@ -333,16 +337,17 @@ public class FighterS : MonoBehaviour
             }
         }
     }
-    
+
     //ATTACK
     private bool canAttack = true;
     public int currentHp;
+
     public void Attack(MoveType moveType)
     {
         if (currentMove != null)
         {
             if (CheckCancel(moveType))
-                canAttack = true;
+                canCancel = true;
         }
 
         if (!isInHitstun && canAttack && canCancel && moveLand && !grabbing)
@@ -351,7 +356,7 @@ public class FighterS : MonoBehaviour
             {
                 if (MoveType.TryParse(moveType.ToString() + "2", out moveType))
                 {
-                    Debug.Log(moveType);
+                    //Debug.Log(moveType);
                 }
             }
 
@@ -363,7 +368,16 @@ public class FighterS : MonoBehaviour
                 }
             }
 
-            hitbox.UseResponder(currentMove);
+            if (currentMove.properties.Contains(MoveProperty.AntiAir))
+            {
+                airInvulnerable = true;
+            }
+
+            if (currentMove.properties.Contains(MoveProperty.SuperArmor))
+            {
+                superArmor = true;
+            }
+
             ChangeAnimationState(moveType);
             animPlaying = true;
             //head.GetComponent<HurtBox>().HurtboxSwitch(true);
@@ -374,47 +388,70 @@ public class FighterS : MonoBehaviour
             canAttack = false;
         }
     }
-    
-    private float currentFrame = -1;
+
+    public float currentFrame = -1;
+
     public void CurrentAttackFrame()
     {
         if (currentFrame >= 0)
         {
-            currentFrame = animator.GetCurrentAnimatorStateInfo(default).normalizedTime * 10;
+            currentFrame++;
             //currentFrame += 0.5f;
-            if (currentFrame > currentMove.GetTotalFrames() - currentMove.endingFrame)
-            {
-                canCancel = true;
-            }
-
             if (currentFrame > currentMove.GetTotalFrames())
             {
+                AttackOver();
                 AnimOver();
-                currentFrame = -1;
-                canAttack = true;
-                moveLand = true;
             }
             else if (currentFrame > currentMove.activeFrame + currentMove.startupFrame)
             {
-                if (hitBoxActivatated)
+                if (hitbox.gameObject.activeInHierarchy)
                     DeActivateHitbox();
             }
 
             else if (currentFrame > currentMove.startupFrame)
             {
-                if (!hitBoxActivatated)
-                    ActivateHitbox();
+                if (!hitbox.gameObject.activeInHierarchy)
+                    ActivateHitbox(currentMove);
             }
             else
             {
-                if (hitBoxActivatated)
+                if (hitbox.gameObject.activeInHierarchy)
                     DeActivateHitbox();
             }
         }
     }
-    
+
+    public void AttackOver()
+    {
+        currentFrame = -1;
+        canAttack = true;
+        moveLand = true;
+        DeActivateSpecialProperties();
+        if (hitbox.gameObject.activeInHierarchy)
+            DeActivateHitbox();
+    }
+
+    public void AttackLand()
+    {
+        //AttackOver();
+        if (hitbox.gameObject.activeInHierarchy)
+            DeActivateHitbox();
+        moveLand = true;
+        canAttack = true;
+        currentFrame = currentMove.activeFrame + currentMove.startupFrame;
+    }
+
+    public void DeActivateSpecialProperties()
+    {
+        if (superArmor)
+            superArmor = false;
+        if (airInvulnerable)
+            airInvulnerable = false;
+    }
+
     private bool canCancel = true;
     private Move currentMove;
+
     public bool CheckCancel(MoveType typeOfMove)
     {
         int priority;
@@ -464,32 +501,36 @@ public class FighterS : MonoBehaviour
 
         return returnValue;
     }
-    
+
     private bool moveLand = true;
-    void MoveLand(DamageEventArg arg)
+
+    public void MoveLand(DamageEventArg arg)
     {
+        if (arg.player == playerPort) { return; }
         moveLand = true;
         canAttack = true;
-        DeActivateHitbox();
+        if (hitbox.gameObject.activeInHierarchy)
+            DeActivateHitbox();
+        DeActivateSpecialProperties();
     }
-    
+
     //HITBOX
-    public HitBox hitbox;
-    private bool hitBoxActivatated = false;
-    public void ActivateHitbox()
+    public NewHitbox hitbox;
+
+    public void ActivateHitbox(Move move)
     {
-        hitbox.StartCheckingCollision(currentMove.hitboxSize, currentMove.hitboxPosition);
-        hitBoxActivatated = true;
+        hitbox.ActivateHitbox(move, playerPort);
     }
+
     public void DeActivateHitbox()
     {
-        hitbox.StopCheckingCollision();
-        hitBoxActivatated = false;
+        hitbox.DeactivateHitbox();
     }
 
     //TECH RECOVERYY
     public IEnumerator techCoroutine;
     private bool teching = false;
+
     public void TechRecovery()
     {
         ChangeAnimationState(CharacterState.Recovery);
@@ -497,6 +538,7 @@ public class FighterS : MonoBehaviour
         techCoroutine = TechCoroutine();
         StartCoroutine(techCoroutine);
     }
+
     public IEnumerator TechCoroutine()
     {
         while (true)
@@ -509,11 +551,13 @@ public class FighterS : MonoBehaviour
             StopCoroutine(techCoroutine);
         }
     }
+
     //DASH
     private float currentdashTime;
     private bool dashing;
     private bool canDashAgain;
     private Vector2 dashDirection;
+
     public void Dash()
     {
         if (!dashing && canAttack && canDashAgain && !knockedDown && !grabbing)
@@ -550,6 +594,7 @@ public class FighterS : MonoBehaviour
             }
         }
     }
+
     public void Dashing()
     {
         if (currentdashTime <= 0)
@@ -567,12 +612,13 @@ public class FighterS : MonoBehaviour
             rb.velocity = new Vector3(0, 0, stats.dashSpeed * dashDirection.x);
         }
     }
-    
+
     //JUMP
     private bool jumpSquat = false;
     private CharacterState stateBeforeJump;
     private float currentJumpFrame = -1;
     private bool jumping = false;
+
     public void StartJumpSquat()
     {
         if (currentMove != null)
@@ -580,7 +626,7 @@ public class FighterS : MonoBehaviour
             foreach (var p in currentMove.properties)
             {
                 if (p == MoveProperty.JumpCancel)
-                    canAttack = true;
+                    canCancel = true;
             }
         }
 
@@ -594,6 +640,7 @@ public class FighterS : MonoBehaviour
             //isGrounded = false;
         }
     }
+
     public void Jumping()
     {
         if (stateBeforeJump == CharacterState.Walking)
@@ -603,11 +650,12 @@ public class FighterS : MonoBehaviour
         transform.Translate(new Vector3(0, 0.2f, 0));
         isGrounded = false;
     }
+
     public void CurrentJumpFrame()
     {
         if (currentJumpFrame >= 0 && jumpSquat)
         {
-            currentJumpFrame = animator.GetCurrentAnimatorStateInfo(default).normalizedTime * 10;
+            currentJumpFrame++;
 
             if (currentJumpFrame > stats.jumpSquat)
             {
@@ -621,42 +669,42 @@ public class FighterS : MonoBehaviour
 
         if (currentJumpFrame >= 0 && jumping)
         {
-            currentJumpFrame = animator.GetCurrentAnimatorStateInfo(default).normalizedTime * 10;
+            currentJumpFrame++;
             if (currentJumpFrame > stats.jumpFrames)
             {
-                currentJumpFrame = -1;
-                jumping = false;
-                canAttack = true;
+                JumpOver();
                 AnimOver();
             }
         }
-        
+
         if (rb.velocity.y < 0)
         {
             rb.AddForce(new Vector3(0, -stats.floatiness, 0));
         }
     }
-    
+
+    public void JumpOver()
+    {
+        currentJumpFrame = -1;
+        jumping = false;
+        canAttack = true;
+    }
+
     //GETTING HIT
     private bool isInHitstun = false;
-    private Move lastMoveHitBy;
     private bool canbeHit = true;
+    private bool airInvulnerable = false;
+    private bool superArmor = false;
+
     public void TakeHit(DamageEventArg eventArg)
     {
-        if (lastMoveHitBy != null)
+        if (eventArg.player != playerPort) { return; }
+        if (canbeHit && !knockedDown)
         {
-            if (lastMoveHitBy.type != eventArg.move.type)
-                canbeHit = true;
-        }
-
-        if (eventArg.player == playerPort && canbeHit)
-        {
-            if (currentMove != null)
-                currentFrame = currentMove.GetTotalFrames();
-
-            if (transform.rotation.y != 0)
+            if (transform.rotation.y < 1)
             {
-                if (inputVector.x > 0 && !isInHitstun && CheckOverHead(eventArg) && CheckLow(eventArg) && CheckGrab(eventArg))
+                if (inputVector.x < 0 && !isInHitstun && CheckOverHead(eventArg) && CheckLow(eventArg) &&
+                    CheckGrab(eventArg))
                 {
                     currentHitstunFrame = eventArg.move.hitstun;
                     currentHitstunFrame /= 2;
@@ -668,36 +716,7 @@ public class FighterS : MonoBehaviour
                     if (eventArg.move.properties.Contains(MoveProperty.KnockDown))
                     {
                         KnockDown();
-                        currentHp -= eventArg.move.damage;
-                        currentHitstunFrame = eventArg.move.hitstun; 
-                    } else if (eventArg.move.type == MoveType.Grab)
-                    {
-                        Grab(eventArg);
-                    }
-                    else
-                    {
-                        ChangeAnimationState(CharacterState.GettingHit);
-                        currentHp -= eventArg.move.damage;
-                        currentHitstunFrame = eventArg.move.hitstun; 
-                    }
-                }
-            }
-            else
-            {
-                if (inputVector.x < 0 && !isInHitstun && CheckOverHead(eventArg) && CheckLow(eventArg) && CheckGrab(eventArg))
-                {
-                    currentHitstunFrame = eventArg.move.hitstun;
-                    currentHitstunFrame /= 2;
-                    ChangeAnimationState(CharacterState.Blocking);
-                }
-
-                else
-                {
-                    if (eventArg.move.properties.Contains(MoveProperty.KnockDown))
-                    {
-                        KnockDown();
-                        currentHp -= eventArg.move.damage;
-                        currentHitstunFrame = eventArg.move.hitstun; 
+                        ApplyHit(eventArg);
                     }
                     else if (eventArg.move.type == MoveType.Grab)
                     {
@@ -705,24 +724,72 @@ public class FighterS : MonoBehaviour
                     }
                     else
                     {
-                        ChangeAnimationState(CharacterState.GettingHit);
-                        currentHp -= eventArg.move.damage;
-                        currentHitstunFrame = eventArg.move.hitstun; 
+                        if (superArmor)
+                        {
+                            currentHp -= eventArg.move.damage / 2;
+                        }
+                        else if (!airInvulnerable)
+                        {
+                            ChangeAnimationState(CharacterState.GettingHit);
+                            ApplyHit(eventArg);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (inputVector.x > 0 && !isInHitstun && CheckOverHead(eventArg) && CheckLow(eventArg) &&
+                    CheckGrab(eventArg))
+                {
+                    currentHitstunFrame = eventArg.move.hitstun;
+                    currentHitstunFrame /= 2;
+                    ChangeAnimationState(CharacterState.Blocking);
+                }
+
+                else
+                {
+                    if (eventArg.move.properties.Contains(MoveProperty.KnockDown))
+                    {
+                        KnockDown();
+                        ApplyHit(eventArg);
+                    }
+                    else if (eventArg.move.type == MoveType.Grab)
+                    {
+                        Grab(eventArg);
+                    }
+                    else
+                    {
+                        if (superArmor)
+                        {
+                            currentHp -= eventArg.move.damage / 2;
+                        }
+                        else if (!airInvulnerable)
+                        {
+                            ChangeAnimationState(CharacterState.GettingHit);
+                            ApplyHit(eventArg);
+                        }
                     }
                 }
             }
 
-            isInHitstun = true;
-            AnimOver();
-            DeActivateHitbox();
-            PushedAway(eventArg.move.knockbackForce);
-            animPlaying = true;
-            if (currentFrame > 0)
-                currentFrame = 255;
-            if (currentJumpFrame > 0)
-                currentJumpFrame = 255;
-            canbeHit = false;
-            lastMoveHitBy = eventArg.move;
+            if (!superArmor && (!airInvulnerable))
+            {
+                if (currentMove != null)
+                    currentFrame = currentMove.GetTotalFrames();
+                isInHitstun = true;
+                AnimOver();
+                if (hitbox.gameObject.activeInHierarchy)
+                    DeActivateHitbox();
+                animPlaying = true;
+                if (currentFrame > 0)
+                {
+                    AttackOver();
+                }
+
+                if (currentJumpFrame > 0)
+                    JumpOver();
+            }
+
             if (currentHp < 0)
             {
                 MainS.instance.um.inGame.DisplayRoundText("K.O!");
@@ -732,6 +799,14 @@ public class FighterS : MonoBehaviour
             }
         }
     }
+
+    public void ApplyHit(DamageEventArg eventArg)
+    {
+        PushedAway(eventArg.move.knockbackForce);
+        currentHp -= eventArg.move.damage;
+        currentHitstunFrame = eventArg.move.hitstun;
+    }
+
     public bool CheckOverHead(DamageEventArg arg)
     {
         bool blockSuccess = true;
@@ -748,6 +823,7 @@ public class FighterS : MonoBehaviour
 
         return blockSuccess;
     }
+
     public bool CheckLow(DamageEventArg arg)
     {
         bool blockSuccess = true;
@@ -764,13 +840,15 @@ public class FighterS : MonoBehaviour
 
         return blockSuccess;
     }
+
     public bool CheckGrab(DamageEventArg arg)
     {
         bool blockSuccess = arg.move.type != MoveType.Grab;
         return blockSuccess;
     }
-    
+
     public bool grabbing = false;
+
     public void Grab(DamageEventArg arg)
     {
         ChangeAnimationState(CharacterState.GettingHit);
@@ -783,14 +861,17 @@ public class FighterS : MonoBehaviour
         delayedKnockDownCoroutine = DelayedKnockDown(2f, arg);
         StartCoroutine(delayedKnockDownCoroutine);
     }
+
     public void PushedAway(Vector3 knockback)
     {
         rb.AddForce(new Vector3(0, knockback.y, knockback.z * -transform.forward.z));
     }
+
     private bool knockedDown = false;
     private float knockWait = 2f;
     private float currentKnock;
     public IEnumerator delayedKnockDownCoroutine;
+
     public void KnockDown()
     {
         ChangeAnimationState(CharacterState.KnockDown);
@@ -798,6 +879,7 @@ public class FighterS : MonoBehaviour
         currentKnock = Time.time;
         canAttack = false;
     }
+
     public IEnumerator DelayedKnockDown(float delay, DamageEventArg arg)
     {
         while (true)
@@ -815,21 +897,23 @@ public class FighterS : MonoBehaviour
                 MainS.instance.fm.p1Script.grabbing = false;
                 MainS.instance.fm.p1Script.Attack(MoveType.Grab2);
             }
+
             currentHp -= arg.move.damage;
-            currentHitstunFrame = arg.move.hitstun; 
+            currentHitstunFrame = arg.move.hitstun;
             //MainS.instance.fm.EnableControls();
             StopCoroutine(delayedKnockDownCoroutine);
-        } 
+        }
     }
+
     float currentHitstunFrame = -1;
-    private float hitstunRemaining;
+
     public void CurrentHitStunFrame()
     {
         if (currentHitstunFrame > 0)
         {
-            hitstunRemaining = animator.GetCurrentAnimatorStateInfo(default).normalizedTime * 10;
+            currentHitstunFrame--;
             //hitstunRemaining += 0.5f;
-            if (hitstunRemaining >= currentHitstunFrame)
+            if (currentHitstunFrame <= 1)
             {
                 HitStunOver();
             }
@@ -842,8 +926,9 @@ public class FighterS : MonoBehaviour
         AnimOver();
         isInHitstun = false;
         canbeHit = true;
+        canAttack = true;
     }
-    
+
     //Round Animation
     public void PlayRoundWinAnimation()
     {
