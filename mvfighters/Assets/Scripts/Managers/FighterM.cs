@@ -68,14 +68,19 @@ public class FighterM : MonoBehaviour
     public void RoundStart()
     {
         mainCam.transform.position = new Vector3(4, 1.5f, 0);
-        p1Script.ResetPosition(startPos);
-        p2Script.ResetPosition(startPos);
+        ResetPositions();
         MainS.instance.um.inGame.DisplayRoundText("GET READY!");
         SFXManager.sfxInstance.audio.PlayOneShot(MainS.instance.um.inGame.narratorVoices[0]);
         p1Script.PlayMatchIntroAnimation();
         p2Script.PlayMatchIntroAnimation();
         roundStartCoroutine = RoundStartCoroutine();
         StartCoroutine(roundStartCoroutine);
+    }
+
+    public void ResetPositions()
+    {
+        p1Script.ResetPosition(startPos);
+        p2Script.ResetPosition(startPos);
     }
 
     public IEnumerator RoundStartCoroutine()
@@ -209,5 +214,11 @@ public class FighterM : MonoBehaviour
             MainS.instance.um.inGame.narratorVoices[4]);
         roundStart = false;
         EventManager.InvokeRoundEnd(new RoundEndEventArg(winningPort));
+    }
+    
+    public void ForceHp(int hp1, int hp2)
+    {
+        p1Script.currentHp = hp1 * p1Script.stats.maxHp / 100;
+        p2Script.currentHp = hp2 * p2Script.stats.maxHp / 100;
     }
 }

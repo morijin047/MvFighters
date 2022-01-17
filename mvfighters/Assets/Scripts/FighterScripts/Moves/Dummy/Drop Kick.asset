@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f16a587a5f70a6d4da71e56af5382e8f, type: 3}
   m_Name: Drop Kick
   m_EditorClassIdentifier: 
-  properties: 0900000007000000
+  properties: 090000000700000002000000
   type: 6
   category: 0
   damage: 800

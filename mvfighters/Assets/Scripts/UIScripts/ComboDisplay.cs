@@ -10,6 +10,7 @@ public class ComboDisplay
     private float currentDamage;
     private float timeBeforeReset;
     private bool comboDisappearing = false;
+    public float maxDamage;
 
     public ComboDisplay()
     {
@@ -27,9 +28,20 @@ public class ComboDisplay
         timeBeforeReset--;
         if (timeBeforeReset <= 0)
         {
+            if (MainS.instance.state == GameState.TrainingCombat)
+            {
+                SaveMaxDamage();
+            }
             ResetComboDisplay();
             MainS.instance.um.inGame.StartComboDisappearCoroutine(2f);
         }
+    }
+
+    public void SaveMaxDamage()
+    {
+        if (maxDamage > currentDamage) { return;}
+
+        maxDamage = currentDamage;
     }
 
     public bool IsComboHappening()

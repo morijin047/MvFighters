@@ -34,6 +34,8 @@ public class MainS : MonoBehaviour
             Destroy(gameObject);
         player1 = new InputManager();
         player2 = new InputManager();
+        player1.GamePadScheme.PickDevicesFrom(Gamepad.all);
+        player2.GamePadScheme.PickDevicesFrom(Gamepad.all);
         PrepareInputManager(player1, 1);
         state = GameState.Menu;
         //controls = fm.player1.GetComponent<PlayerInput>();
@@ -67,7 +69,7 @@ public class MainS : MonoBehaviour
         player2.MenuMovement2.Cancel.performed += context => um.css.CancelSelection(2);
         player2.MenuMovement2.ExtraButton1.performed += context => um.css.RandomizeSelection(2);
         
-        player1.UI.Cancel.performed += context => um.mainMenu.GoBack();
+        player1.UI.Cancel.performed += context => um.CancelSelection();
         player1.UI.Submit.performed += context => um.Submit();
     }
 
@@ -155,4 +157,5 @@ public class MainS : MonoBehaviour
     {
         return paused;
     }
+    
 }

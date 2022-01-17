@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -44,11 +45,13 @@ public class InGame : MonoBehaviour
 
     public List<AudioClip> narratorVoices;
 
-    private ComboDisplay comboDisplay;
+    [HideInInspector] public ComboDisplay comboDisplay;
     public TMP_Text comboCounter;
     public TMP_Text damageCounter;
     private bool comboEvent = false;
     public IEnumerator comboDisplayCoroutine;
+
+    public TMP_Text trainingInfo;
 
     public void InitiateInGameUI()
     {
@@ -164,7 +167,7 @@ public class InGame : MonoBehaviour
         hp1.fillAmount = p1.GetFillAmount();
         hp2.fillAmount = p2.GetFillAmount();
 
-        if (MainS.instance.fm.roundStart)
+        if (MainS.instance.fm.roundStart && MainS.instance.state != GameState.TrainingCombat)
             timer.DecreaseTimer(timerDelay);
 
         if (timer != null)
@@ -175,19 +178,51 @@ public class InGame : MonoBehaviour
 
         if (comboDisplay.IsComboHappening() || comboDisplay.IsComboDisappearing())
         {
-            comboDisplay.UpdateComboCounter(comboCounter, damageCounter);
             comboCounter.enabled = true;
             damageCounter.enabled = true;
+            comboDisplay.UpdateComboCounter(comboCounter, damageCounter);
         }
         else
         {
             comboCounter.enabled = false;
             damageCounter.enabled = false;
         }
+
+        if (MainS.instance.state == GameState.TrainingCombat)
+        {
+            trainingInfo.enabled = true;
+            string maxDamageText = "Max Damage: " + comboDisplay.maxDamage;
+            float frameAdvantage = 0;
+            float frameAdvantageOnBlock = 0;
+            float attackStartup = 0;
+            float damage = 0;
+            if (MainS.instance.fm.p1Script.currentMove != null)
+            {
+                Move currentMove = MainS.instance.fm.p1Script.currentMove;
+                frameAdvantage = currentMove.hitstun - currentMove.endingFrame;
+                frameAdvantageOnBlock = (currentMove.hitstun / 2) - currentMove.endingFrame;
+                attackStartup = currentMove.startupFrame;
+                damage = currentMove.damage;
+            }
+            string frameAdvantageBlockText = "Frame advantage (Block): " + frameAdvantageOnBlock;
+            string frameAdvantageText = "Frame advantage: " + frameAdvantage;
+            string attackStartupText = "Startup: " + attackStartup;
+            String damageText = "Current move Damage: " + damage;
+
+            trainingInfo.text = attackStartupText + "\n" + frameAdvantageText + "\n" + frameAdvantageBlockText + "\n" +
+                                damageText + "\n" + maxDamageText;
+            
+            MainS.instance.um.training.TrainingModeSettingApply();
+        }
+        else
+        {
+            trainingInfo.enabled = false;
+        }
     }
 
     public void StartComboDisappearCoroutine(float delay)
     {
+        comboDisplay.SetComboDisappearingBoolean(true);
         comboDisplayCoroutine = ComboDisappearCoroutine(delay);
         StartCoroutine(comboDisplayCoroutine);
     }
@@ -196,7 +231,6 @@ public class InGame : MonoBehaviour
     {
         while (true)
         {
-            comboDisplay.SetComboDisappearingBoolean(true);
             yield return new WaitForSeconds(delay);
             comboCounter.text = "";
             damageCounter.text = "";

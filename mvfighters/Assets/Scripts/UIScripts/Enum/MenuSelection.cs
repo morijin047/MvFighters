@@ -49,6 +49,8 @@ public enum PauseSelection
 {
    None,
    Resume,
+   TrainingSetting,
+   Reset,
    ButtonSetting,
    MoveList,
    SoundSetting,

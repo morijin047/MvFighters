@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SubsystemsImplementation;
 using Object = UnityEngine.Object;
 
 public class FighterS : MonoBehaviour
@@ -59,6 +60,7 @@ public class FighterS : MonoBehaviour
         secondTap = false;
         running = false;
         dashing = false;
+        wavedashing = false;
         canDashAgain = true;
         teching = false;
         grabbing = false;
@@ -113,7 +115,7 @@ public class FighterS : MonoBehaviour
         CheckAirborne();
 
         //JUMP Performed
-        if (inputVector.y > 0 && isGrounded)
+        if (inputVector.y > 0 && isGrounded || forcedJump && isGrounded)
         {
             StartJumpSquat();
         }
@@ -246,6 +248,9 @@ public class FighterS : MonoBehaviour
         {
             Dashing();
         }
+
+        if (wavedashing)
+            WaveDashing();
     }
 
     private bool isGrounded = true;
@@ -450,7 +455,7 @@ public class FighterS : MonoBehaviour
     }
 
     private bool canCancel = true;
-    private Move currentMove;
+    public Move currentMove;
 
     public bool CheckCancel(MoveType typeOfMove)
     {
@@ -506,7 +511,11 @@ public class FighterS : MonoBehaviour
 
     public void MoveLand(DamageEventArg arg)
     {
-        if (arg.player == playerPort) { return; }
+        if (arg.player == playerPort)
+        {
+            return;
+        }
+
         moveLand = true;
         canAttack = true;
         if (hitbox.gameObject.activeInHierarchy)
@@ -554,19 +563,15 @@ public class FighterS : MonoBehaviour
 
     //DASH
     private float currentdashTime;
-    private bool dashing;
+    private bool dashing = false;
     private bool canDashAgain;
     private Vector2 dashDirection;
+    private bool wavedashing = false;
 
     public void Dash()
     {
-        if (!dashing && canAttack && canDashAgain && !knockedDown && !grabbing)
+        if (!dashing && !wavedashing && canAttack && canDashAgain && !knockedDown && !grabbing)
         {
-            dashing = true;
-            canAttack = false;
-            canDashAgain = false;
-            ChangeAnimationState(CharacterState.Dash);
-            animPlaying = true;
             Vector2 inputVector = new Vector2();
             switch (playerPort)
             {
@@ -578,39 +583,92 @@ public class FighterS : MonoBehaviour
                     break;
             }
 
+            canAttack = false;
+            float slideForce = 0f;
+
+            if (jumpSquat)
+            {
+                ChangeAnimationState(CharacterState.Crouching);
+                slideForce = 0.66f;
+                JumpOver();
+                jumpSquat = false;
+                wavedashing = true;
+            }
+            else
+            {
+                dashing = true;
+                ChangeAnimationState(CharacterState.Dash);
+                slideForce = 0.66f;
+            }
+
+            animPlaying = true;
+            canDashAgain = false;
             if (transform.rotation.y < 1)
             {
                 if (inputVector.x >= 0)
-                    dashDirection = new Vector2(transform.forward.z, inputVector.y);
+                    dashDirection = new Vector2(transform.forward.z * slideForce, inputVector.y);
                 if (inputVector.x < 0)
-                    dashDirection = new Vector2(-transform.forward.z * 0.75f, inputVector.y);
+                    dashDirection = new Vector2(-transform.forward.z * slideForce / 1.5f, inputVector.y);
             }
             else
             {
                 if (inputVector.x > 0)
-                    dashDirection = new Vector2(-transform.forward.z, inputVector.y);
+                    dashDirection = new Vector2(-transform.forward.z * slideForce / 1.5f, inputVector.y);
                 if (inputVector.x <= 0)
-                    dashDirection = new Vector2(transform.forward.z * 0.75f, inputVector.y);
+                    dashDirection = new Vector2(transform.forward.z * slideForce, inputVector.y);
             }
         }
     }
+
+
+    private IEnumerator endLagDashCoroutine;
 
     public void Dashing()
     {
         if (currentdashTime <= 0)
         {
             dashing = false;
-            canAttack = true;
-            dashDirection = new Vector2();
-            currentdashTime = stats.DashTime;
-            rb.velocity = Vector3.zero;
-            AnimOver();
+            endLagDashCoroutine = EndLagDashCoroutine(0.3f);
+            StartCoroutine(endLagDashCoroutine);
         }
         else
         {
             currentdashTime -= Time.deltaTime;
             rb.velocity = new Vector3(0, 0, stats.dashSpeed * dashDirection.x);
         }
+    }
+
+    public void WaveDashing()
+    {
+        if (currentdashTime <= 0)
+        {
+            wavedashing = false;
+            DashOver();
+        }
+        else
+        {
+            currentdashTime -= Time.deltaTime;
+            rb.velocity = new Vector3(0, 0, stats.dashSpeed * dashDirection.x);
+        }
+    }
+
+    public IEnumerator EndLagDashCoroutine(float delay)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(delay);
+            DashOver();
+            StopCoroutine(endLagDashCoroutine);
+        }
+    }
+
+    public void DashOver()
+    {
+        rb.velocity = Vector3.zero;
+        canAttack = true;
+        dashDirection = new Vector2();
+        currentdashTime = stats.DashTime;
+        AnimOver();
     }
 
     //JUMP
@@ -695,10 +753,17 @@ public class FighterS : MonoBehaviour
     private bool canbeHit = true;
     private bool airInvulnerable = false;
     private bool superArmor = false;
+    private bool guardingAll = false;
+    private bool guardingLow = false;
+    private bool guardingHigh = false;
 
     public void TakeHit(DamageEventArg eventArg)
     {
-        if (eventArg.player != playerPort) { return; }
+        if (eventArg.player != playerPort)
+        {
+            return;
+        }
+
         if (canbeHit && !knockedDown)
         {
             if (transform.rotation.y < 1)
@@ -792,10 +857,17 @@ public class FighterS : MonoBehaviour
 
             if (currentHp < 0)
             {
-                MainS.instance.um.inGame.DisplayRoundText("K.O!");
-                MainS.instance.um.inGame.StartCoroutineRoundText(2f);
-                SFXManager.sfxInstance.audio.PlayOneShot(MainS.instance.um.inGame.narratorVoices[2]);
-                MainS.instance.fm.CheckWinner();
+                if (MainS.instance.state == GameState.TrainingCombat)
+                {
+                    MainS.instance.fm.ResetPositions();
+                }
+                else
+                {
+                    MainS.instance.um.inGame.DisplayRoundText("K.O!");
+                    MainS.instance.um.inGame.StartCoroutineRoundText(2f);
+                    SFXManager.sfxInstance.audio.PlayOneShot(MainS.instance.um.inGame.narratorVoices[2]);
+                    MainS.instance.fm.CheckWinner();
+                }
             }
         }
     }
@@ -818,9 +890,16 @@ public class FighterS : MonoBehaviour
                 {
                     blockSuccess = false;
                 }
+
+                if (guardingHigh)
+                    blockSuccess = true;
+                if (guardingLow)
+                    blockSuccess = false;
             }
         }
 
+        if (guardingAll)
+            blockSuccess = true;
         return blockSuccess;
     }
 
@@ -835,9 +914,14 @@ public class FighterS : MonoBehaviour
                 {
                     blockSuccess = false;
                 }
+
+                if (guardingLow)
+                    blockSuccess = true;
             }
         }
 
+        if (guardingAll)
+            blockSuccess = true;
         return blockSuccess;
     }
 
@@ -938,5 +1022,76 @@ public class FighterS : MonoBehaviour
     public void PlayMatchIntroAnimation()
     {
         ChangeAnimationState(CharacterState.Intro);
+    }
+
+    private bool forcedJump = false;
+
+    public void ForceAction(string action)
+    {
+        switch (action)
+        {
+            case "Idle":
+                inputVector = new Vector2(0, 0);
+                guardingLow = false;
+                guardingHigh = false;
+                guardingAll = false;
+                forcedJump = false;
+                break;
+            case "GuardLow":
+                if (transform.rotation.y < 1)
+                {
+                    inputVector = new Vector2(-1, 0);
+                }
+                else
+                {
+                    inputVector = new Vector2(1, 0);
+                }
+
+                guardingLow = true;
+                guardingHigh = false;
+                guardingAll = false;
+                forcedJump = false;
+                break;
+            case "GuardHigh":
+                if (transform.rotation.y < 1)
+                {
+                    inputVector = new Vector2(-1, 0);
+                }
+                else
+                {
+                    inputVector = new Vector2(1, 0);
+                }
+
+                guardingLow = false;
+                guardingHigh = true;
+                guardingAll = false;
+                forcedJump = false;
+                break;
+            case "GuardAll":
+                if (transform.rotation.y < 1)
+                {
+                    inputVector = new Vector2(-1, 0);
+                }
+                else
+                {
+                    inputVector = new Vector2(1, 0);
+                }
+
+                guardingLow = false;
+                guardingHigh = false;
+                guardingAll = true;
+                forcedJump = false;
+                break;
+            case "Jump":
+                inputVector = new Vector2(0, 1);
+                guardingLow = false;
+                guardingHigh = false;
+                guardingAll = false;
+                forcedJump = true;
+                break;
+            case "AI":
+                //use dummy code
+                break;
+        }
     }
 }
