@@ -34,6 +34,8 @@ public class FighterM : MonoBehaviour
     private IEnumerator roundStartCoroutine;
     public float timeBeforeRoundStart;
 
+    public StateManager stateMachine;
+
     public void StarGame(GameObject p1, GameObject p2, bool twoplayer)
     {
         player1 = p1;
@@ -45,6 +47,10 @@ public class FighterM : MonoBehaviour
         p1Script.SetPort(1);
         p2Script.SetPort(2);
         twoPlayer = twoplayer;
+        if (!twoPlayer && MainS.instance.state == GameState.Css)
+        {
+            stateMachine.AssignAIPrefabScript(p2Script);
+        }
     }
 
     public void EnableControls()
@@ -56,13 +62,26 @@ public class FighterM : MonoBehaviour
             if (!MainS.instance.player2.Combat2.enabled)
                 MainS.instance.player2.Combat2.Enable();
         }
+        else
+        {
+            if (!stateMachine.aiActive)
+                stateMachine.aiActive = true;
+        }
     }
 
     public void DisableControls()
     {
         MainS.instance.player1.Combat1.Disable();
-        if (MainS.instance.player2.Combat2.enabled)
-            MainS.instance.player2.Combat2.Disable();
+        if (twoPlayer)
+        {
+            if (MainS.instance.player2.Combat2.enabled)
+                MainS.instance.player2.Combat2.Disable();
+        }
+        else
+        {
+            if (stateMachine.aiActive)
+                stateMachine.aiActive = false;
+        }
     }
 
     public void RoundStart()
@@ -120,7 +139,12 @@ public class FighterM : MonoBehaviour
         if (roundStart)
         {
             p1Script.Movement(MainS.instance.player1.Combat1.Move.ReadValue<Vector2>());
-            p2Script.Movement(MainS.instance.player2.Combat2.Move.ReadValue<Vector2>());
+            if (twoPlayer)
+                p2Script.Movement(MainS.instance.player2.Combat2.Move.ReadValue<Vector2>());
+            else if (MainS.instance.state == GameState.Combat)
+                stateMachine.UpdateStates();
+            else if (MainS.instance.state == GameState.TrainingCombat)
+                p2Script.Movement(Vector2.zero);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -150,12 +174,12 @@ public class FighterM : MonoBehaviour
     public void UseMove(int playerPort, MoveType moveType)
     {
         //foreach motionbufferArray
-            //condition forward
-                // moveType = MoveType.MotionF;
-            //condition backward
-                // moveType = MoveType.MotionB;
-            //condition super
-                // moveType = MoveType.Super;
+        //condition forward
+        // moveType = MoveType.MotionF;
+        //condition backward
+        // moveType = MoveType.MotionB;
+        //condition super
+        // moveType = MoveType.Super;
         switch (playerPort)
         {
             case 1:
@@ -215,10 +239,15 @@ public class FighterM : MonoBehaviour
         roundStart = false;
         EventManager.InvokeRoundEnd(new RoundEndEventArg(winningPort));
     }
-    
+
     public void ForceHp(int hp1, int hp2)
     {
         p1Script.currentHp = hp1 * p1Script.stats.maxHp / 100;
         p2Script.currentHp = hp2 * p2Script.stats.maxHp / 100;
+    }
+
+    public float CheckDistanceBetweenPlayer()
+    {
+        return Vector3.Distance(p1Script.transform.position, p2Script.transform.position);
     }
 }

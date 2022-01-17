@@ -107,11 +107,19 @@ public class FighterS : MonoBehaviour
 
     //MOVEMENT
     private Vector2 inputVector;
+    private bool isTrainingDummy;
 
     public void Movement(Vector2 input)
     {
-        inputVector = input;
-
+        if (!(MainS.instance.state == GameState.TrainingCombat && playerPort == 2))
+            isTrainingDummy = false;
+        else
+        {
+            isTrainingDummy = true;
+            
+        }
+        if (!isTrainingDummy)
+            inputVector = input;
         CheckAirborne();
 
         //JUMP Performed
@@ -141,7 +149,7 @@ public class FighterS : MonoBehaviour
         //Actual Movement Code
         if (isGrounded && !animPlaying && !knockedDown && !grabbing)
         {
-            if (inputVector.x != 0 && !isCrouched)
+            if (inputVector.x != 0 && !isCrouched && !isTrainingDummy)
             {
                 //Pressed a direction once
                 if (!firsTap && !secondTap)
@@ -355,7 +363,7 @@ public class FighterS : MonoBehaviour
                 canCancel = true;
         }
 
-        if (!isInHitstun && canAttack && canCancel && moveLand && !grabbing)
+        if (!isInHitstun && !knockedDown && canAttack && canCancel && moveLand && !grabbing)
         {
             if (isCrouched && moveType is MoveType.A or MoveType.B or MoveType.C)
             {
@@ -444,6 +452,11 @@ public class FighterS : MonoBehaviour
         moveLand = true;
         canAttack = true;
         currentFrame = currentMove.activeFrame + currentMove.startupFrame;
+    }
+
+    public bool IsAttacking()
+    {
+        return !canAttack;
     }
 
     public void DeActivateSpecialProperties()
@@ -964,6 +977,11 @@ public class FighterS : MonoBehaviour
         canAttack = false;
     }
 
+    public bool IsKnockedDown()
+    {
+        return knockedDown;
+    }
+
     public IEnumerator DelayedKnockDown(float delay, DamageEventArg arg)
     {
         while (true)
@@ -1011,6 +1029,11 @@ public class FighterS : MonoBehaviour
         isInHitstun = false;
         canbeHit = true;
         canAttack = true;
+    }
+
+    public bool IsInHitStun()
+    {
+        return isInHitstun;
     }
 
     //Round Animation
@@ -1068,15 +1091,14 @@ public class FighterS : MonoBehaviour
                 forcedJump = false;
                 break;
             case "GuardAll":
-                if (transform.rotation.y < 1)
-                {
-                    inputVector = new Vector2(-1, 0);
-                }
-                else
-                {
-                    inputVector = new Vector2(1, 0);
-                }
-
+                // if (transform.rotation.y < 1)
+                // {
+                //     inputVector = new Vector2(-1, 0);
+                // }
+                // else
+                // {
+                //     inputVector = new Vector2(1, 0);
+                // }
                 guardingLow = false;
                 guardingHigh = false;
                 guardingAll = true;

@@ -28,11 +28,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9b1ff91b000f5374b879cee6c1fe6d1a, type: 2}
   - {fileID: 11400000, guid: c9b39e1d816b897439c92879e8e49ed3, type: 2}
   - {fileID: 11400000, guid: c0a46720d3ae3d64e8fbd8d73940fbb4, type: 2}
-  jumpSquat: 4
+  jumpSquat: 12
   jumpFrames: 12
   floatiness: 3
   dashSpeed: 8
   DashTime: 0.3
   winningQuotes:
   - Go home and be a family man
-  techSpeed: 1
+  techSpeed: 0.5
