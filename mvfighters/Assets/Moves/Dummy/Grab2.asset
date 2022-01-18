@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f16a587a5f70a6d4da71e56af5382e8f, type: 3}
+  m_Name: Grab2
+  m_EditorClassIdentifier: 
+  properties: 09000000
+  type: 0
+  category: 0
+  damage: 550
+  hitstun: 32
+  startupFrame: 12
+  activeFrame: 3
+  endingFrame: 15
+  hitboxSize: {x: 0, y: 0.5, z: 0.5}
+  hitboxPosition: {x: 0, y: 0.5, z: 0.5}
+  knockbackForce: {x: 0, y: 0, z: 0}
+  MovePriority: -1
+  attackLaunchedSfx: {fileID: 8300000, guid: 6b1c1db529157ef48b97b592baa64e92, type: 3}
+  attackLandSfx: {fileID: 8300000, guid: 6375184a433188f458bb3a0f7d0ac483, type: 3}

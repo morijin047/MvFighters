@@ -399,6 +399,8 @@ public class FighterS : MonoBehaviour
             canCancel = false;
             moveLand = false;
             canAttack = false;
+            if (currentMove.attackLaunchedSfx != null)
+                SFXManager.sfxInstance.audio.PlayOneShot(currentMove.attackLaunchedSfx);
         }
     }
 
@@ -890,6 +892,8 @@ public class FighterS : MonoBehaviour
         PushedAway(eventArg.move.knockbackForce);
         currentHp -= eventArg.move.damage;
         currentHitstunFrame = eventArg.move.hitstun;
+        if (eventArg.move.attackLandSfx != null)
+            SFXManager.sfxInstance.audio.PlayOneShot(eventArg.move.attackLandSfx);
     }
 
     public bool CheckOverHead(DamageEventArg arg)

@@ -26,6 +26,10 @@ public class Move : ScriptableObject
     public Vector3 knockbackForce;
 
     public int MovePriority;
+
+    public AudioClip attackLaunchedSfx;
+
+    public AudioClip attackLandSfx;
     
     public Move(int damage, float hitstun, float startupFrame, float activeFrame, float endingFrame,
         Vector3 knockbackForce, Vector3 hitboxPosition,Vector3 hitboxSize,MoveType type, MoveCategory category)
