@@ -12,7 +12,8 @@ public class GapCloseState : State
     public override State RunCurrentState()
     {
         FighterS opponent = MainS.instance.fm.p1Script;
-        MainS.instance.fm.stateMachine.scriptToUse.Movement(new Vector2(-opponent.transform.forward.z,0));
+        MainS.instance.fm.stateMachine.scriptToUse.inputVector = new Vector2(-opponent.transform.forward.z, 0);
+        MainS.instance.fm.stateMachine.scriptToUse.Movement( -1, true);
         isEnemyAttacking = opponent.IsAttacking();
         isInAttackRange = !(MainS.instance.fm.CheckDistanceBetweenPlayer() > 2f);
         if (isEnemyAttacking)

@@ -5,8 +5,10 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
+using Toggle = UnityEngine.UI.Toggle;
 
 public class UIManager : MonoBehaviour
 {
@@ -44,9 +46,10 @@ public class UIManager : MonoBehaviour
 
     private bool was2Player;
 
-    [HideInInspector] public TrainingMode training;
+    public GameObject soundUI;
 
-    public GameObject trainingWindow;
+    public GameObject displayUI;
+
 
     public void StartMenuUpdating()
     {
@@ -58,7 +61,7 @@ public class UIManager : MonoBehaviour
         inGame = inGameUI.GetComponent<InGame>();
         vsScreen = vsScreenUI.GetComponent<VsScreen>();
         result = resultUI.GetComponent<ResultScreen>();
-        training = trainingWindow.GetComponent<TrainingMode>();
+        pauseTraining.training = pauseTraining.trainingWindow.GetComponent<TrainingMode>();
         MainS.instance.player1.UI.Enable();
         if (cssUI.activeInHierarchy)
         {
@@ -76,6 +79,8 @@ public class UIManager : MonoBehaviour
     public void UpdateMenu()
     {
         mainMenu.UpdateMainMenu();
+        if (soundUI.activeInHierarchy)
+            MainS.instance.settings.soundSettings.UpdateSoundTextUI();
     }
 
     public void UpdateCSS()
@@ -172,8 +177,43 @@ public class UIManager : MonoBehaviour
         OptionSelection setting;
         if (OptionSelection.TryParse(optionSelected, out setting))
         {
-            //mainMenu.SetActive(false);
-            //activate PopMenu SETTING Menu
+            if (setting == OptionSelection.SoundSetting)
+            {
+                Debug.Log("Invoked");
+                soundUI.SetActive(true);
+                mainMenu.DisableTemporaryMenu();
+                mainMenu.Transition(false);
+                eventSystem.SetSelectedGameObject(soundUI.GetComponentInChildren<Button>().gameObject);
+                MainS.instance.settings.soundSettings.OpenSoundSettings();
+            }
+
+            if (setting == OptionSelection.SaveVolume)
+            {
+                MainS.instance.settings.soundSettings.ApplySoundSettings();
+            }
+
+            if (setting == OptionSelection.MuteVolume)
+            {
+                MainS.instance.settings.soundSettings.MuteSoundSettings();
+            }
+
+            if (setting == OptionSelection.DisplaySetting)
+            {
+                displayUI.SetActive(true);
+                mainMenu.DisableTemporaryMenu();
+                mainMenu.Transition(false);
+                eventSystem.SetSelectedGameObject(displayUI.GetComponentInChildren<Button>().gameObject);
+            }
+
+            if (setting == OptionSelection.ResetResolution)
+            {
+                MainS.instance.settings.resolutionSettings.DefaultSettings();
+            }
+
+            if (setting == OptionSelection.ApplyResolution)
+            {
+                MainS.instance.settings.resolutionSettings.ApplySetting();
+            }
         }
     }
 
@@ -182,6 +222,7 @@ public class UIManager : MonoBehaviour
         PauseSelection pause;
         if (PauseSelection.TryParse(optionSelected, out pause))
         {
+            SFXManager.sfxInstance.PlayOkSound();
             if (pause == PauseSelection.Resume)
             {
                 MainS.instance.SetPause(false);
@@ -189,15 +230,36 @@ public class UIManager : MonoBehaviour
 
             if (pause == PauseSelection.Reset)
             {
-                training.ResetPositions();
+                pauseTraining.training.ResetPositions();
                 MainS.instance.SetPause(false);
             }
 
             if (pause == PauseSelection.TrainingSetting)
             {
-                eventSystem.SetSelectedGameObject(trainingWindow.GetComponentInChildren<Button>().gameObject);
+                eventSystem.SetSelectedGameObject(pauseTraining.trainingWindow.GetComponentInChildren<Button>()
+                    .gameObject);
                 //pauseTrainingUI.SetActive(false);
-                trainingWindow.SetActive(true);
+                pauseTraining.trainingWindow.SetActive(true);
+            }
+
+            if (pause == PauseSelection.SoundSettingPause)
+            {
+                eventSystem.SetSelectedGameObject(MainS.instance.state == GameState.TrainingCombat
+                    ? pauseTraining.soundPauseUI.GetComponentInChildren<Button>().gameObject
+                    : this.pause.soundPauseUI.GetComponentInChildren<Button>().gameObject);
+                
+                pauseTraining.soundPauseUI.SetActive(true);
+                MainS.instance.settings.soundPauseSettings.OpenSoundSettings();
+            }
+
+            if (pause == PauseSelection.SaveVolumePause)
+            {
+                MainS.instance.settings.soundPauseSettings.ApplySoundSettings();
+            }
+
+            if (pause == PauseSelection.MuteVolumePause)
+            {
+                MainS.instance.settings.soundPauseSettings.MuteSoundSettings();
             }
 
             if (pause == PauseSelection.CharacterSelect)
@@ -304,25 +366,51 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void Submit()
+    public void Submit(int playerPort, InputAction.CallbackContext context)
     {
+        if (playerPort == 1)
+        {
+            if (!MainS.instance.portController.CheckID(context, 1))
+                return;
+        }
+
+        if (playerPort == 2)
+        {
+            if (!MainS.instance.portController.CheckID(context, 2))
+                return;
+        }
+        Debug.Log("Submit");
         if (eventSystem.currentSelectedGameObject.GetComponent<Button>() != null)
         {
             eventSystem.currentSelectedGameObject.GetComponent<Button>().onClick.Invoke();
             return;
         }
-            
+
         if (eventSystem.currentSelectedGameObject.GetComponent<TMP_Dropdown>() != null)
         {
             eventSystem.currentSelectedGameObject.GetComponent<TMP_Dropdown>().Show();
             return;
         }
-            
-        if (training.enemyState.IsExpanded)
+
+        if (pauseTraining.training.enemyState.IsExpanded)
         {
-            training.DropDownClick(eventSystem.currentSelectedGameObject.name);
-            eventSystem.SetSelectedGameObject(trainingWindow.GetComponentInChildren<TMP_Dropdown>().gameObject);
-            training.enemyState.Hide();
+            pauseTraining.training.DropDownClick(eventSystem.currentSelectedGameObject.name);
+            eventSystem.SetSelectedGameObject(pauseTraining.trainingWindow.GetComponentInChildren<TMP_Dropdown>()
+                .gameObject);
+            pauseTraining.training.enemyState.Hide();
+            return;
+        }
+
+        if (eventSystem.currentSelectedGameObject.GetComponent<Toggle>() != null)
+        {
+            var currentToggle = eventSystem.currentSelectedGameObject.GetComponent<Toggle>();
+            currentToggle.isOn = !currentToggle.isOn;
+            return;
+        }
+        
+        if (MainS.instance.settings.resolutionSettings.resolution.IsExpanded)
+        {
+            MainS.instance.settings.resolutionSettings.ClickDropdown();
             return;
         }
     }
@@ -372,8 +460,8 @@ public class UIManager : MonoBehaviour
             pauseUI.SetActive(false);
         if (pauseTrainingUI.activeInHierarchy)
             pauseTrainingUI.SetActive(false);
-        if (trainingWindow.activeInHierarchy)
-            trainingWindow.SetActive(false);
+        if (pauseTraining.trainingWindow.activeInHierarchy)
+            pauseTraining.trainingWindow.SetActive(false);
         Time.timeScale = 1;
         MainS.instance.player1.Combat1.Enable();
         if (was2Player)
@@ -385,20 +473,58 @@ public class UIManager : MonoBehaviour
         was2Player = false;
     }
 
-    public void CancelSelection()
+    public void CancelSelection(int playerPort, InputAction.CallbackContext context)
     {
+        if (playerPort == 1)
+        {
+            if (!MainS.instance.portController.CheckID(context, 1))
+                return;
+        }
+
+        if (playerPort == 2)
+        {
+            if (!MainS.instance.portController.CheckID(context, 2))
+                return;
+        }
         if (MainS.instance.state == GameState.Menu)
-            mainMenu.GoBack();
+        {
+            if (soundUI.activeInHierarchy)
+            {
+                mainMenu.GoTo(MenuSelection.Options, true);
+                soundUI.SetActive(false);
+            }
+            else if (displayUI.activeInHierarchy)
+            {
+                mainMenu.GoTo(MenuSelection.Options, true);
+                displayUI.SetActive(false);
+            }
+            else
+            {
+                mainMenu.GoBack();
+            }
+        }
+
         if (MainS.instance.state is GameState.Combat or GameState.NetworkCombat or GameState.TrainingCombat)
         {
-            if (training.enemyState.IsExpanded)
+            if (pauseTraining.training.enemyState.IsExpanded)
             {
-                training.enemyState.Hide();
-                eventSystem.SetSelectedGameObject(trainingWindow.GetComponentInChildren<TMP_Dropdown>().gameObject);
+                pauseTraining.training.enemyState.Hide();
+                eventSystem.SetSelectedGameObject(pauseTraining.trainingWindow.GetComponentInChildren<TMP_Dropdown>()
+                    .gameObject);
             }
-            else if (trainingWindow.activeInHierarchy)
+            else if (pauseTraining.trainingWindow.activeInHierarchy)
             {
-                trainingWindow.SetActive(false);
+                pauseTraining.trainingWindow.SetActive(false);
+                eventSystem.SetSelectedGameObject(pauseTrainingUI.GetComponentInChildren<Button>().gameObject);
+            }
+            else if (pause.soundPauseUI)
+            {
+                pause.soundPauseUI.SetActive(false);
+                eventSystem.SetSelectedGameObject(pauseUI.GetComponentInChildren<Button>().gameObject);
+            }
+            else if (pauseTraining.soundPauseUI)
+            {
+                pauseTraining.trainingWindow.SetActive(false);
                 eventSystem.SetSelectedGameObject(pauseTrainingUI.GetComponentInChildren<Button>().gameObject);
             }
             else if (pauseUI.activeInHierarchy || pauseTrainingUI.activeInHierarchy)

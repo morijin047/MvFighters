@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b500e916699a96e449eb88ddeee8babd, type: 3}
+  m_Name: Froxty
+  m_EditorClassIdentifier: 
+  walkSpeed: 2
+  runspeed: 5
+  jumpforce: 300
+  maxHp: 10000
+  name: Dummy1
+  moveSet:
+  - {fileID: 11400000, guid: 246dd97949db0c7499f7e5fd27ea632b, type: 2}
+  - {fileID: 11400000, guid: 7479ca3eb4b05244cb272ffdd59700f1, type: 2}
+  - {fileID: 11400000, guid: 4d5ef03a054a43746a5a960f5b447b20, type: 2}
+  - {fileID: 11400000, guid: 4d5efb357244e1948b9a89f6893dd2a5, type: 2}
+  - {fileID: 11400000, guid: f644e9db03223fe4b9db915b35285543, type: 2}
+  - {fileID: 11400000, guid: 2d7eeb94b8d71284c8b7d47ef30e924d, type: 2}
+  - {fileID: 11400000, guid: ef8ea9b1c7a441e4ebac1e2d6efe2913, type: 2}
+  - {fileID: 11400000, guid: 9b1ff91b000f5374b879cee6c1fe6d1a, type: 2}
+  - {fileID: 11400000, guid: c9b39e1d816b897439c92879e8e49ed3, type: 2}
+  - {fileID: 11400000, guid: c0a46720d3ae3d64e8fbd8d73940fbb4, type: 2}
+  jumpSquat: 12
+  jumpFrames: 12
+  floatiness: 3
+  dashSpeed: 8
+  DashTime: 0.3
+  winningQuotes:
+  - Go home and be a family man
+  techSpeed: 0.5

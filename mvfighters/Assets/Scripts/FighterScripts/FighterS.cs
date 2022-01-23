@@ -1,14 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SubsystemsImplementation;
-using Object = UnityEngine.Object;
 
 public class FighterS : MonoBehaviour
 {
@@ -16,8 +9,9 @@ public class FighterS : MonoBehaviour
     public Rigidbody rb;
     private Animator animator;
     public Fighter stats;
+    bool initiated = false;
 
-    void Start()
+    void InitiateComponent()
     {
         //rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
@@ -25,6 +19,7 @@ public class FighterS : MonoBehaviour
         EventManager.AddDamageListener(MoveLand);
         minZWorld = -5f;
         maxZWorld = 5f;
+        initiated = true;
     }
 
     private int playerPort;
@@ -46,6 +41,11 @@ public class FighterS : MonoBehaviour
 
     public void ResetPosition(float startPos)
     {
+        if (!initiated)
+        {
+            InitiateComponent();
+        }
+
         if (playerPort == 1)
             transform.position = new Vector3(0, 0, -startPos);
         if (playerPort == 2)
@@ -70,6 +70,7 @@ public class FighterS : MonoBehaviour
         lastTimePressedRun = Time.time;
         currentdashTime = stats.DashTime;
         TurnPlayer();
+        inputVector = Vector2.zero;
     }
 
     //ANIMATION
@@ -106,20 +107,48 @@ public class FighterS : MonoBehaviour
     }
 
     //MOVEMENT
-    private Vector2 inputVector;
+    public Vector2 inputVector;
     private bool isTrainingDummy;
 
-    public void Movement(Vector2 input)
+    public void Movement(int deviceID, bool ai)
     {
+        if (playerPort == 1 && !ai)
+        {
+            if (MainS.instance.portController.keyboardOnly1)
+            {
+                if (MainS.instance.portController.gamepad1ID != -1)
+                {
+                    return;
+                }
+            }
+            else if (MainS.instance.portController.gamepad1ID != deviceID)
+            {
+                return;
+            }
+        }
+
+        if (playerPort == 2 && !ai)
+        {
+            if (MainS.instance.portController.keyboardOnly2)
+            {
+                if (MainS.instance.portController.gamepad2ID != -1)
+                {
+                    return;
+                }
+            }
+            else if (MainS.instance.portController.gamepad2ID != deviceID)
+            {
+                return;
+            }
+        }
+
         if (!(MainS.instance.state == GameState.TrainingCombat && playerPort == 2))
             isTrainingDummy = false;
         else
         {
             isTrainingDummy = true;
-            
         }
-        if (!isTrainingDummy)
-            inputVector = input;
+
         CheckAirborne();
 
         //JUMP Performed
@@ -242,7 +271,10 @@ public class FighterS : MonoBehaviour
                 }
             }
         }
+    }
 
+    public void AnimationCalculation()
+    {
         //Frame Calc
         CurrentHitStunFrame();
         CurrentAttackFrame();
@@ -650,6 +682,8 @@ public class FighterS : MonoBehaviour
         {
             currentdashTime -= Time.deltaTime;
             rb.velocity = new Vector3(0, 0, stats.dashSpeed * dashDirection.x);
+            ChangeAnimationState(CharacterState.Dash);
+            animPlaying = true;
         }
     }
 
@@ -664,6 +698,8 @@ public class FighterS : MonoBehaviour
         {
             currentdashTime -= Time.deltaTime;
             rb.velocity = new Vector3(0, 0, stats.dashSpeed * dashDirection.x);
+            ChangeAnimationState(CharacterState.Crouching);
+            animPlaying = true;
         }
     }
 
@@ -1055,6 +1091,13 @@ public class FighterS : MonoBehaviour
 
     public void ForceAction(string action)
     {
+        if (knockedDown && !teching)
+        {
+            if (Time.time - currentKnock >= knockWait)
+            {
+                TechRecovery();
+            }
+        }
         switch (action)
         {
             case "Idle":

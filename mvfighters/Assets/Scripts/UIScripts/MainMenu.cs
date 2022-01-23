@@ -32,6 +32,16 @@ public class MainMenu : MonoBehaviour
         currentMenu = MenuSelection.MainMenu;
     }
 
+    public void DisableTemporaryMenu()
+    {
+        currentMenu = MenuSelection.None;
+    }
+    
+    public void ForceOpenMenu(MenuSelection menuSelection)
+    {
+        currentMenu = menuSelection;
+    }
+
     public void UpdateMainMenu()
     {
         switch (currentMenu)

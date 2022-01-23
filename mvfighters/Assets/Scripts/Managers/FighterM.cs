@@ -19,7 +19,9 @@ public class FighterM : MonoBehaviour
 
     public Camera mainCam;
 
-    public Rect worldSize;
+    public Vector2 worldSizeDim;
+
+    [HideInInspector] public Rect worldSize;
 
     public float cameraSpeed;
 
@@ -36,21 +38,33 @@ public class FighterM : MonoBehaviour
 
     public StateManager stateMachine;
 
-    public void StarGame(GameObject p1, GameObject p2, bool twoplayer)
+    public GameObject stage;
+    
+    [HideInInspector] public int idP1;
+    [HideInInspector] public int idP2;
+    public void StarGame(string p1, string p2, GameObject stage, bool twoplayer)
     {
-        player1 = p1;
-        player1 = Instantiate(player1);
-        player2 = p2;
-        player2 = Instantiate(player2);
+        this.stage = stage;
+        this.stage = Instantiate(stage);
+        player1 = MainS.instance.GetPooledFighter(p1);
+        player1.SetActive(true);
+        player1.transform.parent = null;
+        player1.GetComponent<Rigidbody>().isKinematic = false;
+        player2 = MainS.instance.GetPooledFighter2(p2);
+        player2.SetActive(true);
+        player2.transform.parent = null;
+        player2.GetComponent<Rigidbody>().isKinematic = false;
         p1Script = player1.GetComponent<FighterS>();
         p2Script = player2.GetComponent<FighterS>();
         p1Script.SetPort(1);
         p2Script.SetPort(2);
         twoPlayer = twoplayer;
-        if (!twoPlayer && MainS.instance.state == GameState.Css)
+        if (!twoPlayer && MainS.instance.state == GameState.Combat)
         {
             stateMachine.AssignAIPrefabScript(p2Script);
         }
+        Vector3 stageTransform = stage.transform.position;
+        worldSize = new Rect(- worldSizeDim.x, 0, worldSizeDim.x, worldSizeDim.y);
     }
 
     public void EnableControls()
@@ -92,6 +106,7 @@ public class FighterM : MonoBehaviour
         SFXManager.sfxInstance.audio.PlayOneShot(MainS.instance.um.inGame.narratorVoices[0]);
         p1Script.PlayMatchIntroAnimation();
         p2Script.PlayMatchIntroAnimation();
+        DisableControls();
         roundStartCoroutine = RoundStartCoroutine();
         StartCoroutine(roundStartCoroutine);
     }
@@ -114,6 +129,7 @@ public class FighterM : MonoBehaviour
             SFXManager.sfxInstance.audio.PlayOneShot(MainS.instance.um.inGame.narratorVoices[1]);
             MainS.instance.um.inGame.StartCoroutineRoundText(2f);
             EnableControls();
+            ResetPositions();
             StopCoroutine(roundStartCoroutine);
         }
     }
@@ -121,58 +137,110 @@ public class FighterM : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(new Vector3(0, worldSize.y, worldSize.x), new Vector3(0, worldSize.height, worldSize.x));
-        Gizmos.DrawLine(new Vector3(0, worldSize.y, worldSize.x), new Vector3(0, worldSize.y, worldSize.width));
-        Gizmos.DrawLine(new Vector3(0, worldSize.height, worldSize.x),
-            new Vector3(0, worldSize.height, worldSize.width));
-        Gizmos.DrawLine(new Vector3(0, worldSize.y, worldSize.width),
-            new Vector3(0, worldSize.height, worldSize.width));
+        if (stage != null)
+        {
+            Vector3 stageTransform = stage.transform.position;
+            Gizmos.DrawLine(new Vector3(0, stageTransform.y, worldSize.x), new Vector3(0, worldSize.height, worldSize.x));
+            Gizmos.DrawLine(new Vector3(0, worldSize.height, worldSize.x), new Vector3(0, worldSize.height, worldSize.width));
+            Gizmos.DrawLine(new Vector3(0, worldSize.height, worldSize.width), new Vector3(0, stageTransform.y, worldSize.width));
+            Gizmos.DrawLine(new Vector3(0, stageTransform.y, worldSize.width), new Vector3(0, stageTransform.y, worldSize.x));
+        }
     }
 
     public void UpdateObjects()
     {
         CameraFollow(player1.transform.position);
         CameraFollow(player2.transform.position);
-        mainCam.transform.position = new Vector3(mainCam.transform.position.x,
-            mainCam.transform.position.y,
-            Mathf.Clamp(mainCam.transform.position.z, worldSize.x, worldSize.width));
+        CameraCenter();
+        Vector3 camPosition = mainCam.transform.position;
+        mainCam.transform.position = new Vector3(camPosition.x,
+            camPosition.y,
+            Mathf.Clamp(camPosition.z, worldSize.x, worldSize.width));
         if (roundStart)
         {
-            p1Script.Movement(MainS.instance.player1.Combat1.Move.ReadValue<Vector2>());
-            if (twoPlayer)
-                p2Script.Movement(MainS.instance.player2.Combat2.Move.ReadValue<Vector2>());
-            else if (MainS.instance.state == GameState.Combat)
+            if (MainS.instance.player1.Combat1.Move.ReadValue<Vector2>() == Vector2.zero)
+                p1Script.inputVector = Vector2.zero;
+            var gamepads = Gamepad.all;
+            var arrayDevice = MainS.instance.player1.Combat1.Move.controls;
+            idP1 = arrayDevice[0].device.deviceId;
+            
+            if (MainS.instance.portController.keyboardOnly1)
+                idP1 = -1;
+            p1Script.Movement( idP1, false);
+            if (twoPlayer || MainS.instance.state == GameState.TrainingCombat)
+            {
+                if (MainS.instance.player2.Combat2.Move.ReadValue<Vector2>() == Vector2.zero)
+                    p2Script.inputVector = Vector2.zero;
+                var arrayDevice2 = MainS.instance.player2.Combat2.Move.controls;
+                idP2 = arrayDevice2[1].device.deviceId;
+                if (MainS.instance.portController.keyboardOnly2)
+                    idP2 = -1;
+                p2Script.Movement(idP2, false);
+            }
+            p1Script.AnimationCalculation();
+            p2Script.AnimationCalculation();
+            if (MainS.instance.state == GameState.Combat && !twoPlayer)
                 stateMachine.UpdateStates();
-            else if (MainS.instance.state == GameState.TrainingCombat)
-                p2Script.Movement(Vector2.zero);
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+    public void PauseButton(int playerPort, InputAction.CallbackContext context)
+    {
+        if (playerPort == 1)
         {
-            if (MainS.instance.GetPause())
-            {
-                MainS.instance.SetPause(false);
-            }
-            else
-            {
-                MainS.instance.SetPause(true);
-                SFXManager.sfxInstance.PlayPauseSound();
-            }
+            if (!MainS.instance.portController.CheckID(context, 1))
+                return;
+        }
+        if (playerPort == 2)
+        {
+            if (!MainS.instance.portController.CheckID(context, 2))
+                return;
+        }
+        
+        if (MainS.instance.GetPause())
+        {
+            MainS.instance.SetPause(false);
+        }
+        else
+        {
+            MainS.instance.SetPause(true);
+            SFXManager.sfxInstance.PlayPauseSound();
         }
     }
 
     public void CameraFollow(Vector3 playerTransform)
     {
-        if (playerTransform.z >= mainCam.transform.position.z + maxDistance / 2)
-            MainS.instance.fm.mainCam.transform.position = Vector3.Lerp(mainCam.transform.position,
-                mainCam.transform.position + new Vector3(0, 0, 0.2f), cameraSpeed * Time.deltaTime);
-        if (playerTransform.z <= mainCam.transform.position.z - maxDistance / 2)
-            MainS.instance.fm.mainCam.transform.position = Vector3.Lerp(mainCam.transform.position,
-                mainCam.transform.position + new Vector3(0, 0, -0.2f), cameraSpeed * Time.deltaTime);
+        Vector3 camPosition = mainCam.transform.position;
+        if (playerTransform.z >=camPosition.z + maxDistance / 2)
+            mainCam.transform.position = Vector3.Lerp(camPosition,
+                 camPosition + new Vector3(0, 0, 0.2f), cameraSpeed * Time.deltaTime);
+        if (playerTransform.z <= camPosition.z - maxDistance / 2)
+            mainCam.transform.position = Vector3.Lerp(camPosition,
+                camPosition + new Vector3(0, 0, -0.2f), cameraSpeed * Time.deltaTime);
     }
 
-    public void UseMove(int playerPort, MoveType moveType)
+    public void CameraCenter()
     {
+        Vector3 camPosition = mainCam.transform.position;
+        float middlePoint = (player1.transform.position.z + player2.transform.position.z) / 2;
+        mainCam.transform.position = Vector3.Lerp(camPosition,
+             new Vector3(camPosition.x, camPosition.y, middlePoint), cameraSpeed * Time.deltaTime);
+        
+    }
+
+    public void UseMove(int playerPort, MoveType moveType, InputAction.CallbackContext context)
+    {
+        if (playerPort == 1)
+        {
+            if (!MainS.instance.portController.CheckID(context, 1))
+                return;
+        }
+        if (playerPort == 2)
+        {
+            if (!MainS.instance.portController.CheckID(context, 2))
+                return;
+        }
+        
         //foreach motionbufferArray
         //condition forward
         // moveType = MoveType.MotionF;
@@ -180,6 +248,7 @@ public class FighterM : MonoBehaviour
         // moveType = MoveType.MotionB;
         //condition super
         // moveType = MoveType.Super;
+       
         switch (playerPort)
         {
             case 1:
@@ -191,8 +260,44 @@ public class FighterM : MonoBehaviour
         }
     }
 
-    public void PerformDash(int playerPort)
+    public void PlayerMove(int playerPort, InputAction.CallbackContext context)
     {
+        Debug.Log(context.control.device.name);
+        if (playerPort == 1)
+        {
+            if (!MainS.instance.portController.CheckID(context, 1))
+                return;
+            
+            idP1 = context.control.device.deviceId;
+            p1Script.inputVector = context.ReadValue<Vector2>();
+            
+            return;
+        }
+
+        if (playerPort == 2)
+        {
+            if (!MainS.instance.portController.CheckID(context, 2))
+                return;
+            idP2 = context.control.device.deviceId;
+            p2Script.inputVector = context.ReadValue<Vector2>();
+            return;
+        }
+    }
+    
+    
+
+    public void PerformDash(int playerPort, InputAction.CallbackContext context)
+    {
+        if (playerPort == 1)
+        {
+            if (!MainS.instance.portController.CheckID(context, 1))
+                return;
+        }
+        if (playerPort == 2)
+        {
+            if (!MainS.instance.portController.CheckID(context, 2))
+                return;
+        }
         switch (playerPort)
         {
             case 1:
@@ -212,8 +317,9 @@ public class FighterM : MonoBehaviour
 
     public void DeleteCurrentFighter()
     {
-        Destroy(player1);
-        Destroy(player2);
+       player1.SetActive(false);
+       player2.SetActive(false);
+        Destroy(stage);
     }
 
     public void CheckWinner()

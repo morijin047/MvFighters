@@ -42,15 +42,17 @@ public class VsScreen : MonoBehaviour
         {
             yield return new WaitForSeconds(5f);
             MainS.instance.GameStart(twoPlayer, previousState);
+            MainS.instance.um.css.LoadPrefabsInScene();
             MainS.instance.um.inGame.InitiateInGameUI();
             MainS.instance.fm.RoundStart();
             gameObject.SetActive(false); 
+            
         }
     }
     
     public Sprite FindCharacterPortrait(string name)
     {
-        
+        name = name.Split("(Clone")[0];
         foreach (var c in characterPortrait)
         {
             if (c.name.Contains(name))

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum MenuSelection
 {
+   None,
    MainMenu,
    Versus,
    Online,
@@ -40,9 +41,14 @@ public enum OptionSelection
 {
    None,
    SoundSetting,
+   SaveVolume,
+   MuteVolume,
    BattleSetting,
    DisplaySetting,
+   ResetResolution,
+   ApplyResolution,
    ButtonSetting
+   
 }
 
 public enum PauseSelection
@@ -51,9 +57,11 @@ public enum PauseSelection
    Resume,
    TrainingSetting,
    Reset,
-   ButtonSetting,
+   ButtonSettingPause,
    MoveList,
-   SoundSetting,
+   SoundSettingPause,
+   SaveVolumePause,
+   MuteVolumePause,
    CharacterSelect,
    MainMenu
 }

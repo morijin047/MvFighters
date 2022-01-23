@@ -57,10 +57,10 @@ public class InGame : MonoBehaviour
     {
         MainS.instance.um.inGameUI.SetActive(true);
         if (player1 == null)
-            player1 = MainS.instance.fm.player1.GetComponent<FighterS>();
+            player1 = MainS.instance.fm.p1Script;
         p1 = new HealthBar(player1.stats.maxHp);
         if (player2 == null)
-            player2 = MainS.instance.fm.player2.GetComponent<FighterS>();
+            player2 = MainS.instance.fm.p2Script;
         p2 = new HealthBar(player2.stats.maxHp);
         icon1.sprite = FindCharacterIcon(player1.stats.name);
         icon2.sprite = FindCharacterIcon(player2.stats.name);
@@ -212,7 +212,7 @@ public class InGame : MonoBehaviour
             trainingInfo.text = attackStartupText + "\n" + frameAdvantageText + "\n" + frameAdvantageBlockText + "\n" +
                                 damageText + "\n" + maxDamageText;
             
-            MainS.instance.um.training.TrainingModeSettingApply();
+            MainS.instance.um.pauseTraining.training.TrainingModeSettingApply();
         }
         else
         {

@@ -15,7 +15,7 @@ MonoBehaviour:
   walkSpeed: 2
   runspeed: 5
   jumpforce: 300
-  maxHp: 5000
+  maxHp: 10000
   name: Dummy2
   moveSet:
   - {fileID: 11400000, guid: 246dd97949db0c7499f7e5fd27ea632b, type: 2}

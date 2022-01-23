@@ -36,7 +36,6 @@ public class TrainingMode : MonoBehaviour
 
     public void DropDownClick(string name)
     {
-        Debug.Log(name);
         string intValue = Regex.Match(name, @"\d").Value;
         enemyState.SetValueWithoutNotify(Int32.Parse(intValue));
     }

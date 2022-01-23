@@ -18,7 +18,8 @@ public class StateManager : MonoBehaviour
     
     public void UpdateStates()
     {
-        RunStateMachine();
+        if (aiActive)
+            RunStateMachine();
     }
 
     private void RunStateMachine()

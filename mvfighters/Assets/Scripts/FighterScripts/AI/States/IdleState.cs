@@ -16,7 +16,8 @@ public class IdleState : State
     {
         isKnockDown = MainS.instance.fm.stateMachine.scriptToUse.IsKnockedDown();
         Vector2 movement = isKnockDown ? new Vector2(1, 0) : new Vector2(0, 0);
-        MainS.instance.fm.stateMachine.scriptToUse.Movement(movement);
+        MainS.instance.fm.stateMachine.scriptToUse.inputVector = movement;
+        MainS.instance.fm.stateMachine.scriptToUse.Movement(-1, true);
         FighterS opponent = MainS.instance.fm.p1Script;
         opponentKnockedDown = opponent.IsKnockedDown();
         isEnemyAttacking = opponent.IsAttacking();

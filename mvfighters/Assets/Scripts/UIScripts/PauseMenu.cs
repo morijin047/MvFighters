@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
+    public GameObject soundPauseUI;
+    public GameObject trainingWindow;
+    [HideInInspector] public TrainingMode training;
     [HideInInspector] private string lastSelection;
+
+
     public void UpdatePause()
     {
         if (lastSelection == null)
@@ -15,5 +20,8 @@ public class PauseMenu : MonoBehaviour
             lastSelection = MainS.instance.um.eventSystem.currentSelectedGameObject.name;
             SFXManager.sfxInstance.PlayMoveSound();
         }
+        
+        if (soundPauseUI.activeInHierarchy)
+            MainS.instance.settings.soundPauseSettings.UpdateSoundTextUI();
     }
 }
