@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f16a587a5f70a6d4da71e56af5382e8f, type: 3}
+  m_Name: Up Smash
+  m_EditorClassIdentifier: 
+  properties: 00000000
+  type: 7
+  category: 0
+  damage: 1260
+  hitstun: 60
+  startupFrame: 12
+  activeFrame: 5
+  endingFrame: 40
+  hitboxSize: {x: 0, y: 1.5, z: 1}
+  hitboxPosition: {x: 0, y: 0.5, z: -0.3}
+  knockbackForce: {x: 0, y: 250, z: 100}
+  MovePriority: 3
+  attackLaunchedSfx: {fileID: 8300000, guid: 6b1c1db529157ef48b97b592baa64e92, type: 3}
+  attackLandSfx: {fileID: 8300000, guid: 4c512dabe7dbd0c459749ded0b69eba3, type: 3}

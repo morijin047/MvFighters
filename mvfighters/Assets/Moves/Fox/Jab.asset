@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f16a587a5f70a6d4da71e56af5382e8f, type: 3}
+  m_Name: Jab
+  m_EditorClassIdentifier: 
+  properties: 01000000
+  type: 2
+  category: 0
+  damage: 350
+  hitstun: 25
+  startupFrame: 12
+  activeFrame: 5
+  endingFrame: 8
+  hitboxSize: {x: 0.1, y: 0.3, z: 0.5}
+  hitboxPosition: {x: 0, y: 0.8, z: -0.3}
+  knockbackForce: {x: 0, y: 0, z: 150}
+  MovePriority: 1
+  attackLaunchedSfx: {fileID: 8300000, guid: 9d00a3a2cc89da046abc52ed5a2d4b45, type: 3}
+  attackLandSfx: {fileID: 8300000, guid: 225abae2a321b6e47b6e6d441d6e2968, type: 3}

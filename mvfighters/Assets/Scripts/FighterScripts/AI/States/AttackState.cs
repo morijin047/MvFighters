@@ -8,9 +8,15 @@ public class AttackState : State
     public bool opponentKnockedDown;
     public IdleState idleState;
     public MoveType currentMove;
+    public int percentSuccess;
 
     public override State RunCurrentState()
     {
+        bool nerf = Random.Range(0, 100) > percentSuccess;
+        if (nerf)
+        {
+            return this;
+        }
         if (currentMove == null)
             currentMove = MoveType.A;
         FighterS opponent = MainS.instance.fm.p1Script;

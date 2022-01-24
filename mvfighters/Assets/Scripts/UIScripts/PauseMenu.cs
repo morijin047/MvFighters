@@ -6,6 +6,7 @@ public class PauseMenu : MonoBehaviour
 {
     public GameObject soundPauseUI;
     public GameObject trainingWindow;
+    public GameObject buttonPauseUI;
     [HideInInspector] public TrainingMode training;
     [HideInInspector] private string lastSelection;
 

@@ -1,8 +1,5 @@
-
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-
 using UnityEngine.InputSystem;
 
 
@@ -19,16 +16,20 @@ public class MainS : MonoBehaviour
     public static MainS instance = null;
 
     public GameState state;
-    
+
     [HideInInspector] public Settings settings;
 
     [HideInInspector] public PortControl portController;
 
     [SerializeField] private List<GameObject> pooledCharacters;
-    
+
     [SerializeField] private List<GameObject> pooledCharacters2;
 
     public List<GameObject> characterPrefabs;
+
+    [SerializeField] private InputActionAsset inputActions1;
+
+    [SerializeField] private InputActionAsset inputActions2;
 
     //private PlayerInput controls;
 
@@ -42,6 +43,7 @@ public class MainS : MonoBehaviour
             Destroy(gameObject);
         player1 = new InputManager();
         player2 = new InputManager();
+        //Debug.Log(inputActions1.FindActionMap("UI").FindAction("Submit"));
         //player1.GamePadScheme.PickDevicesFrom(Gamepad.all);
         //player2.GamePadScheme.PickDevicesFrom(Gamepad.all);
         portController = GetComponent<PortControl>();
@@ -56,7 +58,7 @@ public class MainS : MonoBehaviour
         CreateFighterPool();
         CreateFighterPool2();
     }
-    
+
     public void CreateFighterPool()
     {
         for (int i = 0; i < characterPrefabs.Count; i++)
@@ -66,7 +68,7 @@ public class MainS : MonoBehaviour
             pooledCharacters.Add(obj);
         }
     }
-    
+
     public void CreateFighterPool2()
     {
         for (int i = 0; i < characterPrefabs.Count; i++)
@@ -86,9 +88,10 @@ public class MainS : MonoBehaviour
                 return pooledCharacters[i];
             }
         }
+
         return null;
     }
-    
+
     public GameObject GetPooledFighter2(string name)
     {
         for (int i = 0; i < pooledCharacters2.Count; i++)
@@ -98,12 +101,14 @@ public class MainS : MonoBehaviour
                 return pooledCharacters2[i];
             }
         }
+
         return null;
     }
 
     public void PrepareInputManager(InputManager player, int playerPort)
     {
         //player1.Combat1.Enable();
+
         player1.Combat1.A.performed += context => fm.UseMove(1, MoveType.A, context);
         player1.Combat1.B.performed += context => fm.UseMove(1, MoveType.B, context);
         player1.Combat1.C.performed += context => fm.UseMove(1, MoveType.C, context);
@@ -129,16 +134,24 @@ public class MainS : MonoBehaviour
         player1.MenuMovement1.Cancel.performed += context => um.css.CancelSelection(1, context);
         player1.MenuMovement1.Select.performed += context => um.css.Select(1, context);
         player1.MenuMovement1.ExtraButton1.performed += context => um.css.RandomizeSelection(1, context);
-        player1.MenuMovement1.Move.performed += context => um.css.Move(1, context); 
+        player1.MenuMovement1.Move.performed += context => um.css.Move(1, context);
+        //player2.MenuMovement2.Enable();
+        player2.MenuMovement1.Cancel.performed += context => um.css.CancelSelection(2, context);
+        player2.MenuMovement1.Select.performed += context => um.css.Select(2, context);
+        player2.MenuMovement1.ExtraButton1.performed += context => um.css.RandomizeSelection(2, context);
+        player2.MenuMovement1.Move.performed += context => um.css.Move(2, context);
         //player2.MenuMovement2.Enable();
         player2.MenuMovement2.Cancel.performed += context => um.css.CancelSelection(2, context);
         player2.MenuMovement2.Select.performed += context => um.css.Select(2, context);
         player2.MenuMovement2.ExtraButton1.performed += context => um.css.RandomizeSelection(2, context);
-        player2.MenuMovement2.Move.performed += context => um.css.Move(2, context); 
-        
+        player2.MenuMovement2.Move.performed += context => um.css.Move(2, context);
+
         player1.UI.Cancel.performed += context => um.CancelSelection(1, context);
-        player1.UI.Submit.performed += context => um.Submit(1 , context);
+        player1.UI.Submit.performed += context => um.Submit(1, context);
+        // inputActions1.actionMaps[0].Enable();
+        // inputActions1.actionMaps[0].actions[2].performed += context => um.Submit(1, context);
         player1.UI.Pause.performed += context => fm.PauseButton(1, context);
+        //inputActionMaps = player1.UI;
     }
 
     public void GameStart(bool twoPlayer, GameState previousState)
@@ -174,6 +187,21 @@ public class MainS : MonoBehaviour
         if (player2.MenuMovement1.enabled)
             player2.MenuMovement1.Disable();
     }
+
+    public void EnableMenuControls()
+    {
+        if (!player1.UI.enabled)
+            player1.UI.Enable();
+        if (!player1.MenuMovement1.enabled)
+            player1.MenuMovement1.Enable();
+        if (!player1.MenuMovement2.enabled)
+            player1.MenuMovement2.Enable();
+        if (!player2.MenuMovement2.enabled)
+            player2.MenuMovement2.Enable();
+        if (!player2.MenuMovement1.enabled)
+            player2.MenuMovement1.Enable();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -194,7 +222,7 @@ public class MainS : MonoBehaviour
             fm.UpdateObjects();
 
             um.UpdateInGameUI();
-            
+
             if (paused)
             {
                 um.ActivatePauseMenu();
@@ -214,20 +242,59 @@ public class MainS : MonoBehaviour
         //um.temp.GetComponentInChildren<TMP_Text>().text = player1.Combat1.Grab.name + " = " + player1.Combat1.Grab;
     }
 
-    public void StartRebindProcess()
+    public void ResetAllBindings()
     {
-        player1.Combat1.Grab.PerformInteractiveRebinding().WithControlsExcluding("Mouse").OnMatchWaitForAnother(0.1f)
-            .Start();
+        foreach (InputActionMap map in inputActions1.actionMaps)
+        {
+            map.RemoveAllBindingOverrides();
+        }
+
+        foreach (InputActionMap map in inputActions2.actionMaps)
+        {
+            map.RemoveAllBindingOverrides();
+        }
+
+        PlayerPrefs.DeleteKey("rebinds");
     }
 
     public void SetPause(bool boolean)
     {
         paused = boolean;
     }
-    
+
     public bool GetPause()
     {
         return paused;
     }
-    
+
+    public void StartRebindProcess(string action)
+    {
+        bool reEnableMenu = false;
+        if (player1.UI.enabled)
+        {
+            DisableMenuControls();
+            reEnableMenu = true;
+        }
+
+        bool reEnableCombat = false;
+        if (player1.Combat1.enabled)
+        {
+            fm.DisableControls();
+            reEnableCombat = true;
+        }
+
+        player1.FindAction(action).PerformInteractiveRebinding().WithTimeout(5f).WithControlsExcluding("Mouse")
+            .WithControlsExcluding("Pointer").Start();
+
+
+        if (reEnableMenu)
+        {
+            EnableMenuControls();
+        }
+
+        if (reEnableCombat)
+        {
+            fm.EnableControls();
+        }
+    }
 }

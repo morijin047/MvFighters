@@ -9,8 +9,14 @@ public class GapCloseState : State
     public IdleState idleState;
     public BlockState blockState;
     public AttackState attackState;
+    public int percentSuccess;
     public override State RunCurrentState()
     {
+        bool nerf = Random.Range(0, 100) > percentSuccess;
+        if (nerf)
+        {
+            return this;
+        }
         FighterS opponent = MainS.instance.fm.p1Script;
         MainS.instance.fm.stateMachine.scriptToUse.inputVector = new Vector2(-opponent.transform.forward.z, 0);
         MainS.instance.fm.stateMachine.scriptToUse.Movement( -1, true);

@@ -12,27 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b500e916699a96e449eb88ddeee8babd, type: 3}
   m_Name: Froxty
   m_EditorClassIdentifier: 
-  walkSpeed: 2
-  runspeed: 5
-  jumpforce: 300
+  walkSpeed: 4
+  runspeed: 8
+  jumpforce: 350
   maxHp: 10000
-  name: Dummy1
+  name: Froxty
   moveSet:
-  - {fileID: 11400000, guid: 246dd97949db0c7499f7e5fd27ea632b, type: 2}
-  - {fileID: 11400000, guid: 7479ca3eb4b05244cb272ffdd59700f1, type: 2}
-  - {fileID: 11400000, guid: 4d5ef03a054a43746a5a960f5b447b20, type: 2}
-  - {fileID: 11400000, guid: 4d5efb357244e1948b9a89f6893dd2a5, type: 2}
-  - {fileID: 11400000, guid: f644e9db03223fe4b9db915b35285543, type: 2}
-  - {fileID: 11400000, guid: 2d7eeb94b8d71284c8b7d47ef30e924d, type: 2}
-  - {fileID: 11400000, guid: ef8ea9b1c7a441e4ebac1e2d6efe2913, type: 2}
-  - {fileID: 11400000, guid: 9b1ff91b000f5374b879cee6c1fe6d1a, type: 2}
-  - {fileID: 11400000, guid: c9b39e1d816b897439c92879e8e49ed3, type: 2}
-  - {fileID: 11400000, guid: c0a46720d3ae3d64e8fbd8d73940fbb4, type: 2}
-  jumpSquat: 12
-  jumpFrames: 12
-  floatiness: 3
-  dashSpeed: 8
+  - {fileID: 11400000, guid: 5d8ccc381720e74498c6b8613c5957a8, type: 2}
+  - {fileID: 11400000, guid: 4e7f529b17b240c40ae58b0c94f5a161, type: 2}
+  - {fileID: 11400000, guid: fd91aa755a89af040a63ba7465bf8458, type: 2}
+  - {fileID: 11400000, guid: 934cf69adbcb1f549ae1ff2446e27f5d, type: 2}
+  - {fileID: 11400000, guid: d9d757fe2859d1843940a96c917626e2, type: 2}
+  - {fileID: 11400000, guid: 054c00d6c3ce69b40a4c39cd35129523, type: 2}
+  - {fileID: 11400000, guid: 783ea845db87a9843971c2f2df88ffdd, type: 2}
+  - {fileID: 11400000, guid: 55dfa8a2927f08e47b36f7419345983f, type: 2}
+  - {fileID: 11400000, guid: ec0ecbf6342b7844a8decf7b5f023e85, type: 2}
+  - {fileID: 11400000, guid: 9ec3ecd5df60c9a4c89bcfde7138730a, type: 2}
+  jumpSquat: 8
+  jumpFrames: 5
+  floatiness: 10
+  dashSpeed: 10
   DashTime: 0.3
   winningQuotes:
-  - Go home and be a family man
+  - "Bro, I don\u2019t get this shit man, like imagine living in a world, quote on
+    quote, built around having a strong organized and society, and then you see this
+    shitty game I just had bro, LIKE HOOOLY SHIT MAN. I Swear this can't be real.
+    I\u2019m either playing with 4 asylum escapee\u2019s or I\u2019m actually matched
+    with half-dogs monkeys. Like 1st off I went mid cause I was tired of not being
+    able to carry cause of my d0g support pulling me down. But now I had to actually
+    deal play against 5 players and deal with my 4 failed a80/7!0n teammates man.
+    LIKE BRO YOU SEE ME HAVING 7 KILLS AT 9MIN AND YOU ARE STILL PLAYING LIKE YOU
+    ARE GOING TO CARRY. LIKE, YOU AND YOUR SUPPORT IS 3/26 WHAT THE F!@K MAN. I swear
+    if you played this game you would've lost faith in humanity man. My jungler is
+    out here camping the top laner that is 2/9 like bro, ARE YOU BLIND DO YOU NOT
+    SEE ME OR YOU\u2019RE JUST GENUINLY R3t@/-3D TURBOC@#/3R R37@/-3D? I swear people
+    play this game like it\u2019s a speed run or some sh!t, they just keep using
+    the same strategy without using a single of their 21 chromosomes, they would
+    rather use their 1 of their deformed b-@1n tumor c@#-3r to play the game out
+    man. I\u2019m exhausted of this shit, the only reason we won that game is because
+    I somehow stole baron with my Q and they didn\u2019t back while I was backdooring
+    HAHAHAHHAAHAH. ON GOD MY TEAMMATES DIDN\u2019T SERVE TO GET A SINGLE LP. ALL
+    OF THEM HAD A KDA OF 0.15 AND LESS IF YOU ONLY COUNT THEIR KILL/DEATH. Ah I man
+    I can\u2019t speak anymore I\u2019m too tired for this sh!t man some of them
+    straight up deserves to get a ticket to h311 already zzz."
   techSpeed: 0.5

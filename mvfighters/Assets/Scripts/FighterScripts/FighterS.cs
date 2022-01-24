@@ -39,17 +39,16 @@ public class FighterS : MonoBehaviour
         return playerPort;
     }
 
-    public void ResetPosition(float startPos)
+    public void ResetPosition(float startPos, Rect worldsize)
     {
         if (!initiated)
         {
             InitiateComponent();
         }
-
         if (playerPort == 1)
-            transform.position = new Vector3(0, 0, -startPos);
+            transform.position = new Vector3(0, 0, (worldsize.x + worldsize.width ) -startPos);
         if (playerPort == 2)
-            transform.position = new Vector3(0, 0, startPos);
+            transform.position = new Vector3(0, 0, (worldsize.x + worldsize.width ) + startPos);
         ChangeAnimationState(CharacterState.Idle);
         moveLand = true;
         knockedDown = false;
@@ -293,7 +292,7 @@ public class FighterS : MonoBehaviour
             WaveDashing();
     }
 
-    private bool isGrounded = true;
+    public bool isGrounded = true;
 
     void CheckAirborne()
     {
@@ -484,7 +483,6 @@ public class FighterS : MonoBehaviour
         if (hitbox.gameObject.activeInHierarchy)
             DeActivateHitbox();
         moveLand = true;
-        canAttack = true;
         currentFrame = currentMove.activeFrame + currentMove.startupFrame;
     }
 
@@ -562,9 +560,7 @@ public class FighterS : MonoBehaviour
         {
             return;
         }
-
         moveLand = true;
-        canAttack = true;
         if (hitbox.gameObject.activeInHierarchy)
             DeActivateHitbox();
         DeActivateSpecialProperties();
@@ -820,10 +816,11 @@ public class FighterS : MonoBehaviour
             if (transform.rotation.y < 1)
             {
                 if (inputVector.x < 0 && !isInHitstun && CheckOverHead(eventArg) && CheckLow(eventArg) &&
-                    CheckGrab(eventArg))
+                    CheckGrab(eventArg) && CheckForcedAction(eventArg) || guardingAll && CheckGrab(eventArg))
                 {
                     currentHitstunFrame = eventArg.move.hitstun;
                     currentHitstunFrame /= 2;
+                    RepulseEnemy(eventArg);
                     ChangeAnimationState(CharacterState.Blocking);
                 }
 
@@ -855,10 +852,11 @@ public class FighterS : MonoBehaviour
             else
             {
                 if (inputVector.x > 0 && !isInHitstun && CheckOverHead(eventArg) && CheckLow(eventArg) &&
-                    CheckGrab(eventArg))
+                    CheckGrab(eventArg) && CheckForcedAction(eventArg) || guardingAll && CheckGrab(eventArg))
                 {
                     currentHitstunFrame = eventArg.move.hitstun;
                     currentHitstunFrame /= 2;
+                    RepulseEnemy(eventArg);
                     ChangeAnimationState(CharacterState.Blocking);
                 }
 
@@ -923,13 +921,59 @@ public class FighterS : MonoBehaviour
         }
     }
 
+    public void RepulseEnemy(DamageEventArg arg)
+    {
+        if (arg.player == 1)
+        {
+            MainS.instance.fm.p2Script.PushedAway(arg.move.knockbackForce);
+        } 
+        if (arg.player == 2)
+        {
+            MainS.instance.fm.p1Script.PushedAway(arg.move.knockbackForce);
+        } 
+    }
+
     public void ApplyHit(DamageEventArg eventArg)
     {
         PushedAway(eventArg.move.knockbackForce);
         currentHp -= eventArg.move.damage;
         currentHitstunFrame = eventArg.move.hitstun;
+        if (eventArg.player == 2)
+        {
+            MainS.instance.fm.p1Script.canAttack = true;
+        }
+        if (eventArg.player == 1)
+        {
+            MainS.instance.fm.p2Script.canAttack = true;
+        }
         if (eventArg.move.attackLandSfx != null)
             SFXManager.sfxInstance.audio.PlayOneShot(eventArg.move.attackLandSfx);
+    }
+
+    public bool CheckForcedAction(DamageEventArg arg)
+    {
+        bool blockSuccess = true;
+        if (!isTrainingDummy)
+            return true;
+        foreach (var p in arg.move.properties)
+        {
+            if (p == MoveProperty.Low)
+            {
+                if (guardingHigh)
+                    blockSuccess = false;
+                if (guardingLow)
+                    blockSuccess = true;
+            }
+            
+            if (p == MoveProperty.Overhead)
+            {
+                if (guardingHigh)
+                    blockSuccess = true;
+                if (guardingLow)
+                    blockSuccess = false;
+            }
+        }
+        return blockSuccess;
     }
 
     public bool CheckOverHead(DamageEventArg arg)
@@ -943,15 +987,11 @@ public class FighterS : MonoBehaviour
                 {
                     blockSuccess = false;
                 }
-
-                if (guardingHigh)
-                    blockSuccess = true;
-                if (guardingLow)
-                    blockSuccess = false;
+                
             }
         }
 
-        if (guardingAll)
+        if (guardingHigh)
             blockSuccess = true;
         return blockSuccess;
     }
@@ -967,20 +1007,17 @@ public class FighterS : MonoBehaviour
                 {
                     blockSuccess = false;
                 }
-
-                if (guardingLow)
-                    blockSuccess = true;
             }
         }
 
-        if (guardingAll)
+        if (guardingLow)
             blockSuccess = true;
         return blockSuccess;
     }
 
     public bool CheckGrab(DamageEventArg arg)
     {
-        bool blockSuccess = arg.move.type != MoveType.Grab;
+        bool blockSuccess = arg.move.type is not (MoveType.Grab or MoveType.Grab2);
         return blockSuccess;
     }
 
@@ -1037,6 +1074,7 @@ public class FighterS : MonoBehaviour
             if (playerPort == 2)
             {
                 MainS.instance.fm.p1Script.grabbing = false;
+                MainS.instance.fm.p1Script.canCancel = true;
                 MainS.instance.fm.p1Script.Attack(MoveType.Grab2);
             }
 

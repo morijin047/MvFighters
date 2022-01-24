@@ -15,13 +15,13 @@ MonoBehaviour:
   properties: 090000000700000002000000
   type: 6
   category: 0
-  damage: 800
-  hitstun: 30
-  startupFrame: 40
+  damage: 1500
+  hitstun: 40
+  startupFrame: 25
   activeFrame: 20
-  endingFrame: 45
-  hitboxSize: {x: 0.1, y: 0.5, z: 1}
-  hitboxPosition: {x: 0, y: 0.5, z: 0.5}
+  endingFrame: 30
+  hitboxSize: {x: 0.1, y: 0.7, z: 0.7}
+  hitboxPosition: {x: 0, y: 0.5, z: 0.3}
   knockbackForce: {x: 0, y: 0, z: 300}
   MovePriority: 3
   attackLaunchedSfx: {fileID: 8300000, guid: 6b1c1db529157ef48b97b592baa64e92, type: 3}

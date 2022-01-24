@@ -1423,7 +1423,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 82
+  m_Constraints: 114
   m_CollisionDetection: 0
 --- !u!65 &502032521326385355
 BoxCollider:
@@ -1436,7 +1436,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.1865044, z: 0.4210977}
+  m_Size: {x: 1, y: 1.15, z: 0.4210977}
   m_Center: {x: 0, y: 0.5647893, z: -0.023878247}
 --- !u!114 &502032521326385367
 MonoBehaviour:
@@ -1452,6 +1452,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 502032521326385352}
   stats: {fileID: 11400000, guid: 2b66a319fcc02574bb0c986d2713c7cf, type: 2}
+  inputVector: {x: 0, y: 0}
+  isGrounded: 1
   currentHp: 0
   currentFrame: -1
   currentMove: {fileID: 0}
@@ -1556,10 +1558,6 @@ MonoBehaviour:
     m_ActionName: Combat1/Dash[/XInputControllerWindows/leftTrigger,/Keyboard/h]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 8aa999af-2f9b-410d-b1d6-2e30b7a328a9
-    m_ActionName: Combat2/Move[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/rightStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/rightStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/rightStick/right,/XInputControllerWindows/dpad,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: a83ccf63-73df-400c-b61b-9e72b9ad3a78
     m_ActionName: Combat2/A[/Keyboard/numpad1,/XInputControllerWindows/buttonWest]
   - m_PersistentCalls:
@@ -1588,10 +1586,6 @@ MonoBehaviour:
     m_ActionName: Combat2/Dash[/XInputControllerWindows/leftTrigger,/Keyboard/numpad0]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: b2732b3b-5da5-4360-9782-26db80a3233d
-    m_ActionName: MenuMovement1/Move[/XInputControllerWindows/dpad/up,/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/right,/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 8e04a2c7-b3e2-4e37-99c5-91b9cd9ccdf2
     m_ActionName: MenuMovement1/Cancel[/XInputControllerWindows/buttonEast,/Keyboard/k]
   - m_PersistentCalls:
@@ -1602,10 +1596,6 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: ca744d2f-0ae8-4b74-8287-9a59a42970b1
     m_ActionName: MenuMovement1/ExtraButton1[/Keyboard/l,/XInputControllerWindows/buttonNorth]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 83a9d741-2734-46b9-a2e5-a2c95b50de29
-    m_ActionName: MenuMovement2/Move[/XInputControllerWindows/dpad/up,/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/right,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 58f28a22-60af-4bad-90b4-f26dfdad4704
@@ -1626,6 +1616,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 8f580ad0-2dd1-4b8d-8b65-15fa6ff0839a
     m_ActionName: Combat2/Pause[/Keyboard/escape,/XInputControllerWindows/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f8e8dac5-53a2-4e18-97fb-86a507c32ea1
+    m_ActionName: UI/Pause[/Keyboard/escape,/XInputControllerWindows/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f10d6994-0c81-441d-90c9-5fd8b91063c3
+    m_ActionName: Combat2/Move[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/dpad,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4ae19a02-17a6-42a5-8199-64b1330e6a5b
+    m_ActionName: MenuMovement1/Move[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/dpad,/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c2d571c7-2149-4f68-bc67-5e803b5e656c
+    m_ActionName: MenuMovement2/Move[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/dpad,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: UI

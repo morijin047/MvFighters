@@ -32,7 +32,7 @@ MonoBehaviour:
   jumpFrames: 12
   floatiness: 3
   dashSpeed: 8
-  DashTime: 0.3
+  DashTime: 0.5
   winningQuotes:
   - Go home and be a family man
   techSpeed: 0.5

@@ -15,7 +15,7 @@ MonoBehaviour:
   properties: 09000000
   type: 0
   category: 0
-  damage: 550
+  damage: 2000
   hitstun: 32
   startupFrame: 12
   activeFrame: 3

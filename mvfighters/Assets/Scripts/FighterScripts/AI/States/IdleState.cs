@@ -11,9 +11,15 @@ public class IdleState : State
     public GapCloseState gapCloseState;
     public AttackState attackState;
     public BlockState blockState;
+    public int percentSuccess;
 
     public override State RunCurrentState()
     {
+        bool nerf = Random.Range(0, 100) > percentSuccess;
+        if (nerf)
+        {
+            return this;
+        }
         isKnockDown = MainS.instance.fm.stateMachine.scriptToUse.IsKnockedDown();
         Vector2 movement = isKnockDown ? new Vector2(1, 0) : new Vector2(0, 0);
         MainS.instance.fm.stateMachine.scriptToUse.inputVector = movement;

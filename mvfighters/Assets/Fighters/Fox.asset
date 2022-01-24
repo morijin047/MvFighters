@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b500e916699a96e449eb88ddeee8babd, type: 3}
+  m_Name: Fox
+  m_EditorClassIdentifier: 
+  walkSpeed: 3
+  runspeed: 8
+  jumpforce: 300
+  maxHp: 10000
+  name: Fox
+  moveSet:
+  - {fileID: 11400000, guid: 2f456b15dbc1bea45814f15dc13db07d, type: 2}
+  - {fileID: 11400000, guid: 28a110b1c42233440bfe57b4986c5fa4, type: 2}
+  - {fileID: 11400000, guid: 1bd3faf7ba9d65a4294aebbb724becec, type: 2}
+  - {fileID: 11400000, guid: bccc39c9373304640b982a48d41095a7, type: 2}
+  - {fileID: 11400000, guid: 723828e24474b8b4bb2e6c9692e44d31, type: 2}
+  - {fileID: 11400000, guid: c63b7b52965877849baacb7a14bd574d, type: 2}
+  - {fileID: 11400000, guid: c8d0c78674caa96438627a50c4898649, type: 2}
+  - {fileID: 11400000, guid: 051db537eeb830d4b9585968e78f5ff1, type: 2}
+  - {fileID: 11400000, guid: a6b7419ffea2659469ada4be799814fd, type: 2}
+  - {fileID: 11400000, guid: 77455e45533fd484ca34e253aae7927f, type: 2}
+  jumpSquat: 8
+  jumpFrames: 5
+  floatiness: 15
+  dashSpeed: 8
+  DashTime: 0.3
+  winningQuotes:
+  - Mission Complete!
+  techSpeed: 0.5

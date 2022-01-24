@@ -50,6 +50,8 @@ public class UIManager : MonoBehaviour
 
     public GameObject displayUI;
 
+    public GameObject buttonUI;
+
 
     public void StartMenuUpdating()
     {
@@ -214,6 +216,14 @@ public class UIManager : MonoBehaviour
             {
                 MainS.instance.settings.resolutionSettings.ApplySetting();
             }
+
+            if (setting == OptionSelection.ButtonSetting)
+            {
+                buttonUI.SetActive(true);
+                mainMenu.DisableTemporaryMenu();
+                mainMenu.Transition(false);
+                eventSystem.SetSelectedGameObject(buttonUI.GetComponentInChildren<Button>().gameObject);
+            }
         }
     }
 
@@ -244,11 +254,20 @@ public class UIManager : MonoBehaviour
 
             if (pause == PauseSelection.SoundSettingPause)
             {
-                eventSystem.SetSelectedGameObject(MainS.instance.state == GameState.TrainingCombat
-                    ? pauseTraining.soundPauseUI.GetComponentInChildren<Button>().gameObject
-                    : this.pause.soundPauseUI.GetComponentInChildren<Button>().gameObject);
-                
-                pauseTraining.soundPauseUI.SetActive(true);
+                if (MainS.instance.state == GameState.TrainingCombat)
+                {
+                    eventSystem.SetSelectedGameObject(
+                        pauseTraining.soundPauseUI.GetComponentInChildren<Button>().gameObject
+                    );
+                    pauseTraining.soundPauseUI.SetActive(true);
+                }
+                else
+                {
+                    eventSystem.SetSelectedGameObject(
+                        this.pause.soundPauseUI.GetComponentInChildren<Button>().gameObject
+                    );
+                    this.pause.soundPauseUI.SetActive(true);
+                }
                 MainS.instance.settings.soundPauseSettings.OpenSoundSettings();
             }
 
@@ -260,6 +279,23 @@ public class UIManager : MonoBehaviour
             if (pause == PauseSelection.MuteVolumePause)
             {
                 MainS.instance.settings.soundPauseSettings.MuteSoundSettings();
+            }
+
+            if (pause == PauseSelection.ButtonSettingPause)
+            {
+                if (MainS.instance.state == GameState.TrainingCombat)
+                {
+                    eventSystem.SetSelectedGameObject(pauseTraining.buttonPauseUI.GetComponentInChildren<Button>()
+                        .gameObject);
+                    pauseTraining.buttonPauseUI.SetActive(true);
+                }
+                else
+                {
+                    eventSystem.SetSelectedGameObject(this.pause.buttonPauseUI.GetComponentInChildren<Button>()
+                        .gameObject);
+                    this.pause.buttonPauseUI.SetActive(true);
+                }
+               
             }
 
             if (pause == PauseSelection.CharacterSelect)
@@ -379,7 +415,8 @@ public class UIManager : MonoBehaviour
             if (!MainS.instance.portController.CheckID(context, 2))
                 return;
         }
-        Debug.Log("Submit");
+
+       // Debug.Log("Submit");
         if (eventSystem.currentSelectedGameObject.GetComponent<Button>() != null)
         {
             eventSystem.currentSelectedGameObject.GetComponent<Button>().onClick.Invoke();
@@ -407,7 +444,7 @@ public class UIManager : MonoBehaviour
             currentToggle.isOn = !currentToggle.isOn;
             return;
         }
-        
+
         if (MainS.instance.settings.resolutionSettings.resolution.IsExpanded)
         {
             MainS.instance.settings.resolutionSettings.ClickDropdown();
@@ -462,6 +499,14 @@ public class UIManager : MonoBehaviour
             pauseTrainingUI.SetActive(false);
         if (pauseTraining.trainingWindow.activeInHierarchy)
             pauseTraining.trainingWindow.SetActive(false);
+        if (pauseTraining.buttonPauseUI.activeInHierarchy)
+            pauseTraining.buttonPauseUI.SetActive(false);
+        if (pause.buttonPauseUI.activeInHierarchy)
+            pause.buttonPauseUI.SetActive(false);
+        if (pauseTraining.soundPauseUI.activeInHierarchy)
+            pauseTraining.soundPauseUI.SetActive(false);
+        if (pause.soundPauseUI.activeInHierarchy)
+            pause.soundPauseUI.SetActive(false);
         Time.timeScale = 1;
         MainS.instance.player1.Combat1.Enable();
         if (was2Player)
@@ -486,6 +531,7 @@ public class UIManager : MonoBehaviour
             if (!MainS.instance.portController.CheckID(context, 2))
                 return;
         }
+
         if (MainS.instance.state == GameState.Menu)
         {
             if (soundUI.activeInHierarchy)
@@ -497,6 +543,11 @@ public class UIManager : MonoBehaviour
             {
                 mainMenu.GoTo(MenuSelection.Options, true);
                 displayUI.SetActive(false);
+            }
+            else if (buttonUI.activeInHierarchy)
+            {
+                mainMenu.GoTo(MenuSelection.Options, true);
+                buttonUI.SetActive(false);
             }
             else
             {
@@ -517,14 +568,25 @@ public class UIManager : MonoBehaviour
                 pauseTraining.trainingWindow.SetActive(false);
                 eventSystem.SetSelectedGameObject(pauseTrainingUI.GetComponentInChildren<Button>().gameObject);
             }
-            else if (pause.soundPauseUI)
+            else if (pause.buttonPauseUI.activeInHierarchy)
             {
-                pause.soundPauseUI.SetActive(false);
+                pause.buttonPauseUI.SetActive(false);
                 eventSystem.SetSelectedGameObject(pauseUI.GetComponentInChildren<Button>().gameObject);
             }
-            else if (pauseTraining.soundPauseUI)
+            else if (pauseTraining.buttonPauseUI.activeInHierarchy)
             {
-                pauseTraining.trainingWindow.SetActive(false);
+                pauseTraining.buttonPauseUI.SetActive(false);
+                eventSystem.SetSelectedGameObject(pauseTrainingUI.GetComponentInChildren<Button>().gameObject);
+            }
+            else if (pause.soundPauseUI.activeInHierarchy)
+            {
+                pause.soundPauseUI.SetActive(false);
+
+                eventSystem.SetSelectedGameObject(pauseUI.GetComponentInChildren<Button>().gameObject);
+            }
+            else if (pauseTraining.soundPauseUI.activeInHierarchy)
+            {
+                pauseTraining.soundPauseUI.SetActive(false);
                 eventSystem.SetSelectedGameObject(pauseTrainingUI.GetComponentInChildren<Button>().gameObject);
             }
             else if (pauseUI.activeInHierarchy || pauseTrainingUI.activeInHierarchy)

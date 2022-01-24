@@ -16,12 +16,12 @@ MonoBehaviour:
   type: 5
   category: 0
   damage: 225
-  hitstun: 36
-  startupFrame: 24
+  hitstun: 40
+  startupFrame: 12
   activeFrame: 10
-  endingFrame: 30
-  hitboxSize: {x: 0, y: 1, z: 1}
-  hitboxPosition: {x: 0, y: 0.3, z: 0.5}
+  endingFrame: 20
+  hitboxSize: {x: 0, y: 1, z: 0.7}
+  hitboxPosition: {x: 0, y: 0.3, z: 0.3}
   knockbackForce: {x: 0, y: 0, z: 150}
   MovePriority: 2
   attackLaunchedSfx: {fileID: 8300000, guid: 6b1c1db529157ef48b97b592baa64e92, type: 3}

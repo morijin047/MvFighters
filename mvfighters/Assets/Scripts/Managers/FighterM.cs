@@ -1,11 +1,8 @@
-using System;
+
 using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 
 public class FighterM : MonoBehaviour
 {
@@ -42,6 +39,8 @@ public class FighterM : MonoBehaviour
     
     [HideInInspector] public int idP1;
     [HideInInspector] public int idP2;
+
+    public float repulsionForce;
     public void StarGame(string p1, string p2, GameObject stage, bool twoplayer)
     {
         this.stage = stage;
@@ -100,21 +99,23 @@ public class FighterM : MonoBehaviour
 
     public void RoundStart()
     {
-        mainCam.transform.position = new Vector3(4, 1.5f, 0);
+        mainCam.transform.position = new Vector3(4, 1.5f, worldSize.x + worldSize.width);
         ResetPositions();
         MainS.instance.um.inGame.DisplayRoundText("GET READY!");
         SFXManager.sfxInstance.audio.PlayOneShot(MainS.instance.um.inGame.narratorVoices[0]);
         p1Script.PlayMatchIntroAnimation();
         p2Script.PlayMatchIntroAnimation();
         DisableControls();
+        MainS.instance.um.inGame.AssignCharacterIcons();
         roundStartCoroutine = RoundStartCoroutine();
         StartCoroutine(roundStartCoroutine);
     }
 
     public void ResetPositions()
     {
-        p1Script.ResetPosition(startPos);
-        p2Script.ResetPosition(startPos);
+        p1Script.ResetPosition(startPos, worldSize);
+        p2Script.ResetPosition(startPos, worldSize);
+        mainCam.transform.position = new Vector3(4, 1.5f, worldSize.x + worldSize.width);
     }
 
     public IEnumerator RoundStartCoroutine()
@@ -147,7 +148,42 @@ public class FighterM : MonoBehaviour
         }
     }
 
-    public void UpdateObjects()
+    public bool CheckCharacterOnTopOfEachOther()
+    {
+        Vector3 p1Position = p1Script.transform.position;
+        Vector3 p2Position = p2Script.transform.position;
+        bool p2OnTop = p1Position.z + 0.8f > p2Position.z && p1Position.z - 0.8f < p2Position.z;
+        bool p2Falling = p2Script.rb.velocity.y < 0;
+        if (p1Script.isGrounded && !p2Script.isGrounded && p2OnTop && !p2Falling)
+        {
+            if (p2Script.transform.rotation.y < 1)
+            {
+                p2Script.transform.Translate(new Vector3(0,0, p2Script.transform.forward.z * repulsionForce));
+            }
+            else
+            {
+                p2Script.transform.Translate(new Vector3(0,0, -p2Script.transform.forward.z * repulsionForce));
+            }
+            return true;
+        }
+        bool p1OnTop = p2Position.z + 0.8f > p1Position.z && p2Position.z - 0.8f < p1Position.z;
+        bool p1Falling = p1Script.rb.velocity.y < 0;
+        if (p2Script.isGrounded && !p1Script.isGrounded && p1OnTop && !p1Falling)
+        {
+            if (p1Script.transform.rotation.y < 1)
+            {
+                p1Script.transform.Translate(new Vector3(0,0, p1Script.transform.forward.z * repulsionForce));
+            }
+            else
+            {
+                p1Script.transform.Translate(new Vector3(0,0, -p1Script.transform.forward.z * repulsionForce));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public void CameraMovement()
     {
         CameraFollow(player1.transform.position);
         CameraFollow(player2.transform.position);
@@ -156,6 +192,10 @@ public class FighterM : MonoBehaviour
         mainCam.transform.position = new Vector3(camPosition.x,
             camPosition.y,
             Mathf.Clamp(camPosition.z, worldSize.x, worldSize.width));
+    }
+    public void UpdateObjects()
+    {
+        CameraMovement();
         if (roundStart)
         {
             if (MainS.instance.player1.Combat1.Move.ReadValue<Vector2>() == Vector2.zero)
@@ -181,6 +221,10 @@ public class FighterM : MonoBehaviour
             p2Script.AnimationCalculation();
             if (MainS.instance.state == GameState.Combat && !twoPlayer)
                 stateMachine.UpdateStates();
+            if (CheckCharacterOnTopOfEachOther())
+            {
+                Debug.Log("OnTop");
+            }
         }
     }
 
@@ -262,7 +306,7 @@ public class FighterM : MonoBehaviour
 
     public void PlayerMove(int playerPort, InputAction.CallbackContext context)
     {
-        Debug.Log(context.control.device.name);
+       // Debug.Log(context.control.device.name);
         if (playerPort == 1)
         {
             if (!MainS.instance.portController.CheckID(context, 1))

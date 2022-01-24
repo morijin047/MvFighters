@@ -350,7 +350,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 82
+  m_Constraints: 114
   m_CollisionDetection: 0
 --- !u!65 &8933848925709463143
 BoxCollider:
@@ -363,8 +363,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.1865044, z: 0.4210977}
-  m_Center: {x: 0, y: 0.5647893, z: -0.023878247}
+  m_Size: {x: 1, y: 1.2, z: 0.4210977}
+  m_Center: {x: 0, y: 0.6, z: -0.023878247}
 --- !u!114 &579263350473907650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,6 +379,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 163875800910132876}
   stats: {fileID: 11400000, guid: 03325a9d8f7bffb4f90dc1c79e60875c, type: 2}
+  inputVector: {x: 0, y: 0}
+  isGrounded: 1
   currentHp: 0
   currentFrame: -1
   currentMove: {fileID: 0}

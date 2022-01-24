@@ -169,13 +169,13 @@ public class Css : MonoBehaviour
 
     public void Move(int port, InputAction.CallbackContext context)
     {
-        if (port == 1)
+        if (port == 1 && !chooseForCPU)
         {
             if (!MainS.instance.portController.CheckID(context, 1))
                 return;
         }
 
-        if (port == 2)
+        if (port == 2 && !chooseForCPU)
         {
             if (!MainS.instance.portController.CheckID(context, 2))
                 return;
@@ -326,13 +326,13 @@ public class Css : MonoBehaviour
 
     public void Select(int playerPort, InputAction.CallbackContext context)
     {
-        if (playerPort == 1)
+        if (playerPort == 1 && !chooseForCPU)
         {
             if (!MainS.instance.portController.CheckID(context, 1))
                 return;
         }
 
-        if (playerPort == 2)
+        if (playerPort == 2 && !chooseForCPU)
         {
             if (!MainS.instance.portController.CheckID(context, 2))
                 return;
@@ -378,7 +378,7 @@ public class Css : MonoBehaviour
                     currentCharacter2 = prefabPreview2;
                     currentCharacter2.SetActive(false);
                     c2Selected = true;
-                    MainS.instance.player1.MenuMovement2.Disable();
+                    MainS.instance.player2.MenuMovement1.Disable();
                 }
                 else
                 {
@@ -392,7 +392,7 @@ public class Css : MonoBehaviour
                     {
                         chooseForCPU = true;
                         MainS.instance.player1.MenuMovement1.Disable();
-                        MainS.instance.player2.MenuMovement2.Enable();
+                        MainS.instance.player2.MenuMovement1.Enable();
                     }
                 }
             }
@@ -403,13 +403,13 @@ public class Css : MonoBehaviour
 
     public void CancelSelection(int playerPort, InputAction.CallbackContext context)
     {
-        if (playerPort == 1)
+        if (playerPort == 1 && !chooseForCPU)
         {
             if (!MainS.instance.portController.CheckID(context, 1))
                 return;
         }
 
-        if (playerPort == 2)
+        if (playerPort == 2 && !chooseForCPU)
         {
             if (!MainS.instance.portController.CheckID(context, 2))
                 return;
@@ -437,7 +437,7 @@ public class Css : MonoBehaviour
             if (chooseForCPU)
             {
                 chooseForCPU = false;
-                MainS.instance.player1.MenuMovement2.Disable();
+                MainS.instance.player2.MenuMovement1.Disable();
                 MainS.instance.player1.MenuMovement1.Enable();
             }
         }
@@ -472,13 +472,13 @@ public class Css : MonoBehaviour
 
     public void RandomizeSelection(int playerPort, InputAction.CallbackContext context)
     {
-        if (playerPort == 1)
+        if (playerPort == 1 && !chooseForCPU)
         {
             if (!MainS.instance.portController.CheckID(context, 1))
                 return;
         }
 
-        if (playerPort == 2)
+        if (playerPort == 2 && !chooseForCPU)
         {
             if (!MainS.instance.portController.CheckID(context, 2))
                 return;

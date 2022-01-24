@@ -11,9 +11,6 @@ public class InGame : MonoBehaviour
     private HealthBar p1;
     private HealthBar p2;
 
-    private FighterS player1;
-    private FighterS player2;
-
     public Image hp1;
     public Image hp2;
 
@@ -56,14 +53,9 @@ public class InGame : MonoBehaviour
     public void InitiateInGameUI()
     {
         MainS.instance.um.inGameUI.SetActive(true);
-        if (player1 == null)
-            player1 = MainS.instance.fm.p1Script;
-        p1 = new HealthBar(player1.stats.maxHp);
-        if (player2 == null)
-            player2 = MainS.instance.fm.p2Script;
-        p2 = new HealthBar(player2.stats.maxHp);
-        icon1.sprite = FindCharacterIcon(player1.stats.name);
-        icon2.sprite = FindCharacterIcon(player2.stats.name);
+        p1 = new HealthBar(MainS.instance.fm.p1Script.stats.maxHp);
+        p2 = new HealthBar(MainS.instance.fm.p2Script.stats.maxHp);
+        
         if (!eventAdded)
         {
             EventManager.AddRoundEndListener(GiveRoundWin);
@@ -86,6 +78,12 @@ public class InGame : MonoBehaviour
         messageOnScreen.enabled = false;
     }
 
+    public void AssignCharacterIcons()
+    {
+        icon1.sprite = FindCharacterIcon(MainS.instance.fm.p1Script.stats.name);
+        icon2.sprite = FindCharacterIcon(MainS.instance.fm.p2Script.stats.name);
+    }
+
     public IEnumerator RoundStart()
     {
         while (true)
@@ -94,11 +92,11 @@ public class InGame : MonoBehaviour
             if (MatchIcon1.activeInHierarchy)
             {
                 MainS.instance.fm.MatchOver();
-                MainS.instance.um.GoToResultScreen(player1, player2);
+                MainS.instance.um.GoToResultScreen(MainS.instance.fm.p1Script, MainS.instance.fm.p2Script);
             } else if (MatchIcon2.activeInHierarchy)
             {
                 MainS.instance.fm.MatchOver();
-                MainS.instance.um.GoToResultScreen(player2, player1);
+                MainS.instance.um.GoToResultScreen(MainS.instance.fm.p2Script, MainS.instance.fm.p1Script);
             }
             else
             {
@@ -161,8 +159,8 @@ public class InGame : MonoBehaviour
 
     public void UpdateInGameUI()
     {
-        p1.currentHp = player1.currentHp;
-        p2.currentHp = player2.currentHp;
+        p1.currentHp = MainS.instance.fm.p1Script.currentHp;
+        p2.currentHp = MainS.instance.fm.p2Script.currentHp;
 
         hp1.fillAmount = p1.GetFillAmount();
         hp2.fillAmount = p2.GetFillAmount();
@@ -266,7 +264,7 @@ public class InGame : MonoBehaviour
     {
         foreach (var c in characterIcons)
         {
-            if (c.name.Contains(name))
+            if (c.name == name + "ICON")
             {
                 return c;
             }
