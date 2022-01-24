@@ -20,10 +20,10 @@ public class PortControl : MonoBehaviour
 
     public bool CheckID(InputAction.CallbackContext context, int playerPort)
     {
-        int gamepadID = playerPort == 1 ? MainS.instance.portController.gamepad1ID : MainS.instance.portController.gamepad2ID;
+        int gamepadID = playerPort == 1 ? MainScript.instance.portController.gamepad1ID : MainScript.instance.portController.gamepad2ID;
         bool isKeyboardOnly = playerPort == 1
-            ? MainS.instance.portController.keyboardOnly1
-            : MainS.instance.portController.keyboardOnly2;
+            ? MainScript.instance.portController.keyboardOnly1
+            : MainScript.instance.portController.keyboardOnly2;
         if (isKeyboardOnly)
         {
             if (context.control.device.name != "Keyboard")

@@ -28,12 +28,12 @@ public class ComboDisplay
         timeBeforeReset--;
         if (timeBeforeReset <= 0)
         {
-            if (MainS.instance.state == GameState.TrainingCombat)
+            if (MainScript.instance.state == GameState.TrainingCombat)
             {
                 SaveMaxDamage();
             }
             ResetComboDisplay();
-            MainS.instance.um.inGame.StartComboDisappearCoroutine(2f);
+            MainScript.instance.um.inGame.StartComboDisappearCoroutine(2f);
         }
     }
 

@@ -68,16 +68,16 @@ public class Css : MonoBehaviour
     {
         initiated = true;
         player1.enabled = true;
-        MainS.instance.player1.MenuMovement1.Enable();
+        MainScript.instance.player1.MenuMovement1.Enable();
         //player1.SetSelectedGameObject(characterIcons.GetComponentInChildren<Button>().gameObject);
         player1.SetSelectedGameObject(player1.firstSelectedGameObject);
-        if (MainS.instance.player2.MenuMovement2.enabled)
+        if (MainScript.instance.player2.MenuMovement2.enabled)
         {
             player2.enabled = true;
             twoPlayer = true;
             //player2.SetSelectedGameObject(characterIcons.GetComponentInChildren<Button>().FindSelectableOnLeft().gameObject);
             player2.SetSelectedGameObject(player2.firstSelectedGameObject);
-            MainS.instance.player2.MenuMovement2.Enable();
+            MainScript.instance.player2.MenuMovement2.Enable();
         }
         else
         {
@@ -109,7 +109,7 @@ public class Css : MonoBehaviour
 
     public void DisplayPreviewArea1()
     {
-        foreach (var c in MainS.instance.characterPrefabs)
+        foreach (var c in MainScript.instance.characterPrefabs)
         {
             if (c.name == player1.currentSelectedGameObject.name)
             {
@@ -118,7 +118,7 @@ public class Css : MonoBehaviour
                     if (prefabPreview1.name != c.name + "(Clone)")
                     {
                         prefabPreview1.SetActive(false);
-                        prefabPreview1 = MainS.instance.GetPooledFighter(c.name + "(Clone)");
+                        prefabPreview1 = MainScript.instance.GetPooledFighter(c.name + "(Clone)");
                         prefabPreview1.SetActive(true);
                         prefabPreview1.transform.parent = previewArea1.transform;
                         prefabPreview1.transform.localPosition = new Vector3(0, 0, 0);
@@ -127,7 +127,7 @@ public class Css : MonoBehaviour
                 }
                 else
                 {
-                    prefabPreview1 = MainS.instance.GetPooledFighter(c.name + "(Clone)");
+                    prefabPreview1 = MainScript.instance.GetPooledFighter(c.name + "(Clone)");
                     prefabPreview1.SetActive(true);
                     prefabPreview1.transform.parent = previewArea1.transform;
                     prefabPreview1.transform.localPosition = new Vector3(0, 0, 0);
@@ -139,7 +139,7 @@ public class Css : MonoBehaviour
 
     public void DisplayPreviewArea2()
     {
-        foreach (var c in MainS.instance.characterPrefabs)
+        foreach (var c in MainScript.instance.characterPrefabs)
         {
             if (c.name == player2.currentSelectedGameObject.name)
             {
@@ -148,7 +148,7 @@ public class Css : MonoBehaviour
                     if (prefabPreview2.name != c.name + "(Clone)")
                     {
                         prefabPreview2.SetActive(false);
-                        prefabPreview2 = MainS.instance.GetPooledFighter2(c.name + "(Clone)");
+                        prefabPreview2 = MainScript.instance.GetPooledFighter2(c.name + "(Clone)");
                         prefabPreview2.SetActive(true);
                         prefabPreview2.transform.parent = previewArea2.transform;
                         prefabPreview2.transform.localPosition = new Vector3(0, 0, 0);
@@ -157,7 +157,7 @@ public class Css : MonoBehaviour
                 }
                 else
                 {
-                    prefabPreview2 = MainS.instance.GetPooledFighter2(c.name + "(Clone)");
+                    prefabPreview2 = MainScript.instance.GetPooledFighter2(c.name + "(Clone)");
                     prefabPreview2.SetActive(true);
                     prefabPreview2.transform.parent = previewArea2.transform;
                     prefabPreview2.transform.localPosition = new Vector3(0, 0, 0);
@@ -171,13 +171,13 @@ public class Css : MonoBehaviour
     {
         if (port == 1 && !chooseForCPU)
         {
-            if (!MainS.instance.portController.CheckID(context, 1))
+            if (!MainScript.instance.portController.CheckID(context, 1))
                 return;
         }
 
         if (port == 2 && !chooseForCPU)
         {
-            if (!MainS.instance.portController.CheckID(context, 2))
+            if (!MainScript.instance.portController.CheckID(context, 2))
                 return;
         }
         Vector2 direction = context.ReadValue<Vector2>();
@@ -264,16 +264,16 @@ public class Css : MonoBehaviour
             UpdateStageUI();
             if (stageSelected)
             {
-                MainS.instance.um.vsScreen.VsScreenAppear(twoPlayer, currentCharacter1.name,
+                MainScript.instance.um.vsScreen.VsScreenAppear(twoPlayer, currentCharacter1.name,
                     currentCharacter2.name);
                 initiated = false;
                 c1Selected = false;
                 c2Selected = false;
                 stageSelected = false;
                 chooseForCPU = false;
-                MainS.instance.player1.MenuMovement1.Disable();
-                MainS.instance.player1.MenuMovement2.Disable();
-                MainS.instance.player2.MenuMovement2.Disable();
+                MainScript.instance.player1.MenuMovement1.Disable();
+                MainScript.instance.player1.MenuMovement2.Disable();
+                MainScript.instance.player2.MenuMovement2.Disable();
             }
         }
     }
@@ -282,7 +282,7 @@ public class Css : MonoBehaviour
     {
         currentCharacter1.SetActive(false);
         currentCharacter2.SetActive(false);
-        MainS.instance.fm.StarGame(currentCharacter1.name, currentCharacter2.name, currentStage, twoPlayer);
+        MainScript.instance.fm.StarGame(currentCharacter1.name, currentCharacter2.name, currentStage, twoPlayer);
         stageUI.SetActive(false);
         twoPlayer = false;
         gameObject.SetActive(false);
@@ -294,7 +294,7 @@ public class Css : MonoBehaviour
         {
             stageUI.SetActive(true);
             player1.SetSelectedGameObject(stageUI.GetComponentInChildren<Button>().gameObject);
-            MainS.instance.player1.MenuMovement1.Enable();
+            MainScript.instance.player1.MenuMovement1.Enable();
         }
     }
 
@@ -328,13 +328,13 @@ public class Css : MonoBehaviour
     {
         if (playerPort == 1 && !chooseForCPU)
         {
-            if (!MainS.instance.portController.CheckID(context, 1))
+            if (!MainScript.instance.portController.CheckID(context, 1))
                 return;
         }
 
         if (playerPort == 2 && !chooseForCPU)
         {
-            if (!MainS.instance.portController.CheckID(context, 2))
+            if (!MainScript.instance.portController.CheckID(context, 2))
                 return;
         }
         if (c1Selected && c2Selected)
@@ -360,7 +360,7 @@ public class Css : MonoBehaviour
                 break;
         }
 
-        foreach (var c in MainS.instance.characterPrefabs)
+        foreach (var c in MainScript.instance.characterPrefabs)
         {
             if (c.name == nameToUse)
             {
@@ -370,7 +370,7 @@ public class Css : MonoBehaviour
                     currentCharacter2 = prefabPreview2;
                     currentCharacter2.SetActive(false);
                     c2Selected = true;
-                    MainS.instance.player2.MenuMovement2.Disable();
+                    MainScript.instance.player2.MenuMovement2.Disable();
                 }
                 else if (c1Selected && chooseForCPU)
                 {
@@ -378,7 +378,7 @@ public class Css : MonoBehaviour
                     currentCharacter2 = prefabPreview2;
                     currentCharacter2.SetActive(false);
                     c2Selected = true;
-                    MainS.instance.player2.MenuMovement1.Disable();
+                    MainScript.instance.player2.MenuMovement1.Disable();
                 }
                 else
                 {
@@ -387,12 +387,12 @@ public class Css : MonoBehaviour
                     currentCharacter1.SetActive(false);
                     c1Selected = true;
                     if (twoPlayer)
-                        MainS.instance.player1.MenuMovement1.Disable();
+                        MainScript.instance.player1.MenuMovement1.Disable();
                     else
                     {
                         chooseForCPU = true;
-                        MainS.instance.player1.MenuMovement1.Disable();
-                        MainS.instance.player2.MenuMovement1.Enable();
+                        MainScript.instance.player1.MenuMovement1.Disable();
+                        MainScript.instance.player2.MenuMovement1.Enable();
                     }
                 }
             }
@@ -405,13 +405,13 @@ public class Css : MonoBehaviour
     {
         if (playerPort == 1 && !chooseForCPU)
         {
-            if (!MainS.instance.portController.CheckID(context, 1))
+            if (!MainScript.instance.portController.CheckID(context, 1))
                 return;
         }
 
         if (playerPort == 2 && !chooseForCPU)
         {
-            if (!MainS.instance.portController.CheckID(context, 2))
+            if (!MainScript.instance.portController.CheckID(context, 2))
                 return;
         }
 
@@ -425,26 +425,26 @@ public class Css : MonoBehaviour
                 case 1:
                     currentCharacter1.SetActive(false);
                     c1Selected = false;
-                    MainS.instance.player1.MenuMovement1.Disable();
+                    MainScript.instance.player1.MenuMovement1.Disable();
                     break;
                 case 2:
                     currentCharacter2.SetActive(false);
                     c2Selected = false;
-                    MainS.instance.player2.MenuMovement2.Disable();
+                    MainScript.instance.player2.MenuMovement2.Disable();
                     break;
             }
 
             if (chooseForCPU)
             {
                 chooseForCPU = false;
-                MainS.instance.player2.MenuMovement1.Disable();
-                MainS.instance.player1.MenuMovement1.Enable();
+                MainScript.instance.player2.MenuMovement1.Disable();
+                MainScript.instance.player1.MenuMovement1.Enable();
             }
         }
         else
         {
-            MainS.instance.state = GameState.Menu;
-            MainS.instance.um.StartMenuUpdating();
+            MainScript.instance.state = GameState.Menu;
+            MainScript.instance.um.StartMenuUpdating();
             initiated = false;
             c1Selected = false;
             c2Selected = false;
@@ -453,16 +453,16 @@ public class Css : MonoBehaviour
                 player2.enabled = false;
             twoPlayer = false;
             chooseForCPU = false;
-            switch (MainS.instance.state)
+            switch (MainScript.instance.state)
             {
                 case GameState.Css:
-                    MainS.instance.um.mainMenu.GoTo(MenuSelection.Versus, true);
+                    MainScript.instance.um.mainMenu.GoTo(MenuSelection.Versus, true);
                     break;
                 case GameState.NetworkCss:
-                    MainS.instance.um.mainMenu.GoTo(MenuSelection.Online, true);
+                    MainScript.instance.um.mainMenu.GoTo(MenuSelection.Online, true);
                     break;
                 case GameState.TrainingCss:
-                    MainS.instance.um.mainMenu.GoTo(MenuSelection.Training, true);
+                    MainScript.instance.um.mainMenu.GoTo(MenuSelection.Training, true);
                     break;
             }
         }
@@ -474,13 +474,13 @@ public class Css : MonoBehaviour
     {
         if (playerPort == 1 && !chooseForCPU)
         {
-            if (!MainS.instance.portController.CheckID(context, 1))
+            if (!MainScript.instance.portController.CheckID(context, 1))
                 return;
         }
 
         if (playerPort == 2 && !chooseForCPU)
         {
-            if (!MainS.instance.portController.CheckID(context, 2))
+            if (!MainScript.instance.portController.CheckID(context, 2))
                 return;
         }
 
@@ -500,8 +500,8 @@ public class Css : MonoBehaviour
         }
         else
         {
-            int numberOfCharacter = MainS.instance.characterPrefabs.Count;
-            string newGOName = MainS.instance.characterPrefabs[Random.Range(0, numberOfCharacter)].name;
+            int numberOfCharacter = MainScript.instance.characterPrefabs.Count;
+            string newGOName = MainScript.instance.characterPrefabs[Random.Range(0, numberOfCharacter)].name;
             GameObject go = null;
             Button[] buttons = characterIcons.GetComponentsInChildren<Button>();
             foreach (var c in buttons)

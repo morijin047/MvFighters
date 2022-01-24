@@ -30,10 +30,10 @@ public class ResultScreen : MonoBehaviour
 
     public void IninitateResultScreen(FighterS playerWin, FighterS playerLost)
     {
-        if(!MainS.instance.player1.UI.enabled)
-            MainS.instance.player1.UI.Enable();
-        previousGameState = MainS.instance.state;
-        MainS.instance.state = GameState.ResultScreen;
+        if(!MainScript.instance.player1.UI.enabled)
+            MainScript.instance.player1.UI.Enable();
+        previousGameState = MainScript.instance.state;
+        MainScript.instance.state = GameState.ResultScreen;
         playerWinPort.text = playerWin.GetPort().ToString();
         playerWinName.text = playerWin.stats.name;
         playerLostName = playerLost.stats.name;
@@ -49,11 +49,11 @@ public class ResultScreen : MonoBehaviour
         if (quoteFinish)
         {
             if (lastSelection == null)
-                lastSelection = MainS.instance.um.eventSystem.currentSelectedGameObject.name;
+                lastSelection = MainScript.instance.um.eventSystem.currentSelectedGameObject.name;
 
-            if (MainS.instance.um.eventSystem.currentSelectedGameObject.name != lastSelection)
+            if (MainScript.instance.um.eventSystem.currentSelectedGameObject.name != lastSelection)
             {
-                lastSelection = MainS.instance.um.eventSystem.currentSelectedGameObject.name;
+                lastSelection = MainScript.instance.um.eventSystem.currentSelectedGameObject.name;
                 SFXManager.sfxInstance.PlayMoveSound();
             }
         }

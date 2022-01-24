@@ -14,12 +14,12 @@ public class BlockState : State
         {
             return this;
         }
-        MainS.instance.fm.stateMachine.scriptToUse.ForceAction("GuardAll");
-        FighterS opponent = MainS.instance.fm.p1Script;
+        MainScript.instance.fm.stateMachine.scriptToUse.ForceAction("GuardAll");
+        FighterS opponent = MainScript.instance.fm.p1Script;
         isEnemyAttacking = opponent.IsAttacking();
         if (isEnemyAttacking)
             return this;
-        MainS.instance.fm.stateMachine.scriptToUse.ForceAction("Idle");
+        MainScript.instance.fm.stateMachine.scriptToUse.ForceAction("Idle");
         return idleState;
     }
 }

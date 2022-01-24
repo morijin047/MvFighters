@@ -4,15 +4,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class FighterM : MonoBehaviour
+public class FighterManager : MonoBehaviour
 {
-    public GameObject player1;
+    [HideInInspector] public GameObject player1;
 
-    public GameObject player2;
+    [HideInInspector] public GameObject player2;
 
-    public FighterS p1Script;
+    [HideInInspector] public FighterS p1Script;
 
-    public FighterS p2Script;
+    [HideInInspector] public FighterS p2Script;
 
     public Camera mainCam;
 
@@ -26,30 +26,32 @@ public class FighterM : MonoBehaviour
 
     public float maxDistance;
 
-    public bool twoPlayer;
+    [HideInInspector] public bool twoPlayer;
 
-    public bool roundStart = false;
+    [HideInInspector] public bool roundStart = false;
 
     private IEnumerator roundStartCoroutine;
     public float timeBeforeRoundStart;
 
     public StateManager stateMachine;
 
-    public GameObject stage;
+    [HideInInspector] public GameObject stage;
     
     [HideInInspector] public int idP1;
     [HideInInspector] public int idP2;
 
     public float repulsionForce;
+    
+    //Function that is called when closing the css and leaving the vs screen loading time
     public void StarGame(string p1, string p2, GameObject stage, bool twoplayer)
     {
         this.stage = stage;
         this.stage = Instantiate(stage);
-        player1 = MainS.instance.GetPooledFighter(p1);
+        player1 = MainScript.instance.GetPooledFighter(p1);
         player1.SetActive(true);
         player1.transform.parent = null;
         player1.GetComponent<Rigidbody>().isKinematic = false;
-        player2 = MainS.instance.GetPooledFighter2(p2);
+        player2 = MainScript.instance.GetPooledFighter2(p2);
         player2.SetActive(true);
         player2.transform.parent = null;
         player2.GetComponent<Rigidbody>().isKinematic = false;
@@ -58,7 +60,7 @@ public class FighterM : MonoBehaviour
         p1Script.SetPort(1);
         p2Script.SetPort(2);
         twoPlayer = twoplayer;
-        if (!twoPlayer && MainS.instance.state == GameState.Combat)
+        if (!twoPlayer && MainScript.instance.state == GameState.Combat)
         {
             stateMachine.AssignAIPrefabScript(p2Script);
         }
@@ -66,14 +68,15 @@ public class FighterM : MonoBehaviour
         worldSize = new Rect(- worldSizeDim.x, 0, worldSizeDim.x, worldSizeDim.y);
     }
 
+    //Enable the player(s) controls
     public void EnableControls()
     {
-        if (!MainS.instance.player1.Combat1.enabled)
-            MainS.instance.player1.Combat1.Enable();
+        if (!MainScript.instance.player1.Combat1.enabled)
+            MainScript.instance.player1.Combat1.Enable();
         if (twoPlayer)
         {
-            if (!MainS.instance.player2.Combat2.enabled)
-                MainS.instance.player2.Combat2.Enable();
+            if (!MainScript.instance.player2.Combat2.enabled)
+                MainScript.instance.player2.Combat2.Enable();
         }
         else
         {
@@ -82,13 +85,14 @@ public class FighterM : MonoBehaviour
         }
     }
 
+    //Disable the player(s) controls
     public void DisableControls()
     {
-        MainS.instance.player1.Combat1.Disable();
+        MainScript.instance.player1.Combat1.Disable();
         if (twoPlayer)
         {
-            if (MainS.instance.player2.Combat2.enabled)
-                MainS.instance.player2.Combat2.Disable();
+            if (MainScript.instance.player2.Combat2.enabled)
+                MainScript.instance.player2.Combat2.Disable();
         }
         else
         {
@@ -97,20 +101,22 @@ public class FighterM : MonoBehaviour
         }
     }
 
+    //All the cleanup that happens each start of a round
     public void RoundStart()
     {
         mainCam.transform.position = new Vector3(4, 1.5f, worldSize.x + worldSize.width);
         ResetPositions();
-        MainS.instance.um.inGame.DisplayRoundText("GET READY!");
-        SFXManager.sfxInstance.audio.PlayOneShot(MainS.instance.um.inGame.narratorVoices[0]);
+        MainScript.instance.um.inGame.DisplayRoundText("GET READY!");
+        SFXManager.sfxInstance.audio.PlayOneShot(MainScript.instance.um.inGame.narratorVoices[0]);
         p1Script.PlayMatchIntroAnimation();
         p2Script.PlayMatchIntroAnimation();
         DisableControls();
-        MainS.instance.um.inGame.AssignCharacterIcons();
+        MainScript.instance.um.inGame.AssignCharacterIcons();
         roundStartCoroutine = RoundStartCoroutine();
         StartCoroutine(roundStartCoroutine);
     }
 
+    //reset the position of all the fighters currently in the scene and centers the cam on them in order to not get clipped by the camera limitation
     public void ResetPositions()
     {
         p1Script.ResetPosition(startPos, worldSize);
@@ -118,6 +124,7 @@ public class FighterM : MonoBehaviour
         mainCam.transform.position = new Vector3(4, 1.5f, worldSize.x + worldSize.width);
     }
 
+    //Coroutine for the closing of the text and playing the intro animation at the start of each round. This also enable the controls and the fight begins.
     public IEnumerator RoundStartCoroutine()
     {
         while (true)
@@ -126,15 +133,16 @@ public class FighterM : MonoBehaviour
             p2Script.TurnPlayer();
             yield return new WaitForSeconds(timeBeforeRoundStart);
             roundStart = true;
-            MainS.instance.um.inGame.DisplayRoundText("FIGHT!");
-            SFXManager.sfxInstance.audio.PlayOneShot(MainS.instance.um.inGame.narratorVoices[1]);
-            MainS.instance.um.inGame.StartCoroutineRoundText(2f);
+            MainScript.instance.um.inGame.DisplayRoundText("FIGHT!");
+            SFXManager.sfxInstance.audio.PlayOneShot(MainScript.instance.um.inGame.narratorVoices[1]);
+            MainScript.instance.um.inGame.StartCoroutineRoundText(2f);
             EnableControls();
             ResetPositions();
             StopCoroutine(roundStartCoroutine);
         }
     }
 
+    //The world border drawn on the scene to visualize where the world ends
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -148,6 +156,7 @@ public class FighterM : MonoBehaviour
         }
     }
 
+    //Function to prevent fighters that jump and land on top of their opponent and gets stuck. Function repeated twice for each player
     public bool CheckCharacterOnTopOfEachOther()
     {
         Vector3 p1Position = p1Script.transform.position;
@@ -183,6 +192,7 @@ public class FighterM : MonoBehaviour
         return false;
     }
 
+    //Camera will move when a player is attempting to leave the edge of the screen if theres still place in the world to move
     public void CameraMovement()
     {
         CameraFollow(player1.transform.position);
@@ -193,33 +203,35 @@ public class FighterM : MonoBehaviour
             camPosition.y,
             Mathf.Clamp(camPosition.z, worldSize.x, worldSize.width));
     }
+    
+    // Update function
     public void UpdateObjects()
     {
         CameraMovement();
         if (roundStart)
         {
-            if (MainS.instance.player1.Combat1.Move.ReadValue<Vector2>() == Vector2.zero)
+            if (MainScript.instance.player1.Combat1.Move.ReadValue<Vector2>() == Vector2.zero)
                 p1Script.inputVector = Vector2.zero;
             var gamepads = Gamepad.all;
-            var arrayDevice = MainS.instance.player1.Combat1.Move.controls;
+            var arrayDevice = MainScript.instance.player1.Combat1.Move.controls;
             idP1 = arrayDevice[0].device.deviceId;
             
-            if (MainS.instance.portController.keyboardOnly1)
+            if (MainScript.instance.portController.keyboardOnly1)
                 idP1 = -1;
             p1Script.Movement( idP1, false);
-            if (twoPlayer || MainS.instance.state == GameState.TrainingCombat)
+            if (twoPlayer || MainScript.instance.state == GameState.TrainingCombat)
             {
-                if (MainS.instance.player2.Combat2.Move.ReadValue<Vector2>() == Vector2.zero)
+                if (MainScript.instance.player2.Combat2.Move.ReadValue<Vector2>() == Vector2.zero)
                     p2Script.inputVector = Vector2.zero;
-                var arrayDevice2 = MainS.instance.player2.Combat2.Move.controls;
+                var arrayDevice2 = MainScript.instance.player2.Combat2.Move.controls;
                 idP2 = arrayDevice2[1].device.deviceId;
-                if (MainS.instance.portController.keyboardOnly2)
+                if (MainScript.instance.portController.keyboardOnly2)
                     idP2 = -1;
                 p2Script.Movement(idP2, false);
             }
             p1Script.AnimationCalculation();
             p2Script.AnimationCalculation();
-            if (MainS.instance.state == GameState.Combat && !twoPlayer)
+            if (MainScript.instance.state == GameState.Combat && !twoPlayer)
                 stateMachine.UpdateStates();
             if (CheckCharacterOnTopOfEachOther())
             {
@@ -228,30 +240,32 @@ public class FighterM : MonoBehaviour
         }
     }
 
+    //Pause performed event that trigger the pause menu
     public void PauseButton(int playerPort, InputAction.CallbackContext context)
     {
         if (playerPort == 1)
         {
-            if (!MainS.instance.portController.CheckID(context, 1))
+            if (!MainScript.instance.portController.CheckID(context, 1))
                 return;
         }
         if (playerPort == 2)
         {
-            if (!MainS.instance.portController.CheckID(context, 2))
+            if (!MainScript.instance.portController.CheckID(context, 2))
                 return;
         }
         
-        if (MainS.instance.GetPause())
+        if (MainScript.instance.GetPause())
         {
-            MainS.instance.SetPause(false);
+            MainScript.instance.SetPause(false);
         }
         else
         {
-            MainS.instance.SetPause(true);
+            MainScript.instance.SetPause(true);
             SFXManager.sfxInstance.PlayPauseSound();
         }
     }
 
+    //Camera will never moves too far of the player thanks to this function
     public void CameraFollow(Vector3 playerTransform)
     {
         Vector3 camPosition = mainCam.transform.position;
@@ -263,6 +277,7 @@ public class FighterM : MonoBehaviour
                 camPosition + new Vector3(0, 0, -0.2f), cameraSpeed * Time.deltaTime);
     }
 
+    //Camera will always try to center itself in between each fighter
     public void CameraCenter()
     {
         Vector3 camPosition = mainCam.transform.position;
@@ -272,18 +287,20 @@ public class FighterM : MonoBehaviour
         
     }
 
+    //Attack performed event that triggers an attack
     public void UseMove(int playerPort, MoveType moveType, InputAction.CallbackContext context)
     {
         if (playerPort == 1)
         {
-            if (!MainS.instance.portController.CheckID(context, 1))
+            if (!MainScript.instance.portController.CheckID(context, 1))
                 return;
         }
         if (playerPort == 2)
         {
-            if (!MainS.instance.portController.CheckID(context, 2))
+            if (!MainScript.instance.portController.CheckID(context, 2))
                 return;
         }
+        //Input buffer array that is unoperational. Their is currently button mapped to triggers special input
         
         //foreach motionbufferArray
         //condition forward
@@ -304,12 +321,13 @@ public class FighterM : MonoBehaviour
         }
     }
 
+    //Movement event performed that gives the value to the internal vector inside the fighterScript
     public void PlayerMove(int playerPort, InputAction.CallbackContext context)
     {
        // Debug.Log(context.control.device.name);
         if (playerPort == 1)
         {
-            if (!MainS.instance.portController.CheckID(context, 1))
+            if (!MainScript.instance.portController.CheckID(context, 1))
                 return;
             
             idP1 = context.control.device.deviceId;
@@ -320,7 +338,7 @@ public class FighterM : MonoBehaviour
 
         if (playerPort == 2)
         {
-            if (!MainS.instance.portController.CheckID(context, 2))
+            if (!MainScript.instance.portController.CheckID(context, 2))
                 return;
             idP2 = context.control.device.deviceId;
             p2Script.inputVector = context.ReadValue<Vector2>();
@@ -328,18 +346,17 @@ public class FighterM : MonoBehaviour
         }
     }
     
-    
-
+    //Dash event performed that triggers a dash
     public void PerformDash(int playerPort, InputAction.CallbackContext context)
     {
         if (playerPort == 1)
         {
-            if (!MainS.instance.portController.CheckID(context, 1))
+            if (!MainScript.instance.portController.CheckID(context, 1))
                 return;
         }
         if (playerPort == 2)
         {
-            if (!MainS.instance.portController.CheckID(context, 2))
+            if (!MainScript.instance.portController.CheckID(context, 2))
                 return;
         }
         switch (playerPort)
@@ -353,12 +370,13 @@ public class FighterM : MonoBehaviour
         }
     }
 
-
+    //Function called when a match is over. More logic was initially inside this function but as the need decreased over the time, the function became empty/
     public void MatchOver()
     {
         DisableControls();
     }
 
+    //Remove fighters currently active and put them back in the pool
     public void DeleteCurrentFighter()
     {
        player1.SetActive(false);
@@ -366,6 +384,7 @@ public class FighterM : MonoBehaviour
         Destroy(stage);
     }
 
+    //Method to check which player wins
     public void CheckWinner()
     {
         p1Script.TurnPlayer();
@@ -384,18 +403,20 @@ public class FighterM : MonoBehaviour
             p1Script.KnockDown();
         }
 
-        MainS.instance.um.inGame.StartDelayedCoroutineRoundText(2f, 2f, winningPort,
-            MainS.instance.um.inGame.narratorVoices[4]);
+        MainScript.instance.um.inGame.StartDelayedCoroutineRoundText(2f, 2f, winningPort,
+            MainScript.instance.um.inGame.narratorVoices[4]);
         roundStart = false;
         EventManager.InvokeRoundEnd(new RoundEndEventArg(winningPort));
     }
 
+    //Method to manually set the hp of a player. Used in the training Mode Script
     public void ForceHp(int hp1, int hp2)
     {
         p1Script.currentHp = hp1 * p1Script.stats.maxHp / 100;
         p2Script.currentHp = hp2 * p2Script.stats.maxHp / 100;
     }
 
+    //Return distance between PLayer
     public float CheckDistanceBetweenPlayer()
     {
         return Vector3.Distance(p1Script.transform.position, p2Script.transform.position);

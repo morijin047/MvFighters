@@ -20,14 +20,14 @@ public class IdleState : State
         {
             return this;
         }
-        isKnockDown = MainS.instance.fm.stateMachine.scriptToUse.IsKnockedDown();
+        isKnockDown = MainScript.instance.fm.stateMachine.scriptToUse.IsKnockedDown();
         Vector2 movement = isKnockDown ? new Vector2(1, 0) : new Vector2(0, 0);
-        MainS.instance.fm.stateMachine.scriptToUse.inputVector = movement;
-        MainS.instance.fm.stateMachine.scriptToUse.Movement(-1, true);
-        FighterS opponent = MainS.instance.fm.p1Script;
+        MainScript.instance.fm.stateMachine.scriptToUse.inputVector = movement;
+        MainScript.instance.fm.stateMachine.scriptToUse.Movement(-1, true);
+        FighterS opponent = MainScript.instance.fm.p1Script;
         opponentKnockedDown = opponent.IsKnockedDown();
         isEnemyAttacking = opponent.IsAttacking();
-        isInAttackRange = !(MainS.instance.fm.CheckDistanceBetweenPlayer() > 2f);
+        isInAttackRange = !(MainScript.instance.fm.CheckDistanceBetweenPlayer() > 2f);
         if (isKnockDown)
             return this;
         if (opponentKnockedDown)

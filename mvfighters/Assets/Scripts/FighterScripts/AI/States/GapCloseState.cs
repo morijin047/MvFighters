@@ -17,11 +17,11 @@ public class GapCloseState : State
         {
             return this;
         }
-        FighterS opponent = MainS.instance.fm.p1Script;
-        MainS.instance.fm.stateMachine.scriptToUse.inputVector = new Vector2(-opponent.transform.forward.z, 0);
-        MainS.instance.fm.stateMachine.scriptToUse.Movement( -1, true);
+        FighterS opponent = MainScript.instance.fm.p1Script;
+        MainScript.instance.fm.stateMachine.scriptToUse.inputVector = new Vector2(-opponent.transform.forward.z, 0);
+        MainScript.instance.fm.stateMachine.scriptToUse.Movement( -1, true);
         isEnemyAttacking = opponent.IsAttacking();
-        isInAttackRange = !(MainS.instance.fm.CheckDistanceBetweenPlayer() > 2f);
+        isInAttackRange = !(MainScript.instance.fm.CheckDistanceBetweenPlayer() > 2f);
         if (isEnemyAttacking)
             return blockState;
         if (isInAttackRange)

@@ -52,16 +52,16 @@ public class InGame : MonoBehaviour
 
     public void InitiateInGameUI()
     {
-        MainS.instance.um.inGameUI.SetActive(true);
-        p1 = new HealthBar(MainS.instance.fm.p1Script.stats.maxHp);
-        p2 = new HealthBar(MainS.instance.fm.p2Script.stats.maxHp);
+        MainScript.instance.um.inGameUI.SetActive(true);
+        p1 = new HealthBar(MainScript.instance.fm.p1Script.stats.maxHp);
+        p2 = new HealthBar(MainScript.instance.fm.p2Script.stats.maxHp);
         
         if (!eventAdded)
         {
             EventManager.AddRoundEndListener(GiveRoundWin);
             eventAdded = true;
         }
-        BGMusic.bgmInstance.audio.clip = MainS.instance.um.inGame.stageMusic;
+        BGMusic.bgmInstance.audio.clip = MainScript.instance.um.inGame.stageMusic;
         BGMusic.bgmInstance.audio.Play();
         RoundIcon1.SetActive(false);
         RoundIcon2.SetActive(false);
@@ -80,8 +80,8 @@ public class InGame : MonoBehaviour
 
     public void AssignCharacterIcons()
     {
-        icon1.sprite = FindCharacterIcon(MainS.instance.fm.p1Script.stats.name);
-        icon2.sprite = FindCharacterIcon(MainS.instance.fm.p2Script.stats.name);
+        icon1.sprite = FindCharacterIcon(MainScript.instance.fm.p1Script.stats.name);
+        icon2.sprite = FindCharacterIcon(MainScript.instance.fm.p2Script.stats.name);
     }
 
     public IEnumerator RoundStart()
@@ -91,17 +91,17 @@ public class InGame : MonoBehaviour
             yield return new WaitForSeconds(timeBeforeRoundReset);
             if (MatchIcon1.activeInHierarchy)
             {
-                MainS.instance.fm.MatchOver();
-                MainS.instance.um.GoToResultScreen(MainS.instance.fm.p1Script, MainS.instance.fm.p2Script);
+                MainScript.instance.fm.MatchOver();
+                MainScript.instance.um.GoToResultScreen(MainScript.instance.fm.p1Script, MainScript.instance.fm.p2Script);
             } else if (MatchIcon2.activeInHierarchy)
             {
-                MainS.instance.fm.MatchOver();
-                MainS.instance.um.GoToResultScreen(MainS.instance.fm.p2Script, MainS.instance.fm.p1Script);
+                MainScript.instance.fm.MatchOver();
+                MainScript.instance.um.GoToResultScreen(MainScript.instance.fm.p2Script, MainScript.instance.fm.p1Script);
             }
             else
             {
                 timer = new Timer(timerStart);
-                MainS.instance.fm.RoundStart();
+                MainScript.instance.fm.RoundStart();
             }
             StopCoroutine(roundEndCoroutine);  
         }
@@ -133,9 +133,9 @@ public class InGame : MonoBehaviour
             messageOnScreen.enabled = true;
             messageOnScreen.text = "PLAYER " + port + " WINS!";
             if (port == 1)
-                MainS.instance.fm.p1Script.PlayRoundWinAnimation();
+                MainScript.instance.fm.p1Script.PlayRoundWinAnimation();
             if (port == 2)
-                MainS.instance.fm.p2Script.PlayRoundWinAnimation();
+                MainScript.instance.fm.p2Script.PlayRoundWinAnimation();
             SFXManager.sfxInstance.audio.PlayOneShot(clip);
             StartCoroutineRoundText(time);
             StopCoroutine(delayedRoundTextCoroutine);
@@ -154,18 +154,18 @@ public class InGame : MonoBehaviour
 
     public void TurnOffIngameUI()
     {
-        MainS.instance.um.inGameUI.SetActive(false);
+        MainScript.instance.um.inGameUI.SetActive(false);
     }
 
     public void UpdateInGameUI()
     {
-        p1.currentHp = MainS.instance.fm.p1Script.currentHp;
-        p2.currentHp = MainS.instance.fm.p2Script.currentHp;
+        p1.currentHp = MainScript.instance.fm.p1Script.currentHp;
+        p2.currentHp = MainScript.instance.fm.p2Script.currentHp;
 
         hp1.fillAmount = p1.GetFillAmount();
         hp2.fillAmount = p2.GetFillAmount();
 
-        if (MainS.instance.fm.roundStart && MainS.instance.state != GameState.TrainingCombat)
+        if (MainScript.instance.fm.roundStart && MainScript.instance.state != GameState.TrainingCombat)
             timer.DecreaseTimer(timerDelay);
 
         if (timer != null)
@@ -186,7 +186,7 @@ public class InGame : MonoBehaviour
             damageCounter.enabled = false;
         }
 
-        if (MainS.instance.state == GameState.TrainingCombat)
+        if (MainScript.instance.state == GameState.TrainingCombat)
         {
             trainingInfo.enabled = true;
             string maxDamageText = "Max Damage: " + comboDisplay.maxDamage;
@@ -194,9 +194,9 @@ public class InGame : MonoBehaviour
             float frameAdvantageOnBlock = 0;
             float attackStartup = 0;
             float damage = 0;
-            if (MainS.instance.fm.p1Script.currentMove != null)
+            if (MainScript.instance.fm.p1Script.currentMove != null)
             {
-                Move currentMove = MainS.instance.fm.p1Script.currentMove;
+                Move currentMove = MainScript.instance.fm.p1Script.currentMove;
                 frameAdvantage = currentMove.hitstun - currentMove.endingFrame;
                 frameAdvantageOnBlock = (currentMove.hitstun / 2) - currentMove.endingFrame;
                 attackStartup = currentMove.startupFrame;
@@ -210,7 +210,7 @@ public class InGame : MonoBehaviour
             trainingInfo.text = attackStartupText + "\n" + frameAdvantageText + "\n" + frameAdvantageBlockText + "\n" +
                                 damageText + "\n" + maxDamageText;
             
-            MainS.instance.um.pauseTraining.training.TrainingModeSettingApply();
+            MainScript.instance.um.pauseTraining.training.TrainingModeSettingApply();
         }
         else
         {

@@ -24,13 +24,13 @@ public class VsScreen : MonoBehaviour
     {
         this.twoPlayer = isTwoplayer;
         gameObject.SetActive(true);
-        previousState = MainS.instance.state;
-        MainS.instance.state = GameState.VsScreen;
+        previousState = MainScript.instance.state;
+        MainScript.instance.state = GameState.VsScreen;
         cp1.sprite = FindCharacterPortrait(cp1Name);
         cp2.sprite = FindCharacterPortrait(cp2Name);
         BGMusic.bgmInstance.audio.Stop();
         BGMusic.bgmInstance.audio.PlayOneShot(vsBGM);
-        MainS.instance.DisableMenuControls();
+        MainScript.instance.DisableMenuControls();
         vsScreenCoroutine = VsScreenFinish();
         StartCoroutine(vsScreenCoroutine);
         //VsScreenFinish();
@@ -41,10 +41,10 @@ public class VsScreen : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(5f);
-            MainS.instance.GameStart(twoPlayer, previousState);
-            MainS.instance.um.css.LoadPrefabsInScene();
-            MainS.instance.um.inGame.InitiateInGameUI();
-            MainS.instance.fm.RoundStart();
+            MainScript.instance.GameStart(twoPlayer, previousState);
+            MainScript.instance.um.css.LoadPrefabsInScene();
+            MainScript.instance.um.inGame.InitiateInGameUI();
+            MainScript.instance.fm.RoundStart();
             gameObject.SetActive(false); 
             
         }

@@ -22,16 +22,16 @@ public class TrainingMode : MonoBehaviour
     {
         hpValue.text = hpControl.value.ToString();
         enemyHpValue.text = enemyHpControl.value.ToString();
-        if (!MainS.instance.um.inGame.comboDisplay.IsComboHappening() && !MainS.instance.um.inGame.comboDisplay.IsComboDisappearing())
+        if (!MainScript.instance.um.inGame.comboDisplay.IsComboHappening() && !MainScript.instance.um.inGame.comboDisplay.IsComboDisappearing())
         {
-            MainS.instance.fm.ForceHp(Int32.Parse(hpValue.text), Int32.Parse(enemyHpValue.text));
+            MainScript.instance.fm.ForceHp(Int32.Parse(hpValue.text), Int32.Parse(enemyHpValue.text));
         }
-        MainS.instance.fm.p2Script.ForceAction(enemyState.options[enemyState.value].text);
+        MainScript.instance.fm.p2Script.ForceAction(enemyState.options[enemyState.value].text);
     }
 
     public void ResetPositions()
     {
-        MainS.instance.fm.ResetPositions();
+        MainScript.instance.fm.ResetPositions();
     }
 
     public void DropDownClick(string name)

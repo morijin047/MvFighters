@@ -53,6 +53,7 @@ public class UIManager : MonoBehaviour
     public GameObject buttonUI;
 
 
+    //fUNCTION that prepares all the object necessary to navigate the UI of the game
     public void StartMenuUpdating()
     {
         mainMenuUI.SetActive(true);
@@ -64,13 +65,13 @@ public class UIManager : MonoBehaviour
         vsScreen = vsScreenUI.GetComponent<VsScreen>();
         result = resultUI.GetComponent<ResultScreen>();
         pauseTraining.training = pauseTraining.trainingWindow.GetComponent<TrainingMode>();
-        MainS.instance.player1.UI.Enable();
+        MainScript.instance.player1.UI.Enable();
         if (cssUI.activeInHierarchy)
         {
             cssUI.SetActive(false);
-            MainS.instance.player1.MenuMovement1.Disable();
-            if (MainS.instance.player2.MenuMovement2.enabled)
-                MainS.instance.player2.MenuMovement2.Disable();
+            MainScript.instance.player1.MenuMovement1.Disable();
+            if (MainScript.instance.player2.MenuMovement2.enabled)
+                MainScript.instance.player2.MenuMovement2.Disable();
         }
 
         eventSystem.SetSelectedGameObject(mainMenu.mainMenu.GetComponentInChildren<Button>().gameObject);
@@ -78,29 +79,34 @@ public class UIManager : MonoBehaviour
         BGMusic.bgmInstance.audio.Play();
     }
 
+    //Update function for the menu
     public void UpdateMenu()
     {
         mainMenu.UpdateMainMenu();
         if (soundUI.activeInHierarchy)
-            MainS.instance.settings.soundSettings.UpdateSoundTextUI();
+            MainScript.instance.settings.soundSettings.UpdateSoundTextUI();
     }
 
+    //Update function for the css
     public void UpdateCSS()
     {
         css.UpdateCss();
     }
 
+    //Update function for the InGame UI
     public void UpdateInGameUI()
     {
         inGame.UpdateInGameUI();
         //Debug.Log(eventSystem.currentSelectedGameObject.name);
     }
 
+    //Update function for the Result Screen
     public void UpdateResultScreen()
     {
         result.UpdateResultScreen();
     }
 
+    //Function to transition to the Result Screen
     public void GoToResultScreen(FighterS playerWin, FighterS playerLost)
     {
         inGameUI.SetActive(false);
@@ -109,6 +115,11 @@ public class UIManager : MonoBehaviour
         result.IninitateResultScreen(playerWin, playerLost);
     }
 
+    /*
+     *Main method that handle all the button UI OnClick Method. Each button click pass a string that get passed to this function. This string can be any Option Selection from any menu. Since each menu has 
+     *different options, Multiple enums had to be created. This function tryparse the string for each enum of menu Selection that exist and find one that matches the string. Note that all the ooptions across the
+     * enums  need to have unique names
+     */
     public void ClickOption(String optionSelected)
     {
         MenuSelectionTryParse(optionSelected);
@@ -126,6 +137,7 @@ public class UIManager : MonoBehaviour
         ResultSelectionTryParse(optionSelected);
     }
 
+    //Menu selection logic
     public void MenuSelectionTryParse(string optionSelected)
     {
         MenuSelection newMenu;
@@ -135,6 +147,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    //Versus selection logic
     public void VersusSelectionTryParse(string optionSelected)
     {
         VersusSelection vs;
@@ -146,6 +159,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    //Online selection logic
     public void OnlineSelectionTryParse(string optionSelected)
     {
         OnlineSelection online;
@@ -160,6 +174,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    //Training selection logic
     public void TrainingSelectionTryParse(string optionSelected)
     {
         TrainingSelection training;
@@ -174,6 +189,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    //Option selection logic
     public void OptionSelectionTryParse(string optionSelected)
     {
         OptionSelection setting;
@@ -186,17 +202,17 @@ public class UIManager : MonoBehaviour
                 mainMenu.DisableTemporaryMenu();
                 mainMenu.Transition(false);
                 eventSystem.SetSelectedGameObject(soundUI.GetComponentInChildren<Button>().gameObject);
-                MainS.instance.settings.soundSettings.OpenSoundSettings();
+                MainScript.instance.settings.soundSettings.OpenSoundSettings();
             }
 
             if (setting == OptionSelection.SaveVolume)
             {
-                MainS.instance.settings.soundSettings.ApplySoundSettings();
+                MainScript.instance.settings.soundSettings.ApplySoundSettings();
             }
 
             if (setting == OptionSelection.MuteVolume)
             {
-                MainS.instance.settings.soundSettings.MuteSoundSettings();
+                MainScript.instance.settings.soundSettings.MuteSoundSettings();
             }
 
             if (setting == OptionSelection.DisplaySetting)
@@ -209,12 +225,12 @@ public class UIManager : MonoBehaviour
 
             if (setting == OptionSelection.ResetResolution)
             {
-                MainS.instance.settings.resolutionSettings.DefaultSettings();
+                MainScript.instance.settings.resolutionSettings.DefaultSettings();
             }
 
             if (setting == OptionSelection.ApplyResolution)
             {
-                MainS.instance.settings.resolutionSettings.ApplySetting();
+                MainScript.instance.settings.resolutionSettings.ApplySetting();
             }
 
             if (setting == OptionSelection.ButtonSetting)
@@ -227,6 +243,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    //Pause selection logic
     public void PauseSelectionTryParse(string optionSelected)
     {
         PauseSelection pause;
@@ -235,13 +252,13 @@ public class UIManager : MonoBehaviour
             SFXManager.sfxInstance.PlayOkSound();
             if (pause == PauseSelection.Resume)
             {
-                MainS.instance.SetPause(false);
+                MainScript.instance.SetPause(false);
             }
 
             if (pause == PauseSelection.Reset)
             {
                 pauseTraining.training.ResetPositions();
-                MainS.instance.SetPause(false);
+                MainScript.instance.SetPause(false);
             }
 
             if (pause == PauseSelection.TrainingSetting)
@@ -254,7 +271,7 @@ public class UIManager : MonoBehaviour
 
             if (pause == PauseSelection.SoundSettingPause)
             {
-                if (MainS.instance.state == GameState.TrainingCombat)
+                if (MainScript.instance.state == GameState.TrainingCombat)
                 {
                     eventSystem.SetSelectedGameObject(
                         pauseTraining.soundPauseUI.GetComponentInChildren<Button>().gameObject
@@ -268,22 +285,22 @@ public class UIManager : MonoBehaviour
                     );
                     this.pause.soundPauseUI.SetActive(true);
                 }
-                MainS.instance.settings.soundPauseSettings.OpenSoundSettings();
+                MainScript.instance.settings.soundPauseSettings.OpenSoundSettings();
             }
 
             if (pause == PauseSelection.SaveVolumePause)
             {
-                MainS.instance.settings.soundPauseSettings.ApplySoundSettings();
+                MainScript.instance.settings.soundPauseSettings.ApplySoundSettings();
             }
 
             if (pause == PauseSelection.MuteVolumePause)
             {
-                MainS.instance.settings.soundPauseSettings.MuteSoundSettings();
+                MainScript.instance.settings.soundPauseSettings.MuteSoundSettings();
             }
 
             if (pause == PauseSelection.ButtonSettingPause)
             {
-                if (MainS.instance.state == GameState.TrainingCombat)
+                if (MainScript.instance.state == GameState.TrainingCombat)
                 {
                     eventSystem.SetSelectedGameObject(pauseTraining.buttonPauseUI.GetComponentInChildren<Button>()
                         .gameObject);
@@ -300,57 +317,58 @@ public class UIManager : MonoBehaviour
 
             if (pause == PauseSelection.CharacterSelect)
             {
-                MainS.instance.SetPause(false);
+                MainScript.instance.SetPause(false);
                 inGame.TurnOffIngameUI();
-                switch (MainS.instance.state)
+                switch (MainScript.instance.state)
                 {
                     case GameState.Combat:
-                        MainS.instance.fm.MatchOver();
-                        MainS.instance.fm.DeleteCurrentFighter();
-                        MainS.instance.SetPause(false);
-                        MainS.instance.um.DeactivatePauseMenu();
-                        MainS.instance.state = GameState.Css;
-                        MainS.instance.um.cssUI.SetActive(true);
-                        MainS.instance.player1.MenuMovement1.Enable();
+                        MainScript.instance.fm.MatchOver();
+                        MainScript.instance.fm.DeleteCurrentFighter();
+                        MainScript.instance.SetPause(false);
+                        MainScript.instance.um.DeactivatePauseMenu();
+                        MainScript.instance.state = GameState.Css;
+                        MainScript.instance.um.cssUI.SetActive(true);
+                        MainScript.instance.player1.MenuMovement1.Enable();
                         //MainS.instance.um.StartMenuUpdating();
-                        if (MainS.instance.fm.twoPlayer)
+                        if (MainScript.instance.fm.twoPlayer)
                         {
-                            MainS.instance.um.mainMenu.GoToCss(VersusSelection.VsPlayer.ToString());
-                            MainS.instance.player2.MenuMovement2.Enable();
+                            MainScript.instance.um.mainMenu.GoToCss(VersusSelection.VsPlayer.ToString());
+                            MainScript.instance.player2.MenuMovement2.Enable();
                         }
                         else
                         {
-                            MainS.instance.um.mainMenu.GoToCss(VersusSelection.VsCom.ToString());
+                            MainScript.instance.um.mainMenu.GoToCss(VersusSelection.VsCom.ToString());
                         }
 
                         break;
                     case GameState.TrainingCombat:
-                        MainS.instance.fm.MatchOver();
-                        MainS.instance.fm.DeleteCurrentFighter();
-                        MainS.instance.SetPause(false);
-                        MainS.instance.um.DeactivatePauseMenu();
-                        MainS.instance.state = GameState.TrainingCss;
-                        MainS.instance.um.cssUI.SetActive(true);
-                        MainS.instance.player1.MenuMovement1.Enable();
+                        MainScript.instance.fm.MatchOver();
+                        MainScript.instance.fm.DeleteCurrentFighter();
+                        MainScript.instance.SetPause(false);
+                        MainScript.instance.um.DeactivatePauseMenu();
+                        MainScript.instance.state = GameState.TrainingCss;
+                        MainScript.instance.um.cssUI.SetActive(true);
+                        MainScript.instance.player1.MenuMovement1.Enable();
                         //MainS.instance.um.StartMenuUpdating();
-                        MainS.instance.um.mainMenu.GoToCss(TrainingSelection.FreeTraining.ToString());
+                        MainScript.instance.um.mainMenu.GoToCss(TrainingSelection.FreeTraining.ToString());
                         break;
                 }
             }
 
             if (pause == PauseSelection.MainMenu)
             {
-                MainS.instance.fm.MatchOver();
-                MainS.instance.fm.DeleteCurrentFighter();
-                MainS.instance.SetPause(false);
+                MainScript.instance.fm.MatchOver();
+                MainScript.instance.fm.DeleteCurrentFighter();
+                MainScript.instance.SetPause(false);
                 DeactivatePauseMenu();
                 inGame.TurnOffIngameUI();
-                MainS.instance.state = GameState.Menu;
+                MainScript.instance.state = GameState.Menu;
                 StartMenuUpdating();
             }
         }
     }
 
+    //Result selection logic
     public void ResultSelectionTryParse(string optionSelected)
     {
         ResultSelection result;
@@ -358,8 +376,8 @@ public class UIManager : MonoBehaviour
         {
             if (result == ResultSelection.Retry)
             {
-                MainS.instance.state = this.result.previousGameState;
-                MainS.instance.fm.RoundStart();
+                MainScript.instance.state = this.result.previousGameState;
+                MainScript.instance.fm.RoundStart();
                 inGame.InitiateInGameUI();
                 this.resultUI.SetActive(false);
             }
@@ -370,20 +388,20 @@ public class UIManager : MonoBehaviour
                 switch (this.result.previousGameState)
                 {
                     case GameState.Combat:
-                        MainS.instance.fm.MatchOver();
-                        MainS.instance.fm.DeleteCurrentFighter();
-                        MainS.instance.state = GameState.Css;
-                        MainS.instance.um.cssUI.SetActive(true);
-                        MainS.instance.player1.MenuMovement1.Enable();
+                        MainScript.instance.fm.MatchOver();
+                        MainScript.instance.fm.DeleteCurrentFighter();
+                        MainScript.instance.state = GameState.Css;
+                        MainScript.instance.um.cssUI.SetActive(true);
+                        MainScript.instance.player1.MenuMovement1.Enable();
                         //MainS.instance.um.StartMenuUpdating();
-                        if (MainS.instance.fm.twoPlayer)
+                        if (MainScript.instance.fm.twoPlayer)
                         {
-                            MainS.instance.um.mainMenu.GoToCss(VersusSelection.VsPlayer.ToString());
-                            MainS.instance.player2.MenuMovement2.Enable();
+                            MainScript.instance.um.mainMenu.GoToCss(VersusSelection.VsPlayer.ToString());
+                            MainScript.instance.player2.MenuMovement2.Enable();
                         }
                         else
                         {
-                            MainS.instance.um.mainMenu.GoToCss(VersusSelection.VsCom.ToString());
+                            MainScript.instance.um.mainMenu.GoToCss(VersusSelection.VsCom.ToString());
                         }
 
                         break;
@@ -392,27 +410,28 @@ public class UIManager : MonoBehaviour
 
             if (result == ResultSelection.RMainMenu)
             {
-                MainS.instance.fm.MatchOver();
-                MainS.instance.fm.DeleteCurrentFighter();
+                MainScript.instance.fm.MatchOver();
+                MainScript.instance.fm.DeleteCurrentFighter();
                 resultUI.SetActive(false);
-                MainS.instance.state = GameState.Menu;
+                MainScript.instance.state = GameState.Menu;
                 StartMenuUpdating();
                 mainMenu.GoTo(MenuSelection.MainMenu, false);
             }
         }
     }
 
+    //Submit event performed that triggers the event that needs to be called depending on the object selected by the event system. An example would be the OnClick() method from a button
     public void Submit(int playerPort, InputAction.CallbackContext context)
     {
         if (playerPort == 1)
         {
-            if (!MainS.instance.portController.CheckID(context, 1))
+            if (!MainScript.instance.portController.CheckID(context, 1))
                 return;
         }
 
         if (playerPort == 2)
         {
-            if (!MainS.instance.portController.CheckID(context, 2))
+            if (!MainScript.instance.portController.CheckID(context, 2))
                 return;
         }
 
@@ -445,18 +464,19 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        if (MainS.instance.settings.resolutionSettings.resolution.IsExpanded)
+        if (MainScript.instance.settings.resolutionSettings.resolution.IsExpanded)
         {
-            MainS.instance.settings.resolutionSettings.ClickDropdown();
+            MainScript.instance.settings.resolutionSettings.ClickDropdown();
             return;
         }
     }
 
+    //All the logic that happens when the pause menu is activated
     public void ActivatePauseMenu()
     {
         if (!pauseUI.activeInHierarchy && !pauseTrainingUI.activeInHierarchy)
         {
-            if (MainS.instance.state == GameState.TrainingCombat)
+            if (MainScript.instance.state == GameState.TrainingCombat)
             {
                 pauseTrainingUI.SetActive(true);
                 eventSystem.SetSelectedGameObject(pauseTrainingUI.GetComponentInChildren<Button>().gameObject);
@@ -468,19 +488,19 @@ public class UIManager : MonoBehaviour
             }
 
             Time.timeScale = 0;
-            MainS.instance.player1.Combat1.Disable();
-            if (MainS.instance.player2.Combat2.enabled)
+            MainScript.instance.player1.Combat1.Disable();
+            if (MainScript.instance.player2.Combat2.enabled)
             {
-                MainS.instance.player2.Combat2.Disable();
+                MainScript.instance.player2.Combat2.Disable();
                 was2Player = true;
             }
 
-            MainS.instance.player1.UI.Enable();
+            MainScript.instance.player1.UI.Enable();
             SFXManager.sfxInstance.PlayPauseSound();
         }
         else
         {
-            if (MainS.instance.state == GameState.TrainingCombat)
+            if (MainScript.instance.state == GameState.TrainingCombat)
             {
                 pauseTraining.UpdatePause();
             }
@@ -491,6 +511,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    //All the logic that happens when the pause menu is deactivated
     public void DeactivatePauseMenu()
     {
         if (pauseUI.activeInHierarchy)
@@ -508,31 +529,32 @@ public class UIManager : MonoBehaviour
         if (pause.soundPauseUI.activeInHierarchy)
             pause.soundPauseUI.SetActive(false);
         Time.timeScale = 1;
-        MainS.instance.player1.Combat1.Enable();
+        MainScript.instance.player1.Combat1.Enable();
         if (was2Player)
         {
-            MainS.instance.player2.Combat2.Enable();
+            MainScript.instance.player2.Combat2.Enable();
         }
 
-        MainS.instance.player1.UI.Disable();
+        MainScript.instance.player1.UI.Disable();
         was2Player = false;
     }
 
+    //Cancel event performed that goes the correct menu that preceded the current location.
     public void CancelSelection(int playerPort, InputAction.CallbackContext context)
     {
         if (playerPort == 1)
         {
-            if (!MainS.instance.portController.CheckID(context, 1))
+            if (!MainScript.instance.portController.CheckID(context, 1))
                 return;
         }
 
         if (playerPort == 2)
         {
-            if (!MainS.instance.portController.CheckID(context, 2))
+            if (!MainScript.instance.portController.CheckID(context, 2))
                 return;
         }
 
-        if (MainS.instance.state == GameState.Menu)
+        if (MainScript.instance.state == GameState.Menu)
         {
             if (soundUI.activeInHierarchy)
             {
@@ -555,7 +577,7 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        if (MainS.instance.state is GameState.Combat or GameState.NetworkCombat or GameState.TrainingCombat)
+        if (MainScript.instance.state is GameState.Combat or GameState.NetworkCombat or GameState.TrainingCombat)
         {
             if (pauseTraining.training.enemyState.IsExpanded)
             {
@@ -591,7 +613,7 @@ public class UIManager : MonoBehaviour
             }
             else if (pauseUI.activeInHierarchy || pauseTrainingUI.activeInHierarchy)
             {
-                MainS.instance.SetPause(false);
+                MainScript.instance.SetPause(false);
             }
         }
     }

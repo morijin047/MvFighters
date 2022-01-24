@@ -17,10 +17,10 @@ public class Timer
         if (current < 0)
         {
             current = 0;
-            MainS.instance.um.inGame.DisplayRoundText("TIMES UP!");
-            MainS.instance.um.inGame.StartCoroutineRoundText(2f);
-            SFXManager.sfxInstance.audio.PlayOneShot(MainS.instance.um.inGame.narratorVoices[3]);
-            MainS.instance.fm.CheckWinner();
+            MainScript.instance.um.inGame.DisplayRoundText("TIMES UP!");
+            MainScript.instance.um.inGame.StartCoroutineRoundText(2f);
+            SFXManager.sfxInstance.audio.PlayOneShot(MainScript.instance.um.inGame.narratorVoices[3]);
+            MainScript.instance.fm.CheckWinner();
         }
     }
 }

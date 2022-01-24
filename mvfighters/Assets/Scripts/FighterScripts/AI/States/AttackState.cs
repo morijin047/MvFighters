@@ -19,9 +19,9 @@ public class AttackState : State
         }
         if (currentMove == null)
             currentMove = MoveType.A;
-        FighterS opponent = MainS.instance.fm.p1Script;
+        FighterS opponent = MainScript.instance.fm.p1Script;
         isEnemyHit = opponent.IsInHitStun();
-        if (isEnemyHit && !MainS.instance.fm.stateMachine.scriptToUse.IsAttacking())
+        if (isEnemyHit && !MainScript.instance.fm.stateMachine.scriptToUse.IsAttacking())
         {
             switch (currentMove)
             {
@@ -37,7 +37,7 @@ public class AttackState : State
         {
             currentMove = MoveType.A;
         }
-        MainS.instance.fm.stateMachine.scriptToUse.Attack(currentMove);
+        MainScript.instance.fm.stateMachine.scriptToUse.Attack(currentMove);
         opponentKnockedDown = opponent.IsKnockedDown();
         if (opponentKnockedDown)
             return idleState;

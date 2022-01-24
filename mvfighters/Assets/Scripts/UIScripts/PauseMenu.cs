@@ -14,15 +14,15 @@ public class PauseMenu : MonoBehaviour
     public void UpdatePause()
     {
         if (lastSelection == null)
-            lastSelection = MainS.instance.um.eventSystem.currentSelectedGameObject.name;
+            lastSelection = MainScript.instance.um.eventSystem.currentSelectedGameObject.name;
 
-        if (MainS.instance.um.eventSystem.currentSelectedGameObject.name != lastSelection)
+        if (MainScript.instance.um.eventSystem.currentSelectedGameObject.name != lastSelection)
         {
-            lastSelection = MainS.instance.um.eventSystem.currentSelectedGameObject.name;
+            lastSelection = MainScript.instance.um.eventSystem.currentSelectedGameObject.name;
             SFXManager.sfxInstance.PlayMoveSound();
         }
         
         if (soundPauseUI.activeInHierarchy)
-            MainS.instance.settings.soundPauseSettings.UpdateSoundTextUI();
+            MainScript.instance.settings.soundPauseSettings.UpdateSoundTextUI();
     }
 }

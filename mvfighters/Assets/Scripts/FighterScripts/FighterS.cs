@@ -113,14 +113,14 @@ public class FighterS : MonoBehaviour
     {
         if (playerPort == 1 && !ai)
         {
-            if (MainS.instance.portController.keyboardOnly1)
+            if (MainScript.instance.portController.keyboardOnly1)
             {
-                if (MainS.instance.portController.gamepad1ID != -1)
+                if (MainScript.instance.portController.gamepad1ID != -1)
                 {
                     return;
                 }
             }
-            else if (MainS.instance.portController.gamepad1ID != deviceID)
+            else if (MainScript.instance.portController.gamepad1ID != deviceID)
             {
                 return;
             }
@@ -128,20 +128,20 @@ public class FighterS : MonoBehaviour
 
         if (playerPort == 2 && !ai)
         {
-            if (MainS.instance.portController.keyboardOnly2)
+            if (MainScript.instance.portController.keyboardOnly2)
             {
-                if (MainS.instance.portController.gamepad2ID != -1)
+                if (MainScript.instance.portController.gamepad2ID != -1)
                 {
                     return;
                 }
             }
-            else if (MainS.instance.portController.gamepad2ID != deviceID)
+            else if (MainScript.instance.portController.gamepad2ID != deviceID)
             {
                 return;
             }
         }
 
-        if (!(MainS.instance.state == GameState.TrainingCombat && playerPort == 2))
+        if (!(MainScript.instance.state == GameState.TrainingCombat && playerPort == 2))
             isTrainingDummy = false;
         else
         {
@@ -346,8 +346,8 @@ public class FighterS : MonoBehaviour
 
     public void CameraLimit()
     {
-        float maxDist = MainS.instance.fm.maxDistance;
-        Vector3 centerScreen = MainS.instance.fm.mainCam.transform.position;
+        float maxDist = MainScript.instance.fm.maxDistance;
+        Vector3 centerScreen = MainScript.instance.fm.mainCam.transform.position;
         Vector3 viewPos = transform.position;
         viewPos.z = Math.Clamp(viewPos.z, centerScreen.z - maxDist / 2, centerScreen.z + maxDist / 2);
         transform.position = viewPos;
@@ -357,12 +357,12 @@ public class FighterS : MonoBehaviour
     {
         if (playerPort == 1)
         {
-            if (transform.position.z - MainS.instance.fm.player2.transform.position.z < 0)
+            if (transform.position.z - MainScript.instance.fm.player2.transform.position.z < 0)
             {
                 transform.rotation = new Quaternion(0f, 0, 0f, 0f);
             }
 
-            if (transform.position.z - MainS.instance.fm.player2.transform.position.z >= 0)
+            if (transform.position.z - MainScript.instance.fm.player2.transform.position.z >= 0)
             {
                 transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
             }
@@ -370,12 +370,12 @@ public class FighterS : MonoBehaviour
 
         if (playerPort == 2)
         {
-            if (transform.position.z - MainS.instance.fm.player1.transform.position.z < 0)
+            if (transform.position.z - MainScript.instance.fm.player1.transform.position.z < 0)
             {
                 transform.rotation = new Quaternion(0f, 0, 0f, 0f);
             }
 
-            if (transform.position.z - MainS.instance.fm.player1.transform.position.z >= 0)
+            if (transform.position.z - MainScript.instance.fm.player1.transform.position.z >= 0)
             {
                 transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
             }
@@ -619,10 +619,10 @@ public class FighterS : MonoBehaviour
             switch (playerPort)
             {
                 case 1:
-                    inputVector = MainS.instance.player1.Combat1.Move.ReadValue<Vector2>();
+                    inputVector = MainScript.instance.player1.Combat1.Move.ReadValue<Vector2>();
                     break;
                 case 2:
-                    inputVector = MainS.instance.player2.Combat2.Move.ReadValue<Vector2>();
+                    inputVector = MainScript.instance.player2.Combat2.Move.ReadValue<Vector2>();
                     break;
             }
 
@@ -906,16 +906,16 @@ public class FighterS : MonoBehaviour
 
             if (currentHp < 0)
             {
-                if (MainS.instance.state == GameState.TrainingCombat)
+                if (MainScript.instance.state == GameState.TrainingCombat)
                 {
-                    MainS.instance.fm.ResetPositions();
+                    MainScript.instance.fm.ResetPositions();
                 }
                 else
                 {
-                    MainS.instance.um.inGame.DisplayRoundText("K.O!");
-                    MainS.instance.um.inGame.StartCoroutineRoundText(2f);
-                    SFXManager.sfxInstance.audio.PlayOneShot(MainS.instance.um.inGame.narratorVoices[2]);
-                    MainS.instance.fm.CheckWinner();
+                    MainScript.instance.um.inGame.DisplayRoundText("K.O!");
+                    MainScript.instance.um.inGame.StartCoroutineRoundText(2f);
+                    SFXManager.sfxInstance.audio.PlayOneShot(MainScript.instance.um.inGame.narratorVoices[2]);
+                    MainScript.instance.fm.CheckWinner();
                 }
             }
         }
@@ -925,11 +925,11 @@ public class FighterS : MonoBehaviour
     {
         if (arg.player == 1)
         {
-            MainS.instance.fm.p2Script.PushedAway(arg.move.knockbackForce);
+            MainScript.instance.fm.p2Script.PushedAway(arg.move.knockbackForce);
         } 
         if (arg.player == 2)
         {
-            MainS.instance.fm.p1Script.PushedAway(arg.move.knockbackForce);
+            MainScript.instance.fm.p1Script.PushedAway(arg.move.knockbackForce);
         } 
     }
 
@@ -940,11 +940,11 @@ public class FighterS : MonoBehaviour
         currentHitstunFrame = eventArg.move.hitstun;
         if (eventArg.player == 2)
         {
-            MainS.instance.fm.p1Script.canAttack = true;
+            MainScript.instance.fm.p1Script.canAttack = true;
         }
         if (eventArg.player == 1)
         {
-            MainS.instance.fm.p2Script.canAttack = true;
+            MainScript.instance.fm.p2Script.canAttack = true;
         }
         if (eventArg.move.attackLandSfx != null)
             SFXManager.sfxInstance.audio.PlayOneShot(eventArg.move.attackLandSfx);
@@ -1028,9 +1028,9 @@ public class FighterS : MonoBehaviour
         ChangeAnimationState(CharacterState.GettingHit);
         //MainS.instance.fm.DisableControls();
         if (playerPort == 1)
-            MainS.instance.fm.p2Script.grabbing = true;
+            MainScript.instance.fm.p2Script.grabbing = true;
         if (playerPort == 2)
-            MainS.instance.fm.p1Script.grabbing = true;
+            MainScript.instance.fm.p1Script.grabbing = true;
         currentHitstunFrame = 999f;
         delayedKnockDownCoroutine = DelayedKnockDown(2f, arg);
         StartCoroutine(delayedKnockDownCoroutine);
@@ -1067,15 +1067,15 @@ public class FighterS : MonoBehaviour
             canbeHit = false;
             if (playerPort == 1)
             {
-                MainS.instance.fm.p2Script.grabbing = false;
-                MainS.instance.fm.p2Script.Attack(MoveType.Grab2);
+                MainScript.instance.fm.p2Script.grabbing = false;
+                MainScript.instance.fm.p2Script.Attack(MoveType.Grab2);
             }
 
             if (playerPort == 2)
             {
-                MainS.instance.fm.p1Script.grabbing = false;
-                MainS.instance.fm.p1Script.canCancel = true;
-                MainS.instance.fm.p1Script.Attack(MoveType.Grab2);
+                MainScript.instance.fm.p1Script.grabbing = false;
+                MainScript.instance.fm.p1Script.canCancel = true;
+                MainScript.instance.fm.p1Script.Attack(MoveType.Grab2);
             }
 
             currentHp -= arg.move.damage;

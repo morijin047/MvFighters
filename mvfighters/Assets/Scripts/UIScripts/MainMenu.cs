@@ -150,16 +150,16 @@ public class MainMenu : MonoBehaviour
     
     public void GoToCss(String optionChoosed)
     {
-        MainS.instance.player1.UI.Disable();
-        MainS.instance.player1.MenuMovement1.Enable();
+        MainScript.instance.player1.UI.Disable();
+        MainScript.instance.player1.MenuMovement1.Enable();
         VersusSelection vs;
         if (VersusSelection.TryParse(optionChoosed, out vs))
         {
             if (vs == VersusSelection.VsPlayer)
             {
-                MainS.instance.player2.MenuMovement2.Enable();
+                MainScript.instance.player2.MenuMovement2.Enable();
             }
-            MainS.instance.state = GameState.Css;
+            MainScript.instance.state = GameState.Css;
         }
         OnlineSelection online;
         if (OnlineSelection.TryParse(optionChoosed, out online))
@@ -167,7 +167,7 @@ public class MainMenu : MonoBehaviour
             if (online == OnlineSelection.RankedMode)
             {
                 //MainS.instance.player2.MenuMovement2.Enable();
-                MainS.instance.state = GameState.NetworkCss;
+                MainScript.instance.state = GameState.NetworkCss;
             }
         }
         TrainingSelection training;
@@ -176,7 +176,7 @@ public class MainMenu : MonoBehaviour
             if (training == TrainingSelection.FreeTraining)
             {
                 //MainS.instance.player2.MenuMovement2.Enable();
-                MainS.instance.state = GameState.TrainingCss;
+                MainScript.instance.state = GameState.TrainingCss;
             }
         }
         Transition(false);

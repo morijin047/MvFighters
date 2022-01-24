@@ -49,7 +49,7 @@ public class ResolutionSettings : MonoBehaviour
    public void ClickDropdown()
    {
       resolution.SetValueWithoutNotify(resolution.value);
-      MainS.instance.um.eventSystem.SetSelectedGameObject(MainS.instance.um.displayUI.GetComponentInChildren<TMP_Dropdown>()
+      MainScript.instance.um.eventSystem.SetSelectedGameObject(MainScript.instance.um.displayUI.GetComponentInChildren<TMP_Dropdown>()
          .gameObject);
       resolution.Hide();
    }
