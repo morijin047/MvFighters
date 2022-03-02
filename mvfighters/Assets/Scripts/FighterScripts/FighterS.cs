@@ -344,6 +344,7 @@ public class FighterS : MonoBehaviour
     private float minZWorld;
     private float maxZWorld;
 
+    //Player stays in camera limit
     public void CameraLimit()
     {
         float maxDist = MainScript.instance.fm.maxDistance;

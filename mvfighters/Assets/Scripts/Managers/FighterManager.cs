@@ -192,17 +192,7 @@ public class FighterManager : MonoBehaviour
         return false;
     }
 
-    //Camera will move when a player is attempting to leave the edge of the screen if theres still place in the world to move
-    public void CameraMovement()
-    {
-        CameraFollow(player1.transform.position);
-        CameraFollow(player2.transform.position);
-        CameraCenter();
-        Vector3 camPosition = mainCam.transform.position;
-        mainCam.transform.position = new Vector3(camPosition.x,
-            camPosition.y,
-            Mathf.Clamp(camPosition.z, worldSize.x, worldSize.width));
-    }
+    
     
     // Update function
     public void UpdateObjects()
@@ -263,6 +253,17 @@ public class FighterManager : MonoBehaviour
             MainScript.instance.SetPause(true);
             SFXManager.sfxInstance.PlayPauseSound();
         }
+    }
+    //Camera will move when a player is attempting to leave the edge of the screen if theres still place in the world to move
+    public void CameraMovement()
+    {
+        CameraFollow(player1.transform.position);
+        CameraFollow(player2.transform.position);
+        CameraCenter();
+        Vector3 camPosition = mainCam.transform.position;
+        mainCam.transform.position = new Vector3(camPosition.x,
+            camPosition.y,
+            Mathf.Clamp(camPosition.z, worldSize.x, worldSize.width));
     }
 
     //Camera will never moves too far of the player thanks to this function

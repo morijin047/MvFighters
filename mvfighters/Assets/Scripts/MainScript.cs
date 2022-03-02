@@ -78,17 +78,6 @@ public class MainScript : MonoBehaviour
             pooledCharacters.Add(obj);
         }
     }
-    
-    //A 2nd pool was added to avoid conflicts created by both script trying to take the same fighter from the pool
-    public void CreateFighterPool2()
-    {
-        for (int i = 0; i < characterPrefabs.Count; i++)
-        {
-            GameObject obj = Instantiate(characterPrefabs[i]);
-            obj.SetActive(false);
-            pooledCharacters2.Add(obj);
-        }
-    }
 
     // Get a fighter from the 1st generated pool 
     public GameObject GetPooledFighter(string name)
@@ -102,6 +91,17 @@ public class MainScript : MonoBehaviour
         }
 
         return null;
+    }
+    
+    //A 2nd pool was added to avoid conflicts created by both script trying to take the same fighter from the pool
+    public void CreateFighterPool2()
+    {
+        for (int i = 0; i < characterPrefabs.Count; i++)
+        {
+            GameObject obj = Instantiate(characterPrefabs[i]);
+            obj.SetActive(false);
+            pooledCharacters2.Add(obj);
+        }
     }
     // Get a fighter from the 2nd generated pool 
     public GameObject GetPooledFighter2(string name)
